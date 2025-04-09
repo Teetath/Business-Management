@@ -1,52 +1,50 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
 using namespace std;
 
-class Person {
-    protected:      //เดะเอาไปใช้ใน Employee (inheri)
-        string name;
-        int age;
-    public:
-        Person (string name, int age) : name(name), age(age) {}
-        virtual void display(){
-            cout << "Name: " << name << "Age " << age <<endl;
-        }
-};
+#include "Employee.h"
+#include "Product.h"
 
-class Employee : public Person {
-    private: 
-        float salary;
-        string role;
-    public:
-        Employee(string name, int age, float salary, string role):Person(name,age),salary(salary),role(role) {}
 
-        void display() {
-            cout << " Name: " << name << ", Age: " << age << ", Salary: " << salary << " Bath " << endl;
-        }
-};
+int main() {
+    while(1) {
+        int cate;
 
-class Product {
-    private:
-        string name;
-        float price;
-        int stock;
-    public:
-        Product(string name,float price,int stock):name(name),price(price),stock(stock) {}
-        void displayProduct() {
-            cout << "Product: " << name << ", Price: $" << price
-             << ", Stock: " << stock << endl;
-        }
-    string getName() {return name; }
-    float getPrice() { return price; }
-    int getStock() { return stock; }
+        cout << "Business Management System" << endl;
+        cout << "--------------------------" << endl;
+        cout << "Choose Category" << endl;
+        cout << "1. Employee" << endl;
+        cout << "2. Finance" << endl;
+        cout << "3. Products" << endl;
+        cout << "4. Exit" << endl;
+        cin >> cate;
 
-    string getLine() {
-        return name + "," + to_string(price) + "," + to_string(stock);
+        if(cate == 1) {
+            int choice;
+            cout << "1. Add Employee" << endl;
+            cout << "2. Search Employee" << endl;
+            cout << "3. Add Employee" << endl;
+            cout << "4. Remove Employee" << endl;
+            cin >> choice;
+            if(choice) {}
+
+        } else if(cate == 2) {
+            int choice;
+            cout << "1. Sell Product" << endl;
+            cout << "2. Show Income Expense / Profit" << endl;
+            cin >> choice;
+            if(choice) {}
+
+        } else if(cate == 3) {
+            int choice;
+            cout << "1. Add Product" << endl;
+            cout << "2. Display Products" << endl;
+            cout << "3. Remove Product" << endl;
+            cin >> choice;
+            if(choice) {}
+
+        } else if(cate == 4) break;
+        else cout << "Error! Please try again." << endl;;
     }
-};
-
-
-
-
+}

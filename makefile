@@ -3,7 +3,7 @@ compile: main.cpp
 
 
 
-run: monster
+run: main
 	 ./main
 
 
