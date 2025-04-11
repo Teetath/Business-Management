@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <limits>
+#include <vector>
 using namespace std;
 
 #include "Employee.h"
@@ -11,10 +12,10 @@ using namespace std;
 
 
 int main() {
-    system("clear");
+    
     while(1) {
         int cate;
-
+        system("clear");
         cout << "\033[1;35mBusiness Management System\033[0m" << endl;
         cout << "--------------------------" << endl;
         cout << "Choose Category" << endl;
@@ -25,14 +26,32 @@ int main() {
         cin >> cate;
 
         if(cate == 1) {
+            EmployeeManager manager;
             int choice;
-            system("clear");
-            cout << "1. Add Employee" << endl;
-            cout << "2. Search Employee" << endl;
-            cout << "3. Remove Employee" << endl;
-            cout << "4. Exit" << endl;
-            cin >> choice;
-            if(choice) {}
+
+            while (true) {
+                system("clear");
+                cout << "1. Add Employee" << endl;
+                cout << "2. Search Employee" << endl;
+                cout << "3. Remove Employee" << endl;
+                cout << "4. Display All Employees" << endl;
+                cout << "5. Return to Main Menu" << endl;
+                cout << "Enter your choice: ";
+                cin >> choice;
+
+                switch (choice) {
+                    case 1: manager.add_employee(); break;
+                    case 2: manager.search_employee(); break;
+                    case 3: manager.remove_employee(); break;
+                    case 4: manager.display_all(); break;
+                    case 5: break;
+                    default: cout << "Invalid choice. Try again.\n";
+                }
+                if(choice == 5)break;
+                cout << "Press any key to continue...";
+                cin.ignore();
+                cin.get();
+            }
 
         } else if(cate == 2) {
             int choice;
