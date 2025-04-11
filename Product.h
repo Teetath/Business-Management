@@ -48,7 +48,10 @@ float Product::getPrice() const { return price; }
 int Product::getStock() const { return stock; }
 
 string Product::getLine() const {
-    return name + "," + to_string(price) + "," + to_string(stock);
+    stringstream ss;
+    ss << fixed << setprecision(2);  // พิมพ์ทศนิยม 2 ตำแหน่ง
+    ss << name << "," << price << "," << stock;
+    return ss.str();
 }
 
 // ProductList Implementation
