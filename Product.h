@@ -9,6 +9,8 @@ class Product {
         void displayProduct() const;
         string getName() const;
         float getPrice() const;
+        float getVAT() const;
+        float getPriceWithVAT() const;
         int getStock() const;
         string getLine() const;
     };
@@ -40,12 +42,17 @@ class Product {
     : name(name), price(price), stock(stock) {}
 
 void Product::displayProduct() const {
-    cout << "Product: " << name << ", Price: $" << price
-         << ", Stock: " << stock << endl;
+    cout << left << setw(15) << name
+    << "| " << setw(8) << fixed << setprecision(2) << price
+    << "| " << setw(8) << getVAT()
+    << "| " << setw(8) << getPriceWithVAT()
+    << "| " << setw(5) << stock << endl;
 }
 
 string Product::getName() const { return name; }
 float Product::getPrice() const { return price; }
+float Product::getVAT() const { return price*0.07f; }
+float Product::getPriceWithVAT() const { return price + getVAT(); }
 int Product::getStock() const { return stock; }
 
 string Product::getLine() const {
@@ -103,6 +110,9 @@ void ProductList::removeProduct(const string& name) {
 }
 
 void ProductList::displayAll() {
+    system("clear");
+    cout << "Name           | Price  | VAT    | Total  | Stock" << endl;
+    cout << "--------------------------------------------------" << endl;
     ProductNode* current = head;
     while (current) {
         current->product->displayProduct();
