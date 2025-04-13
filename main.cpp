@@ -27,8 +27,8 @@ char getch() {
 
 //ฟังก์ชันหยุดหน้าจอ
 void Pause() {
-    cout << "Press Enter to continue...";
-    cin.get();
+    cout << "\033[1;32mPress any key to continue...\033[0m\n";
+    getch();
 }
 
 void EmployeeMenu() {
@@ -70,7 +70,7 @@ void EmployeeMenu() {
                 manager.getSummary(); break; //เป็น polymorphism
             }
             case '6': return;
-            default: cout << "\033[1;31m❌ Invalid choice! Press any key to retry...\033[0m\n"; getch(); break;
+            default : continue;
         }
         Pause();
     }
@@ -108,7 +108,7 @@ void FinanceMenu() {
                 break;
             }
             case '3': return;
-            default: cout << "\033[1;31m❌ Invalid choice! Press any key to retry...\033[0m\n"; getch(); break;
+            default : continue;
         }
         Pause();
     }
@@ -167,7 +167,7 @@ void ProductMenu() {
                 break;
             }
             case '4': return;
-            default: cout << "\033[1;31m❌ Invalid choice! Press any key to retry...\033[0m\n"; getch(); break;
+            default : continue;
         }
         Pause();
     }
@@ -198,9 +198,6 @@ int main() {
                 cout << "Exiting...\n";
                 system("clear");
                 return 0;
-            default:
-                cout << "\n\033[1;31mInvalid selection! Press any key to retry...\033[0m\n";
-                getch();
         }
     }
 }
