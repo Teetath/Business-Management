@@ -5,158 +5,193 @@
 #include <string>
 #include <limits>
 #include <vector>
+#include <termios.h>
+#include <unistd.h>
 using namespace std;
 
 #include "Employee.h"
 #include "Product.h"
 
+char getch() {
+    char buf = 0;
+    termios old = {};
+    if (tcgetattr(STDIN_FILENO, &old) < 0) perror("tcgetattr()");
+    termios newt = old;
+    newt.c_lflag &= ~ICANON; // ปิด canonical mode
+    newt.c_lflag &= ~ECHO;   // ไม่ echo ตัวอักษรออกจอ
+    if (tcsetattr(STDIN_FILENO, TCSANOW, &newt) < 0) perror("tcsetattr ICANON");
+    if (read(STDIN_FILENO, &buf, 1) < 0) perror("read()");
+    if (tcsetattr(STDIN_FILENO, TCSADRAIN, &old) < 0) perror("tcsetattr ~ICANON");
+    return buf;
+}
+
 //ฟังก์ชันหยุดหน้าจอ
-void pause() {
+void Pause() {
     cout << "Press Enter to continue...";
     cin.get();
 }
 
 void EmployeeMenu() {
     EmployeeManager manager;
-        int choice;
+    char choice;
 
-        while (true) {
-            system("clear");
-            cout << "Employee Management Menu" << endl << "-------------------------" << endl;
-            cout << "1. Add Employee" << endl;
-            cout << "2. Search Employee" << endl;
-            cout << "3. Remove Employee" << endl;
-            cout << "4. Display All Employees" << endl;
-            cout << "5. Return to Main Menu" << endl;
-            cout << "Enter your choice: ";
-            cin >> choice;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    while (true) {
+        system("clear");
+        cout << "\033[1;32m";
+        cout << "+=============================================+\n";
+        cout << "| 👨‍💼       EMPLOYEE MANAGEMENT         👨‍💼 | \n";
+        cout << "+=============================================+\033[0m\n";
+        cout << "| ➕ [1] Add Employee                        | \n";
+        cout << "| 🔍 [2] Search Employee                     | \n";
+        cout << "| ❌ [3] Remove Employee                     | \n";
+        cout << "| 📋 [4] Display All Employees               | \n";
+        cout << "| 🔙 [5] Return to Main Menu                 | \n";
+        cout << "+---------------------------------------------+\n";
+        
+        choice = getch();  // รับตัวอักษรแบบไม่ต้องกด Enter
+        
+        system("clear");
 
-            switch (choice) {
-                case 1: manager.add_employee(); break;
-                case 2: manager.search_employee(); break;
-                case 3: manager.remove_employee(); break;
-                case 4: manager.display_all(); break;
-                case 5: return;
-                default: cout << "Invalid choice. Try again.\n";
+        switch(choice) {
+            case '1': {
+                manager.add_employee(); break;
             }
-                pause();
+            case '2': {
+                manager.search_employee(); break;
             }
+            case '3': {
+                manager.remove_employee(); break;
+            }
+            case '4': {
+                manager.display_all(); break;
+            }
+            case '5': return;
+            default: cout << "\033[1;31m❌ Invalid choice! Press any key to retry...\033[0m\n"; getch(); break;
+        }
+    }
 }
 
 void FinanceMenu() {
-    // อาจจะสร้าง class finance
-    int choice;
+    char choice;
 
     while(true) {
         system("clear");
-        cout << "Finance Menu" << endl << "-------------------------" << endl;
-        cout << "1. Sell Product" << endl;
-        cout << "2. Show Income Expense / Profit" << endl;
-        cout << "3. Return to Main Menu" << endl;
-        cin >> choice;
+        cout << "\033[1;32m";
+        cout << "+=============================================+\n";
+        cout << "| 💰       FINANCE MANAGEMENT        💰 | \n";
+        cout << "+=============================================+\033[0m\n";
+        cout << "| 💸 [1] Sell Product                       | \n";
+        cout << "| 📊 [2] Show Income/Expense/Profit         | \n";
+        cout << "| 🔙 [3] Return to Main Menu                | \n";
+        cout << "+---------------------------------------------+\n";
+        
+        choice = getch();  // รับตัวอักษรแบบไม่ต้องกด Enter
+        
         system("clear");
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         switch(choice) {
-            case 1: {
-
+            case '1': {
+                // Add functionality for selling products
+                cout << "\033[1;36m💰 Selling Product...\033[0m\n";
+                break;
             }
-            case 2: {
-
+            case '2': {
+                // Add functionality for showing income/expense/profit
+                cout << "\033[1;36m📈 Showing Income/Expense/Profit...\033[0m\n";
+                break;
             }
-            case 3: return;
-            default: cout << "Invalid Choice" << endl;
+            case '3': return;
+            default: cout << "\033[1;31m❌ Invalid choice! Press any key to retry...\033[0m\n"; getch(); break;
         }
     }
-
 }
 
 void ProductMenu() {
     ProductList list;
-    int choice;
-    list.loadFromFile("products.txt"); //โหลดมาแค่ครั้งเดียวเพราะเป็น loop
+    char choice;
+    list.loadFromFile("products.txt");
 
     while(true) {
         system("clear");
-        cout << "Product Management Menu" << endl << "-------------------------" << endl;
-        cout << "1. Add Product" << endl;
-        cout << "2. Display Products" << endl;
-        cout << "3. Remove Product" << endl;
-        cout << "4. Return to Main Menu" << endl;
-        cin >> choice;
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "\033[1;34m";
+        cout << "+=============================================+\n";
+        cout << "| 📦       PRODUCT MANAGEMENT        📦 | \n";
+        cout << "+=============================================+\033[0m\n";
+        cout << "| 🆕 [1] Add Product                        | \n";
+        cout << "| 👀 [2] Display Products                   | \n";
+        cout << "| 🗑 [3] Remove Product                     | \n";
+        cout << "| 🔙 [4] Return to Main Menu                | \n";
+        cout << "+---------------------------------------------+\n";
+        
+        choice = getch();  // รับตัวอักษรแบบไม่ต้องกด Enter
+        
         system("clear");
-    
+
         switch(choice) {
-            case 1: {
+            case '1': {
                 string name;
-                float price; int stock;
+                float price;
+                int stock;
+
                 cout << "Product Name: ";
                 getline(cin, name);
                 cout << "Product Price: ";
                 cin >> price;
                 cout << "Product Stock: ";
                 cin >> stock;
-                while (cin.rdbuf()->in_avail() > 0) {
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                }
+
                 list.addProduct(new Product(name, price, stock));
-                cout << "Product added Sucessfully!" << endl;
+                cout << "Product added successfully! 🎉\n";
                 list.displayAll();
                 list.saveToFile("products.txt");
                 break;
             }
-            case 2: {
+            case '2': {
                 list.displayAll(); break;
             }
-            case 3: {
+            case '3': {
                 string target;
                 list.displayAll();
-                cout << "Enter the name of the product you want to remove" << endl;
+                cout << "Enter the name of the product you want to remove: ";
                 getline(cin, target);
-                list.removeProduct(target); 
-                list.saveToFile("products.txt"); break;
+                list.removeProduct(target);
+                list.saveToFile("products.txt");
+                break;
             }
-            case 4: return;
-            default: cout << "Invalid Choice" << endl;
+            case '4': return;
+            default: cout << "\033[1;31m❌ Invalid choice! Press any key to retry...\033[0m\n"; getch(); break;
         }
-
-        pause();
     }
 }
 
 int main() {
-    
-    while(1) {
-        int cate;
+    while (true) {
         system("clear");
-        cout << "\033[1;35mBusiness Management System\033[0m" << endl;
-        cout << "--------------------------" << endl;
-        cout << "Choose Category" << endl;
-        cout << "1. Employee" << endl;
-        cout << "2. Finance" << endl;
-        cout << "3. Products" << endl;
-        cout << "4. Exit" << endl;
-        cin >> cate;
+        cout << "\033[1;35m";
+        cout << "+===========================================+\n";
+        cout << "|        BUSINESS MANAGEMENT SYSTEM         |\n";
+        cout << "+===========================================+\033[0m\n";
+        cout << "|  [1] 👨‍💼  Employee Management            |\n";
+        cout << "|  [2] 💰  Finance                          |\n";
+        cout << "|  [3] 📦  Product Management               |\n";
+        cout << "|  [4] ❌  Exit                             |\n";
+        cout << "+-------------------------------------------+\n";
 
-        if(cate == 1) {
-            EmployeeMenu();
+        char choice = getch(); // รับตัวอักษรแบบไม่ต้องกด Enter
 
-        } else if(cate == 2) {
-            FinanceMenu();
+        system("clear");
 
-        } else if(cate == 3) {
-            ProductMenu();
-
-        } else if(cate == 4) {
-            system("clear");
-            break;
-        }
-        else {
-            system("clear");
-            cout << "Error! Please try again." << endl;;
+        switch (choice) {
+            case '1': EmployeeMenu(); break;
+            case '2': FinanceMenu(); break;
+            case '3': ProductMenu(); break;
+            case '4': 
+                cout << "Exiting...\n";
+                system("clear");
+                return 0;
+            default:
+                cout << "\n\033[1;31mInvalid selection! Press any key to retry...\033[0m\n";
+                getch();
         }
     }
-return 0;
 }
