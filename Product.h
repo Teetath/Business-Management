@@ -111,8 +111,8 @@ void ProductList::removeProduct(const string& name) {
 
 void ProductList::displayAll() {
     system("clear");
-    cout << "Name           | Price  | VAT    | Total  | Stock" << endl;
-    cout << "--------------------------------------------------" << endl;
+    cout << "Name           | Price   | VAT     | Total   | Stock" << endl;
+    cout << "-----------------------------------------------------" << endl;
     ProductNode* current = head;
     while (current) {
         current->product->displayProduct();
