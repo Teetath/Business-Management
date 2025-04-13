@@ -138,20 +138,29 @@ void ProductMenu() {
         switch(choice) {
             case '1': {
                 string name;
-                float price;
+                float price, cost;
                 int stock;
-
-                cout << "Product Name: ";
+                cout << "\033[1;36m+------------------------------------+\n";
+                cout << "|        🆕 Add New Product          |\n";
+                cout << "+------------------------------------+\033[0m\n";
+                cout << "📦 Product Name   : ";
                 getline(cin, name);
-                cout << "Product Price: ";
+            
+                cout << "💲 Product Price  : ";
                 cin >> price;
-                cout << "Product Stock: ";
-                cin >> stock;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-                list.addProduct(new Product(name, price, stock));
-                cout << "Product added successfully! 🎉\n";
-                list.displayAll();
+                cout << "💲 Product Cost   : ";
+                cin >> cost;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            
+                cout << "📦 Product Stock  : ";
+                cin >> stock;
+                cin.ignore();
+                list.addProduct(new Product(name, price, cost, stock));
                 list.saveToFile("products.txt");
+                
+                cout << "\n\033[1;32m✅ Product \"" << name << "\" added successfully! 🎉\033[0m\n";
                 break;
             }
             case '2': {
@@ -162,6 +171,7 @@ void ProductMenu() {
                 list.displayAll();
                 cout << "Enter the name of the product you want to remove: ";
                 getline(cin, target);
+                if(target == "cancel") continue;
                 list.removeProduct(target);
                 list.saveToFile("products.txt");
                 break;

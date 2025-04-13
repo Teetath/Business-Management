@@ -138,14 +138,20 @@ class EmployeeManager {
             system("clear");
             cout << "Enter ID: ";
             cin >> id;
+
+            cin.ignore(); // สำคัญ!
             cout << "Enter name: ";
-            cin >> name;
+            getline(cin, name);
+
             cout << "Enter age: ";
             cin >> age;
+
             cout << "Enter salary: ";
             cin >> salary;
+
+            cin.ignore(); // สำคัญอีกครั้ง
             cout << "Enter role: ";
-            cin >> role;
+            getline(cin, role);
 
             Employee emp(id, name, age, salary, role);
             add_to_list(emp);

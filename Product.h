@@ -2,13 +2,16 @@ class Product {
     private:
         string name;
         float price;
+        float cost;
         int stock;
     
     public:
-        Product(string name, float price, int stock);
+        Product(string name, float price, float cost, int stock);
         void displayProduct() const;
         string getName() const;
         float getPrice() const;
+        float getCost() const; 
+        float getProfitPerUnit() const;
         float getVAT() const;
         float getPriceWithVAT() const;
         int getStock() const;
@@ -41,35 +44,42 @@ class Product {
         void clearLL();
     };
 
-    Product::Product(string name, float price, int stock)
-    : name(name), price(price), stock(stock) {}
+    Product::Product(string name, float price, float cost, int stock)
+    : name(name), price(price), cost(cost), stock(stock) {}
 
 void Product::displayProduct() const {
-    if(stock == 0) {
+    cout << fixed << setprecision(2);
+    if (stock == 0) {
         cout << left << setw(15) << name
-        << "| " << setw(8) << fixed << setprecision(2) << price
-        << "| " << setw(8) << getVAT()
-        << "| " << setw(8) << getPriceWithVAT()
-        << "| " << setw(5) << "\033[1;31mOut of Stock\033[0m"<< endl;
-    }else {
-    cout << left << setw(15) << name
-    << "| " << setw(8) << fixed << setprecision(2) << price
-    << "| " << setw(8) << getVAT()
-    << "| " << setw(8) << getPriceWithVAT()
-    << "| " << setw(5) << stock << endl;
+             << "| " << setw(8) << price
+             << "| " << setw(8) << cost
+             << "| " << setw(8) << getVAT()
+             << "| " << setw(8) << getPriceWithVAT()
+             << "| " << setw(8) << getProfitPerUnit()
+             << "| \033[1;31mOut of Stock\033[0m" << endl;
+    } else {
+        cout << left << setw(15) << name
+             << "| " << setw(8) << price
+             << "| " << setw(8) << cost
+             << "| " << setw(8) << getVAT()
+             << "| " << setw(8) << getPriceWithVAT()
+             << "| " << setw(8) << getProfitPerUnit()
+             << "| " << setw(5) << stock << endl;
     }
 }
 
 string Product::getName() const { return name; }
 float Product::getPrice() const { return price; }
+float Product::getCost() const { return cost; }
 float Product::getVAT() const { return price*0.07f; }
 float Product::getPriceWithVAT() const { return price + getVAT(); }
+float Product::getProfitPerUnit() const { return price - cost; }
 int Product::getStock() const { return stock; }
 
 string Product::getLine() const {
     stringstream ss;
     ss << fixed << setprecision(2);  // พิมพ์ทศนิยม 2 ตำแหน่ง
-    ss << name << "," << price << "," << stock;
+    ss << name << "," << price << "," << cost << "," << stock;
     return ss.str();
 }
 
@@ -122,8 +132,8 @@ void ProductList::removeProduct(const string& name) {
 
 void ProductList::displayAll() {
     system("clear");
-    cout << "Name           | Price   | VAT     | Total   | Stock" << endl;
-    cout << "-----------------------------------------------------" << endl;
+    cout << "Name           | Price   | Cost    | VAT     | Total   | Profit  | Stock" << endl;
+cout << "-------------------------------------------------------------------------" << endl;
     ProductNode* current = head;
     while (current) {
         current->product->displayProduct();
@@ -137,15 +147,17 @@ void ProductList::loadFromFile(const string& filename) {
 
     while (getline(file, line)) {
         stringstream ss(line);
-        string name, priceStr, stockStr;
+        string name, priceStr, stockStr, costStr;
         getline(ss, name, ',');
         getline(ss, priceStr, ',');
+        getline(ss, costStr, ',');
         getline(ss, stockStr);
 
         float price = stof(priceStr);
+        float cost = stof(costStr);
         int stock = stoi(stockStr);
 
-        addProduct(new Product(name, price, stock));
+        addProduct(new Product(name, price, cost, stock));
     }
 
     file.close();
