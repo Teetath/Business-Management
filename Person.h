@@ -23,6 +23,14 @@ public:
     virtual void display() const {
         cout << "Name: " << name << ", Age: " << age << endl;
     }
+    
+    virtual float calculateBonus() {
+        return 0.0f; // Default ไม่มีโบนัส
+    }
+
+    virtual string getSummary() const {
+        return name + " (Age: " + to_string(age) + ")";
+    }
 };
 
 #endif

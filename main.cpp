@@ -46,7 +46,7 @@ void EmployeeMenu() {
         cout << "| ❌ [3] Remove Employee                     | \n";
         cout << "| 📋 [4] Display All Employees               | \n";
         cout << "| 🔙 [5] Summary of All Employees            | \n";
-        cout << "| 🔙 [6] Return to Main Menu                 | \n"
+        cout << "| 🔙 [6] Return to Main Menu                 | \n";
         cout << "+---------------------------------------------+\n";
         
         choice = getch();  // รับตัวอักษรแบบไม่ต้องกด Enter

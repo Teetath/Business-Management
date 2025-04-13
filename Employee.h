@@ -21,7 +21,8 @@ class Employee : public Person {
                  << ", Name: " << name
                  << ", Age: " << age
                  << ", Role: " << role
-                 << ", Salary: " << fixed << setprecision(2) << salary << " Bath" << endl;
+                 << ", Salary: " << fixed << setprecision(2) << salary
+                 << " Bath, Bonus: " << calculateBonus() << " Bath" << endl;
         }
 
         float calculateBonus() const {
