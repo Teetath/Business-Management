@@ -24,6 +24,18 @@ class Employee : public Person {
                  << ", Salary: " << fixed << setprecision(2) << salary << " Bath" << endl;
         }
 
+        float calculateBonus() const {
+            return salary * 0.1f; // พนักงานได้โบนัส 10%
+        }
+
+        string getSummary() const override {
+            stringstream ss;
+            ss << fixed << setprecision(2);
+            ss << name << " - " << role
+               << " (Total: " << (salary + calculateBonus()) << " Bath)";
+            return ss.str();
+        }
+
         string to_file_string() const {
             stringstream ss;
             ss << fixed << setprecision(2) << salary;
@@ -204,6 +216,20 @@ class EmployeeManager {
             Node* current = head;
             while (current) {
                 current->data.display();
+                current = current->next;
+            }
+        }
+
+        void getSummary() {
+            system("clear");
+            if (!head) {
+                cout << "No employees to summarize.\n";
+                return;
+            }
+        
+            Node* current = head;
+            while (current) {
+                cout << current->data.getSummary() << endl;
                 current = current->next;
             }
         }

@@ -45,7 +45,8 @@ void EmployeeMenu() {
         cout << "| 🔍 [2] Search Employee                     | \n";
         cout << "| ❌ [3] Remove Employee                     | \n";
         cout << "| 📋 [4] Display All Employees               | \n";
-        cout << "| 🔙 [5] Return to Main Menu                 | \n";
+        cout << "| 🔙 [5] Summary of All Employees            | \n";
+        cout << "| 🔙 [6] Return to Main Menu                 | \n"
         cout << "+---------------------------------------------+\n";
         
         choice = getch();  // รับตัวอักษรแบบไม่ต้องกด Enter
@@ -63,9 +64,12 @@ void EmployeeMenu() {
                 manager.remove_employee(); break;
             }
             case '4': {
-                manager.display_all(); break;
+                manager.display_all(); break; //เป็น polymorphism แล้วเพราะ inherit มาจาก Person
             }
-            case '5': return;
+            case '5': {
+                manager.getSummary(); break; //เป็น polymorphism
+            }
+            case '6': return;
             default: cout << "\033[1;31m❌ Invalid choice! Press any key to retry...\033[0m\n"; getch(); break;
         }
         Pause();
