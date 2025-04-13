@@ -28,6 +28,7 @@ class Product {
         ~ProductList();
     
         void addProduct(Product* product);
+        void removeProduct(const string& name);
         void displayAll();
         void loadFromFile(const string& filename);
         void saveToFile(const string& filename) const;
@@ -72,6 +73,33 @@ void ProductList::addProduct(Product* product) {
     ProductNode* node = new ProductNode(product);
     node->next = head;
     head = node;
+}
+
+void ProductList::removeProduct(const string& name) {
+    ProductNode* current = head;
+    ProductNode* previous = nullptr;
+
+    while (current) {
+        if (current->product->getName() == name) {
+            if (previous) {
+                previous->next = current->next;
+            } else {
+                // กรณี 1 node
+                head = current->next;
+            }
+            delete current->product;
+            delete current;
+            cout << "Product \"" << name << "\" removed successfully." << endl;
+
+            // หลังลบ อัพเดตไฟล์
+            saveToFile("products.txt");
+            return;
+        }
+        previous = current;
+        current = current->next;
+    }
+
+    cout << "Product \"" << name << "\" not found." << endl;
 }
 
 void ProductList::displayAll() {
