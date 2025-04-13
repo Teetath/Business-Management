@@ -10,7 +10,7 @@
 using namespace std;
 
 #include "Employee.h"
-#include "Product.h"
+#include "Finance.h"
 
 char getch() {
     char buf = 0;
@@ -78,7 +78,7 @@ void EmployeeMenu() {
 
 void FinanceMenu() {
     char choice;
-
+    ProductList list;
     while(true) {
         system("clear");
         cout << "\033[1;32m";
@@ -97,6 +97,8 @@ void FinanceMenu() {
         switch(choice) {
             case '1': {
                 // Add functionality for selling products
+                list.loadFromFile("products.txt");
+                list.sell();
                 cout << "\033[1;36m💰 Selling Product...\033[0m\n";
                 break;
             }

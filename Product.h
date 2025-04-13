@@ -12,6 +12,7 @@ class Product {
         float getVAT() const;
         float getPriceWithVAT() const;
         int getStock() const;
+        void setStock(int newStock);
         string getLine() const;
     };
     
@@ -36,17 +37,26 @@ class Product {
         void saveToFile(const string& filename) const;
         void comparePrice(float price);
         void compareStock(int stock);
+        void sell();
     };
 
     Product::Product(string name, float price, int stock)
     : name(name), price(price), stock(stock) {}
 
 void Product::displayProduct() const {
+    if(stock == 0) {
+        cout << left << setw(15) << name
+        << "| " << setw(8) << fixed << setprecision(2) << price
+        << "| " << setw(8) << getVAT()
+        << "| " << setw(8) << getPriceWithVAT()
+        << "| " << setw(5) << "\033[1;31mOut of Stock\033[0m"<< endl;
+    }else {
     cout << left << setw(15) << name
     << "| " << setw(8) << fixed << setprecision(2) << price
     << "| " << setw(8) << getVAT()
     << "| " << setw(8) << getPriceWithVAT()
     << "| " << setw(5) << stock << endl;
+    }
 }
 
 string Product::getName() const { return name; }
@@ -170,4 +180,8 @@ void ProductList::compareStock(int stock) {
             current->product->displayProduct();
         current = current->next;
     }
+}
+
+void Product::setStock(int newStock) {
+    stock = newStock;
 }
