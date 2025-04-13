@@ -1,3 +1,4 @@
-Sigma,45.60,30
-Skibidi,25.53,40
+Boss Coffee,27.30,45
 test,1.00,0
+Skibidi,25.53,18
+Sigma,45.60,0

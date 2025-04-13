@@ -38,6 +38,7 @@ class Product {
         void comparePrice(float price);
         void compareStock(int stock);
         void sell();
+        void clearLL();
     };
 
     Product::Product(string name, float price, int stock)
