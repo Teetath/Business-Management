@@ -127,7 +127,7 @@ void ProductMenu() {
         cout << "+=======================================+\033[0m\n";
         cout << "| 🆕 [1] Add Product                    | \n";
         cout << "| 👀 [2] Display Products               | \n";
-        cout << "| 🗑 [3] Remove Product                  | \n";
+        cout << "| 🗑  [3] Remove Product                 | \n";
         cout << "| 🔙 [4] Return to Main Menu            | \n";
         cout << "+---------------------------------------+\n";
         
