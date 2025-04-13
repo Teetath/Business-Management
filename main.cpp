@@ -68,6 +68,7 @@ void EmployeeMenu() {
             case '5': return;
             default: cout << "\033[1;31m❌ Invalid choice! Press any key to retry...\033[0m\n"; getch(); break;
         }
+        Pause();
     }
 }
 
@@ -77,13 +78,13 @@ void FinanceMenu() {
     while(true) {
         system("clear");
         cout << "\033[1;32m";
-        cout << "+=============================================+\n";
+        cout << "+=======================================+\n";
         cout << "| 💰       FINANCE MANAGEMENT        💰 | \n";
-        cout << "+=============================================+\033[0m\n";
-        cout << "| 💸 [1] Sell Product                       | \n";
-        cout << "| 📊 [2] Show Income/Expense/Profit         | \n";
-        cout << "| 🔙 [3] Return to Main Menu                | \n";
-        cout << "+---------------------------------------------+\n";
+        cout << "+=======================================+\033[0m\n";
+        cout << "| 💸 [1] Sell Product                   | \n";
+        cout << "| 📊 [2] Show Income/Expense/Profit     | \n";
+        cout << "| 🔙 [3] Return to Main Menu            | \n";
+        cout << "+---------------------------------------+\n";
         
         choice = getch();  // รับตัวอักษรแบบไม่ต้องกด Enter
         
@@ -103,6 +104,7 @@ void FinanceMenu() {
             case '3': return;
             default: cout << "\033[1;31m❌ Invalid choice! Press any key to retry...\033[0m\n"; getch(); break;
         }
+        Pause();
     }
 }
 
@@ -114,14 +116,14 @@ void ProductMenu() {
     while(true) {
         system("clear");
         cout << "\033[1;34m";
-        cout << "+=============================================+\n";
+        cout << "+=======================================+\n";
         cout << "| 📦       PRODUCT MANAGEMENT        📦 | \n";
-        cout << "+=============================================+\033[0m\n";
-        cout << "| 🆕 [1] Add Product                        | \n";
-        cout << "| 👀 [2] Display Products                   | \n";
-        cout << "| 🗑 [3] Remove Product                     | \n";
-        cout << "| 🔙 [4] Return to Main Menu                | \n";
-        cout << "+---------------------------------------------+\n";
+        cout << "+=======================================+\033[0m\n";
+        cout << "| 🆕 [1] Add Product                    | \n";
+        cout << "| 👀 [2] Display Products               | \n";
+        cout << "| 🗑 [3] Remove Product                  | \n";
+        cout << "| 🔙 [4] Return to Main Menu            | \n";
+        cout << "+---------------------------------------+\n";
         
         choice = getch();  // รับตัวอักษรแบบไม่ต้องกด Enter
         
@@ -161,6 +163,7 @@ void ProductMenu() {
             case '4': return;
             default: cout << "\033[1;31m❌ Invalid choice! Press any key to retry...\033[0m\n"; getch(); break;
         }
+        Pause();
     }
 }
 
