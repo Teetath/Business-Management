@@ -13,7 +13,6 @@ using namespace std;
 //ฟังก์ชันหยุดหน้าจอ
 void pause() {
     cout << "Press Enter to continue...";
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cin.get();
 }
 
@@ -31,6 +30,7 @@ void EmployeeMenu() {
             cout << "5. Return to Main Menu" << endl;
             cout << "Enter your choice: ";
             cin >> choice;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
             switch (choice) {
                 case 1: manager.add_employee(); break;
@@ -55,6 +55,7 @@ void FinanceMenu() {
         cout << "2. Show Income Expense / Profit" << endl;
         cout << "3. Return to Main Menu" << endl;
         cin >> choice;
+        system("clear");
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         switch(choice) {
@@ -85,19 +86,21 @@ void ProductMenu() {
         cout << "4. Return to Main Menu" << endl;
         cin >> choice;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        system("clear");
     
         switch(choice) {
             case 1: {
                 string name;
                 float price; int stock;
-        
                 cout << "Product Name: ";
                 getline(cin, name);
                 cout << "Product Price: ";
                 cin >> price;
                 cout << "Product Stock: ";
                 cin >> stock;
-        
+                while (cin.rdbuf()->in_avail() > 0) {
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
                 list.addProduct(new Product(name, price, stock));
                 cout << "Product added Sucessfully!" << endl;
                 list.displayAll();

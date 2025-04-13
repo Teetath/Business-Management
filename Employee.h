@@ -1,145 +1,212 @@
 #ifndef EMPLOYEE_H
 #define EMPLOYEE_H
+
 #include "Person.h"
 
 class Employee : public Person {
     private:
         float salary;
-        string role;
-    
+        string id,role;
+
     public:
-    Employee(string name, int age, float salary, string role)
-        : Person(name, age), salary(salary), role(role) {}
+        Employee(string id, string name, int age, float salary, string role)
+            : Person(name, age), id(id), salary(salary), role(role) {}
 
-    string getRole() const { return role; }
-    float getSalary() const { return salary; }
+        string getId() const { return id; }
+        string getRole() const { return role; }
+        float getSalary() const { return salary; }
 
-    void display() const {
-        cout << "Name: " << name
-                << ", Age: " << age
-                << ", Role: " << role
-                << ", Salary: " << fixed << setprecision(2) << salary << " Bath" << endl;
-    }
+        void display() const {
+            cout << "ID: " << id
+                 << ", Name: " << name
+                 << ", Age: " << age
+                 << ", Role: " << role
+                 << ", Salary: " << fixed << setprecision(2) << salary << " Bath" << endl;
+        }
 
-    string to_file_string() const {
-        stringstream ss;
-        ss << fixed << setprecision(2) << salary;
-        return name + "," + to_string(age) + "," + ss.str() + "," + role;
-    }
+        string to_file_string() const {
+            stringstream ss;
+            ss << fixed << setprecision(2) << salary;
+            return id + "," + name + "," + to_string(age) + "," + ss.str() + "," + role;
+        }
 
-    // Static function to create from file line
-    static Employee from_file_string(const string& line) {
-        string name, role;
-        int age;
-        float salary;
+        static Employee from_file_string(const string& line) {
+            string id, name, role;
+            int age;
+            float salary;
 
-        size_t pos1 = line.find(',');
-        size_t pos2 = line.find(',', pos1 + 1);
-        size_t pos3 = line.find(',', pos2 + 1);
+            size_t pos1 = line.find(',');
+            size_t pos2 = line.find(',', pos1 + 1);
+            size_t pos3 = line.find(',', pos2 + 1);
+            size_t pos4 = line.find(',', pos3 + 1);
 
-        name = line.substr(0, pos1);
-        age = stoi(line.substr(pos1 + 1, pos2 - pos1 - 1));
-        salary = stof(line.substr(pos2 + 1, pos3 - pos2 - 1));
-        role = line.substr(pos3 + 1);
+            id = line.substr(0, pos1);
+            name = line.substr(pos1 + 1, pos2 - pos1 - 1);
+            age = stoi(line.substr(pos2 + 1, pos3 - pos2 - 1));
+            salary = stof(line.substr(pos3 + 1, pos4 - pos3 - 1));
+            role = line.substr(pos4 + 1);
 
-        return Employee(name, age, salary, role);
-    }
+            return Employee(id, name, age, salary, role);
+        }
+};
+
+// ------------------- Linked List Version ----------------------
+
+struct Node {
+    Employee data;
+    Node* next;
+    Node(Employee emp) : data(emp), next(nullptr) {}
 };
 
 class EmployeeManager {
-private:
-    vector<Employee> employees;
-    const string filename = "employees.txt";
+    private:
+        Node* head = nullptr;
+        const string filename = "employees.txt";
 
-    void save_to_file() {
-        ofstream file(filename);
-        for (const auto& emp : employees) {
-            file << emp.to_file_string() << endl;
-        }
-        file.close();
-    }
-
-    void load_from_file() {
-        employees.clear();
-        ifstream file(filename);
-        string line;
-        while (getline(file, line)) {
-            if (!line.empty()) {
-                employees.push_back(Employee::from_file_string(line));
+        void save_to_file() {
+            ofstream file(filename);
+            Node* current = head;
+            while (current) {
+                file << current->data.to_file_string() << endl;
+                current = current->next;
             }
+            file.close();
         }
-        file.close();
-    }
 
-public:
-    EmployeeManager() {
-        load_from_file();
-    }
+        void load_from_file() {
+            clear_list();
+            ifstream file(filename);
+            string line;
+            while (getline(file, line)) {
+                if (!line.empty()) {
+                    Employee emp = Employee::from_file_string(line);
+                    add_to_list(emp);
+                }
+            }
+            file.close();
+        }
 
-    void add_employee() {
-        string name, role;
-        int age;
-        float salary;
-
-        cout << "Enter name: ";
-        cin >> name;
-        cout << "Enter age: ";
-        cin >> age;
-        cout << "Enter salary: ";
-        cin >> salary;
-        cout << "Enter role: ";
-        cin >> role;
-
-        employees.emplace_back(name, age, salary, role);
-        save_to_file();
-        cout << "Employee added and saved to file.\n";
-    }
-
-    void search_employee() {
-        string name;
-        cout << "Enter name to search: ";
-        cin >> name;
-
-        bool found = false;
-        for (const auto& emp : employees) {
-            if (emp.getName() == name) {
-                emp.display();
-                found = true;
+        void add_to_list(const Employee& emp) {
+            Node* newNode = new Node(emp);
+            if (!head) {
+                head = newNode;
+            } else {
+                Node* current = head;
+                while (current->next)
+                    current = current->next;
+                current->next = newNode;
             }
         }
 
-        if (!found) {
+        void clear_list() {
+            Node* current = head;
+            while (current) {
+                Node* toDelete = current;
+                current = current->next;
+                delete toDelete;
+            }
+            head = nullptr;
+        }
+
+    public:
+        EmployeeManager() {
+            load_from_file();
+        }
+
+        ~EmployeeManager() {
+            clear_list();
+        }
+
+        void add_employee() {
+            int age;
+            float salary;
+            string id, name, role;
+
+            system("clear");
+            cout << "Enter ID: ";
+            cin >> id;
+            cout << "Enter name: ";
+            cin >> name;
+            cout << "Enter age: ";
+            cin >> age;
+            cout << "Enter salary: ";
+            cin >> salary;
+            cout << "Enter role: ";
+            cin >> role;
+
+            Employee emp(id, name, age, salary, role);
+            add_to_list(emp);
+            save_to_file();
+            cout << "Employee added and saved to file.\n";
+        }
+
+        void search_employee() {
+            string input;
+            system("clear");
+            cout << "Enter ID or name to search: ";
+            cin >> input;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            system("clear");
+
+            Node* current = head;
+            bool found = false;
+
+            while (current) {
+                if (current->data.getId() == input || current->data.getName() == input) {
+                    current->data.display();
+                    found = true;
+                }
+                current = current->next;
+            }
+
+            if (!found) {
+                cout << "Employee not found.\n";
+            }
+        }
+
+        void remove_employee() {
+            string id;
+            system("clear");
+            cout << "Enter ID to remove: ";
+            cin >> id;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            system("clear");
+            Node* current = head;
+            Node* prev = nullptr;
+
+            while (current) {
+                if (current->data.getId() == id) {
+                    if (prev)
+                        prev->next = current->next;
+                    else
+                        head = current->next;
+
+                    delete current;
+                    save_to_file();
+                    cout << "Employee removed and file updated.\n";
+                    return;
+                }
+
+                prev = current;
+                current = current->next;
+            }
+
             cout << "Employee not found.\n";
         }
-    }
 
-    void remove_employee() {
-        string name;
-        cout << "Enter name to remove: ";
-        cin >> name;
-
-        for (auto it = employees.begin(); it != employees.end(); ++it) {
-            if (it->getName() == name) {
-                employees.erase(it);
-                save_to_file();
-                cout << "Employee removed and file updated.\n";
+        void display_all() {
+            system("clear");
+            if (!head) {
+                cout << "No employees to display.\n";
                 return;
             }
-        }
 
-        cout << "Employee not found.\n";
-    }
-
-    void display_all() {
-        if (employees.empty()) {
-            cout << "No employees to display.\n";
-            return;
+            Node* current = head;
+            while (current) {
+                current->data.display();
+                current = current->next;
+            }
         }
-
-        for (const auto& emp : employees) {
-            emp.display();
-        }
-    }
 };
 
 #endif
