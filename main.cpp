@@ -101,7 +101,7 @@ void EmployeeMenu() {
         cout << "| ❌ [3] Remove Employee                      | \n";
         cout << "| 📋 [4] Display All Employees                | \n";
         cout << "| 🔙 [5] Summary of All Employees             | \n";
-        cout << "| 🔙 [6] Return to Main Menu                  | \n";
+        cout << "| 🔙 [0] Return to Main Menu                  | \n";
         cout << "+---------------------------------------------+\n";
         
         choice = getch();
@@ -129,7 +129,7 @@ void EmployeeMenu() {
                     cout << "\033[1;32m[4]\033[0m Sort by Name (Z-A)\n";
                     cout << "\033[1;32m[5]\033[0m Sort by ID (Ascending)\n";
                     cout << "\033[1;32m[6]\033[0m Sort by ID (Descending)\n";
-                    cout << "\033[1;32m[7]\033[0m Return to Employee Menu\n";
+                    cout << "\033[1;32m[0]\033[0m Return to Employee Menu\n";
                     cout << "\033[1;36m************************************************\033[0m\n";
                     option = getch();
                     bool ascending = true;
@@ -141,7 +141,7 @@ void EmployeeMenu() {
                         case 4: mode = 2; ascending = false; break; // Name Z-A
                         case 5: mode = 3; ascending = true; break; // ID ASC
                         case 6: mode = 3; ascending = false; break; // ID DESC
-                        case 7: break;
+                        case 0: break;
                         default: continue;
                     }
                     if(option-'0' == 7)break;
@@ -151,7 +151,7 @@ void EmployeeMenu() {
             case '5': {
                 manager.getSummary(); break; //เป็น polymorphism
             }
-            case '6': return;
+            case '0': return;
             default : continue;
         }
         Pause();
@@ -168,7 +168,7 @@ void FinanceMenu() {
         cout << "+=======================================+\033[0m\n";
         cout << "| 💸 [1] Sell Product                   | \n";
         cout << "| 📊 [2] Show Income/Expense/Profit     | \n";
-        cout << "| 🔙 [3] Return to Main Menu            | \n";
+        cout << "| 🔙 [0] Return to Main Menu            | \n";
         cout << "+---------------------------------------+\n";
         
         choice = getch();  // รับตัวอักษรแบบไม่ต้องกด Enter
@@ -210,7 +210,7 @@ void ProductMenu() {
         cout << "| 🆕 [1] Add Product                    | \n";
         cout << "| 👀 [2] Display Products               | \n";
         cout << "| 🗑  [3] Remove Product                 | \n";
-        cout << "| 🔙 [4] Return to Main Menu            | \n";
+        cout << "| 🔙 [0] Return to Main Menu            | \n";
         cout << "+---------------------------------------+\n";
         
         choice = getch();  // รับตัวอักษรแบบไม่ต้องกด Enter
@@ -265,7 +265,7 @@ void ProductMenu() {
                 list.saveToFile("products.txt");
                 break;
             }
-            case '4': return;
+            case '0': return;
             default : continue;
         }
         Pause();
@@ -282,7 +282,7 @@ int main() {
         cout << "|  [1] 👨‍💼  Employee Management            |\n";
         cout << "|  [2] 💰  Finance                          |\n";
         cout << "|  [3] 📦  Product Management               |\n";
-        cout << "|  [4] ❌  Exit                             |\n";
+        cout << "|  [0] ❌  Exit                             |\n";
         cout << "+-------------------------------------------+\n";
 
         char choice = getch(); // รับตัวอักษรแบบไม่ต้องกด Enter
@@ -293,7 +293,7 @@ int main() {
             case '1': EmployeeMenu(); break;
             case '2': FinanceMenu(); break;
             case '3': ProductMenu(); break;
-            case '4': 
+            case '0': 
                 cout << "Exiting...\n";
                 system("clear");
                 return 0;
