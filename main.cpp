@@ -49,7 +49,7 @@ void EmployeeMenu() {
         cout << "| 🔙 [6] Return to Main Menu                  | \n";
         cout << "+---------------------------------------------+\n";
         
-        choice = getch();  // รับตัวอักษรแบบไม่ต้องกด Enter
+        choice = getch();
         
         system("clear");
 
@@ -64,7 +64,34 @@ void EmployeeMenu() {
                 manager.remove_employee(); break;
             }
             case '4': {
-                manager.display_all(); break; //เป็น polymorphism แล้วเพราะ inherit มาจาก Person
+                while(true){
+                    system("clear");
+                    char option;
+                    cout << "\033[1;34m************** Employee Sort Menu **************\033[0m\n";
+                    cout << "\033[1;32m[1]\033[0m Sort by Salary (Ascending)\n";
+                    cout << "\033[1;32m[2]\033[0m Sort by Salary (Descending)\n";
+                    cout << "\033[1;32m[3]\033[0m Sort by Name (A-Z)\n";
+                    cout << "\033[1;32m[4]\033[0m Sort by Name (Z-A)\n";
+                    cout << "\033[1;32m[5]\033[0m Sort by ID (Ascending)\n";
+                    cout << "\033[1;32m[6]\033[0m Sort by ID (Descending)\n";
+                    cout << "\033[1;32m[7]\033[0m Return to Employee Menu\n";
+                    cout << "\033[1;36m************************************************\033[0m\n";
+                    option = getch();
+                    bool ascending = true;
+                    int mode = 0;
+                    switch (option-'0') {
+                        case 1: mode = 1; ascending = true; break; // Salary ASC
+                        case 2: mode = 1; ascending = false; break; // Salary DESC
+                        case 3: mode = 2; ascending = true; break; // Name A-Z
+                        case 4: mode = 2; ascending = false; break; // Name Z-A
+                        case 5: mode = 3; ascending = true; break; // ID ASC
+                        case 6: mode = 3; ascending = false; break; // ID DESC
+                        case 7: break;
+                        default: continue;
+                    }
+                    if(option-'0' == 7)break;
+                    manager.display_all(mode,ascending);Pause(); //เป็น polymorphism แล้วเพราะ inherit มาจาก Person
+                }break;
             }
             case '5': {
                 manager.getSummary(); break; //เป็น polymorphism

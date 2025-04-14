@@ -213,20 +213,6 @@ class EmployeeManager {
             cout << "Employee not found.\n";
         }
 
-        void display_all() {
-            system("clear");
-            if (!head) {
-                cout << "No employees to display.\n";
-                return;
-            }
-
-            Node* current = head;
-            while (current) {
-                current->data.display();
-                current = current->next;
-            }
-        }
-
         void getSummary() {
             system("clear");
             if (!head) {
@@ -237,6 +223,77 @@ class EmployeeManager {
             Node* current = head;
             while (current) {
                 cout << current->data.getSummary() << endl;
+                current = current->next;
+            }
+        }
+        void split(Node* source, Node** frontRef, Node** backRef) {
+            Node* slow = source;
+            Node* fast = source->next;
+        
+            while (fast) {
+                fast = fast->next;
+                if (fast) {
+                    slow = slow->next;
+                    fast = fast->next;
+                }
+            }
+        
+            *frontRef = source;
+            *backRef = slow->next;
+            slow->next = nullptr;
+        }
+        Node* sortedMerge(Node* a, Node* b, int mode, bool ascending) {
+            if (!a) return b;
+            if (!b) return a;
+        
+            bool condition;
+            if (mode == 1) { // salary
+                condition = ascending ? (a->data.getSalary() < b->data.getSalary())
+                                      : (a->data.getSalary() > b->data.getSalary());
+            } else if (mode == 2) { // name
+                condition = ascending ? (a->data.getName() < b->data.getName())
+                                      : (a->data.getName() > b->data.getName());
+            } else { // ID
+                condition = ascending ? (a->data.getId() < b->data.getId())
+                                      : (a->data.getId() > b->data.getId());
+            }
+        
+            Node* result = nullptr;
+            if (condition) {
+                result = a;
+                result->next = sortedMerge(a->next, b, mode, ascending);
+            } else {
+                result = b;
+                result->next = sortedMerge(a, b->next, mode, ascending);
+            }
+        
+            return result;
+        }
+        void mergeSort(Node** headRef, int mode, bool ascending) {
+            Node* head = *headRef;
+            if (!head || !head->next) return;
+        
+            Node* a;
+            Node* b;
+            split(head, &a, &b);
+        
+            mergeSort(&a, mode, ascending);
+            mergeSort(&b, mode, ascending);
+        
+            *headRef = sortedMerge(a, b, mode, ascending);
+        }
+        void display_all(int mode, bool ascending) {
+            system("clear");
+            if (!head) {
+                cout << "No employees to sort.\n";
+                return;
+            }
+            
+            mergeSort(&head, mode, ascending);
+        
+            Node* current = head;
+            while (current) {
+                current->data.display();
                 current = current->next;
             }
         }
