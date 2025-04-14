@@ -36,13 +36,17 @@ class Product {
         bool isDuplicateName(const string& name) const;
         void addProduct(Product* product);
         void removeProduct(const string& name);
+        void sortByNameAZ();
+        void sortByNewest();
+        void sortByHighPrice();
+        void sortByLowStock();
         void displayAll();
+        void clearLL();
         void loadFromFile(const string& filename);
         void saveToFile(const string& filename) const;
         void comparePrice(float price);
         void compareStock(int stock);
         void sell();
-        void clearLL();
     };
 
     Product::Product(string name, float price, float cost, int stock)
@@ -142,6 +146,58 @@ void ProductList::removeProduct(const string& name) {
     cout << "Product \"" << name << "\" not found." << endl;
 }
 
+void ProductList::sortByNameAZ() {
+    if (!head || !head->next) return;
+
+    for (ProductNode* i = head; i != nullptr; i = i->next) {
+        for (ProductNode* j = i->next; j != nullptr; j = j->next) {
+            if (i->product->getName() > j->product->getName()) {
+                swap(i->product, j->product);
+            }
+        }
+    }
+}
+
+void ProductList::sortByNewest() {
+    ProductNode* prev = nullptr;
+    ProductNode* current = head;
+    ProductNode* next = nullptr;
+
+    while (current) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+
+    head = prev;
+}
+
+void ProductList::sortByHighPrice() {
+    if (!head || !head->next) return;
+
+    for (ProductNode* i = head; i != nullptr; i = i->next) {
+        for (ProductNode* j = i->next; j != nullptr; j = j->next) {
+            if (i->product->getPrice() < j->product->getPrice()) {
+                swap(i->product, j->product);
+            }
+        }
+    }
+}
+
+void ProductList::sortByLowStock() {
+    if (!head || !head->next) return;
+
+    for (ProductNode* i = head; i != nullptr; i = i->next) {
+        for (ProductNode* j = i->next; j != nullptr; j = j->next) {
+            if (i->product->getStock() > j->product->getStock()) {
+                swap(i->product, j->product);
+            }
+        }
+    }
+}
+
+
 void ProductList::displayAll() {
     system("clear");
     cout << "Name           | Price   | Cost    | VAT     | Total   | Profit  | Stock" << endl;
@@ -153,7 +209,20 @@ cout << "-----------------------------------------------------------------------
     }
 }
 
+void ProductList::clearLL() {
+    ProductNode* current = head;
+    while (current) {
+        ProductNode* temp = current;
+        current = current->next;
+        delete temp->product;
+        delete temp;
+    }
+    head = nullptr;
+}
+
 void ProductList::loadFromFile(const string& filename) {
+    clearLL();
+    
     ifstream file(filename);
     string line;
 

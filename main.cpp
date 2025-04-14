@@ -31,6 +31,61 @@ void Pause() {
     getch();
 }
 
+void SortproductMenu(ProductList& list) {
+    char choice;
+    while (true) {
+        system("clear");
+        cout << "\033[1;34m";
+        cout << "+=============================================+\n";
+        cout << "| 🔽        SORT PRODUCT DISPLAY MENU        |\n";
+        cout << "+=============================================+\033[0m\n";
+        cout << "| [1] 🆕 Newest to Oldest                    |\n";
+        cout << "| [2] 📜 Oldest to Newest                    |\n";
+        cout << "| [3] 🔤 Sort by Name A-Z                    |\n";
+        cout << "| [4] 💰 Price High to Low                   |\n";
+        cout << "| [5] 📦 Stock Low to High                   |\n";
+        cout << "| [0] 🔙 Back to Product Menu                |\n";
+        cout << "+---------------------------------------------+\n";
+        cout << "Select option (press key): " << flush;
+
+        choice = getch(); // รับค่าทันทีที่กด ไม่ต้อง Enter
+        system("clear");
+
+        switch (choice) {
+            case '1':
+                system("clear");
+                list.sortByNewest();
+                list.displayAll();
+                break;
+            case '2':
+                system("clear");
+                list.loadFromFile("products.txt");
+                list.displayAll();
+                break;
+            case '3':
+                system("clear");
+                list.sortByNameAZ();
+                list.displayAll();
+                break;
+            case '4':
+                system("clear");
+                list.sortByHighPrice();
+                list.displayAll();
+                break;
+            case '5':
+                system("clear");
+                list.sortByLowStock();
+                list.displayAll();
+                break;
+            case '0':
+                return;
+            default:
+                continue;
+        }
+        Pause();
+    }
+}
+
 void EmployeeMenu() {
     EmployeeManager manager;
     char choice;
@@ -196,8 +251,10 @@ void ProductMenu() {
                 break;
             }
             case '2': {
-                list.displayAll(); break;
-            }
+                SortproductMenu(list);
+                continue;
+                break;
+            }   
             case '3': {
                 string target;
                 list.displayAll();
