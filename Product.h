@@ -32,7 +32,8 @@ class Product {
     public:
         ProductList();
         ~ProductList();
-    
+        
+        bool isDuplicateName(const string& name) const;
         void addProduct(Product* product);
         void removeProduct(const string& name);
         void displayAll();
@@ -95,6 +96,17 @@ ProductList::~ProductList() {
         delete temp->product;
         delete temp;
     }
+}
+
+bool ProductList::isDuplicateName(const string& name) const {
+    ProductNode* current = head;
+    while (current) {
+        if (current->product->getName() == name) {
+            return true; // พบชื่อซ้ำ
+        }
+        current = current->next;
+    }
+    return false; // ไม่ซ้ำ
 }
 
 void ProductList::addProduct(Product* product) {

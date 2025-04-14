@@ -145,7 +145,12 @@ void ProductMenu() {
                 cout << "+------------------------------------+\033[0m\n";
                 cout << "📦 Product Name   : ";
                 getline(cin, name);
-            
+
+                if (list.isDuplicateName(name)) {
+                    cout << "\033[1;31m❌ Product name already exists! Cannot add duplicate.\033[0m\n";
+                    break;
+                }
+
                 cout << "💲 Product Price  : ";
                 cin >> price;
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
