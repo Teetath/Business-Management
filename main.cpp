@@ -41,12 +41,12 @@ void EmployeeMenu() {
         cout << "+=============================================+\n";
         cout << "| 👨‍💼       EMPLOYEE MANAGEMENT         👨‍💼 | \n";
         cout << "+=============================================+\033[0m\n";
-        cout << "| ➕ [1] Add Employee                        | \n";
-        cout << "| 🔍 [2] Search Employee                     | \n";
-        cout << "| ❌ [3] Remove Employee                     | \n";
-        cout << "| 📋 [4] Display All Employees               | \n";
-        cout << "| 🔙 [5] Summary of All Employees            | \n";
-        cout << "| 🔙 [6] Return to Main Menu                 | \n";
+        cout << "| ➕ [1] Add Employee                         | \n";
+        cout << "| 🔍 [2] Search Employee                      | \n";
+        cout << "| ❌ [3] Remove Employee                      | \n";
+        cout << "| 📋 [4] Display All Employees                | \n";
+        cout << "| 🔙 [5] Summary of All Employees             | \n";
+        cout << "| 🔙 [6] Return to Main Menu                  | \n";
         cout << "+---------------------------------------------+\n";
         
         choice = getch();  // รับตัวอักษรแบบไม่ต้องกด Enter
