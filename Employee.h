@@ -17,14 +17,15 @@ class Employee : public Person {
         float getSalary() const { return salary; }
 
         void display() const {
-            cout << "ID: " << id
-                 << ", Name: " << name
-                 << ", Age: " << age
-                 << ", Role: " << role
-                 << ", Salary: " << fixed << setprecision(2) << salary
-                 << " Bath, Bonus: " << calculateBonus() << " Bath" << endl;
+            cout << fixed << setprecision(2);
+            cout << left
+                 << setw(12) << id
+                 << "| " << setw(20) << name
+                 << "| " << setw(5)  << age
+                 << "| " << setw(12) << role
+                 << "| " << setw(10) << salary
+                 << "| " << setw(10) << calculateBonus() << endl;
         }
-
         float calculateBonus() const {
             return salary * 0.1f; // พนักงานได้โบนัส 10%
         }
@@ -136,26 +137,59 @@ class EmployeeManager {
             string id, name, role;
 
             system("clear");
-            while(true) {
-                cout << "Enter ID: ";
+            cout << "\033[1;36m+------------------------------------+\n";
+            cout << "|        🆕 Add New Employee         |\n";
+            cout << "+------------------------------------+\033[0m\n";
+            while (true) {
+                cout << "\033[1;34mEnter ID: \033[0m ";
                 cin >> id;
-                if(isDuplicateID(id)) cout << "ID: " << id << " Already Exists. Please Enter a New ID" << endl;
-                else break;
+            
+                if (!isValidID(id)) {
+                    cout << "\033[1;31mError: ID must contain only English letters or digits.\033[0m\n";
+                    continue;
+                }
+                if (isDuplicateID(id)) {
+                    cout << "\033[1;31mError: ID '" << id << "' already exists. Please enter a new one.\033[0m\n";
+                    continue;
+                }
+                break;
             }
 
-            cin.ignore(); // สำคัญ!
-            cout << "Enter name: ";
-            getline(cin, name);
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            while(true){
+                cout << "\033[1;34mEnter name: \033[0m";
+                getline(cin, name);
+                if (!isValidName(name)) {
+                    cout << "\033[1;31mError: Name must contain only English letters.\033[0m\n";
+                    continue;
+                }
+                break;
+            }
 
-            cout << "Enter age: ";
-            cin >> age;
+            while(true){
+                cout << "\033[1;34mEnter age: \033[0m";
+                cin >> age;
+                if(check() && age > 0)break;
+                else cout << "\033[1;31mError!?! Please try again.\033[0m\n";
+            }
+            
+            while(true){
+                cout << "\033[1;34mEnter salary: \033[0m";
+                cin >> salary;
+                if(check() && salary >= 0)break;
+                else cout << "\033[1;31mError!?! Please try again.\033[0m\n";
+            }
 
-            cout << "Enter salary: ";
-            cin >> salary;
-
-            cin.ignore(); // สำคัญอีกครั้ง
-            cout << "Enter role: ";
-            getline(cin, role);
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            while(true){
+                cout << "\033[1;34mEnter role: \033[0m";
+                getline(cin, role);
+                if (!isValidName(role)) {
+                    cout << "\033[1;31mError: Role must contain only English letters.\033[0m\n";
+                    continue;
+                }
+                break;
+            }
 
             Employee emp(id, name, age, salary, role);
             add_to_list(emp);
@@ -177,9 +211,8 @@ class EmployeeManager {
         void search_employee() {
             string input;
             system("clear");
-            cout << "Enter ID or name to search: ";
+            cout << "\033[1;34mEnter ID or name to search: \033[0m";
             cin >> input;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             system("clear");
 
             Node* current = head;
@@ -201,7 +234,7 @@ class EmployeeManager {
         void remove_employee() {
             string id;
             system("clear");
-            cout << "Enter ID to remove: ";
+            cout << "\033[1;34mEnter ID to remove: \033[0m";
             cin >> id;
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             system("clear");
@@ -297,21 +330,61 @@ class EmployeeManager {
         
             *headRef = sortedMerge(a, b, mode, ascending);
         }
-        void display_all(int mode, bool ascending) {
-            system("clear");
+        bool display_all() {
+
             if (!head) {
                 cout << "No employees to sort.\n";
-                return;
+                return true;
             }
-            
-            mergeSort(&head, mode, ascending);
-        
-            Node* current = head;
-            while (current) {
-                current->data.display();
-                current = current->next;
-            }
-        }
-};
+            while(true){
+                system("clear");
+                char option;
+                cout << "\033[1;34m************** Employee Sort Menu **************\033[0m\n";
+                cout << "\033[1;32m[1]\033[0m Sort by Salary (Ascending)\n";
+                cout << "\033[1;32m[2]\033[0m Sort by Salary (Descending)\n";
+                cout << "\033[1;32m[3]\033[0m Sort by Name (A-Z)\n";
+                cout << "\033[1;32m[4]\033[0m Sort by Name (Z-A)\n";
+                cout << "\033[1;32m[5]\033[0m Sort by ID (Ascending)\n";
+                cout << "\033[1;32m[6]\033[0m Sort by ID (Descending)\n";
+                cout << "\033[1;32m[0]\033[0m Return to Employee Menu\n";
+                cout << "\033[1;36m************************************************\033[0m\n";
+                option = getch();
 
+                bool ascending = true;
+                int mode = 0;
+                switch (option-'0') {
+                    case 1: mode = 1; ascending = true; break; // Salary ASC
+                    case 2: mode = 1; ascending = false; break; // Salary DESC
+                    case 3: mode = 2; ascending = true; break; // Name A-Z
+                    case 4: mode = 2; ascending = false; break; // Name Z-A
+                    case 5: mode = 3; ascending = true; break; // ID ASC
+                    case 6: mode = 3; ascending = false; break; // ID DESC
+                    case 0: return true;
+                    default: continue;
+                }
+                mergeSort(&head, mode, ascending);
+                system("clear");
+                displayTableHeader();
+                Node* current = head;
+                while (current) {
+                    current->data.display();
+                    current = current->next;
+                }
+                Pause();
+            }
+            return false;
+        }
+
+        void displayTableHeader() {
+            cout << left
+                << setw(12) << "ID"
+                << "| " << setw(20) << "Name"
+                << "| " << setw(5)  << "Age"
+                << "| " << setw(12) << "Role"
+                << "| " << setw(10) << "Salary"
+                << "| " << setw(10) << "Bonus" << endl;
+            cout << string(80, '-') << endl;
+        }
+
+};
 #endif

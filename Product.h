@@ -25,7 +25,7 @@ class Product {
         ProductNode(Product* product) : product(product), next(nullptr) {}
     };
     
-    class ProductList {
+class ProductList {
     private:
         ProductNode* head;
         float totalincome;
@@ -36,6 +36,7 @@ class Product {
         
         bool isDuplicateName(const string& name) const;
         void addProduct(Product* product);
+        void add_new_product();
         void removeProduct(const string& name);
         void sortByNameAZ();
         void sortByNewest();
@@ -50,6 +51,7 @@ class Product {
         void sell();
         void printSalesData(const string& name) const;
         void summaryIncome(const string& name) const;
+        void SortproductMenu(ProductList& list);
     };
 
     Product::Product(string name, float price, float cost, int stock)
@@ -281,4 +283,92 @@ void ProductList::compareStock(int stock) {
 
 void Product::setStock(int newStock) {
     stock = newStock;
+}
+
+void ProductList::SortproductMenu(ProductList& list) {
+    char choice;
+    while (true) {
+        system("clear");
+        cout << "\033[1;34m";
+        cout << "+=============================================+\n";
+        cout << "| 🔽        SORT PRODUCT DISPLAY MENU        |\n";
+        cout << "+=============================================+\033[0m\n";
+        cout << "| [1] 🆕 Newest to Oldest                    |\n";
+        cout << "| [2] 📜 Oldest to Newest                    |\n";
+        cout << "| [3] 🔤 Sort by Name A-Z                    |\n";
+        cout << "| [4] 💰 Price High to Low                   |\n";
+        cout << "| [5] 📦 Stock Low to High                   |\n";
+        cout << "| [0] 🔙 Back to Product Menu                |\n";
+        cout << "+---------------------------------------------+\n";
+
+        choice = getch();
+        system("clear");
+
+        switch (choice) {
+            case '1':
+                system("clear");
+                sortByNewest();
+                displayAll();
+                break;
+            case '2':
+                system("clear");
+                loadFromFile("products.txt");
+                displayAll();
+                break;
+            case '3':
+                system("clear");
+                sortByNameAZ();
+                displayAll();
+                break;
+            case '4':
+                system("clear");
+                sortByHighPrice();
+                displayAll();
+                break;
+            case '5':
+                system("clear");
+                sortByLowStock();
+                displayAll();
+                break;
+            case '0':
+                return;
+            default:
+                continue;
+        }
+        Pause();
+    }
+}
+void ProductList::add_new_product(){
+    string name;
+    float price, cost;
+    int stock;
+    while(true){
+        system("clear");
+        cout << "\033[1;36m+------------------------------------+\n";
+        cout << "|        🆕 Add New Product          |\n";
+        cout << "+------------------------------------+\033[0m\n";
+        cout << "\033[1;34m📦 Product Name   : \033[0m";
+        getline(cin, name);
+
+        if (isDuplicateName(name)) {
+            cout << "\033[1;31m❌ Product \'"<< name << "\' already exists! Cannot add duplicate.\033[0m\n";
+            break;
+        }
+    }
+    
+
+    cout << "\033[1;34m💲 Product Price  : \033[0m";
+    cin >> price;
+
+    cout << "\033[1;34m💲 Product Cost   : \033[0m";
+    cin >> cost;
+
+    cout << "\033[1;34m📦 Product Stock  : \033[0m";
+    cin >> stock;
+
+    addProduct(new Product(name, price, cost, stock));
+    saveToFile("products.txt");
+    
+    cout << "\n\033[1;32m✅ Product \"" << name << "\" added successfully! 🎉\033[0m\n";
+    return;
 }
