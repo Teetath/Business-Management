@@ -28,6 +28,7 @@ class Product {
     class ProductList {
     private:
         ProductNode* head;
+        float totalincome;
     
     public:
         ProductList();
@@ -47,6 +48,8 @@ class Product {
         void comparePrice(float price);
         void compareStock(int stock);
         void sell();
+        void printSalesData(const string& name) const;
+        void summaryIncome(const string& name) const;
     };
 
     Product::Product(string name, float price, float cost, int stock)

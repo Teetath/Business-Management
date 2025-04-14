@@ -186,7 +186,10 @@ void FinanceMenu() {
             }
             case '2': {
                 // Add functionality for showing income/expense/profit
+                ProductList list;
                 cout << "\033[1;36m📈 Showing Income/Expense/Profit...\033[0m\n";
+                list.printSalesData("sales.txt");
+                list.summaryIncome("sales.txt");
                 break;
             }
             case '3': return;
