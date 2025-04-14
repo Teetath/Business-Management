@@ -25,9 +25,10 @@ void EmployeeMenu() {
         cout << "+=============================================+\033[0m\n";
         cout << "| ➕ [1] Add Employee                         | \n";
         cout << "| 🔍 [2] Search Employee                      | \n";
-        cout << "| ❌ [3] Remove Employee                      | \n";
-        cout << "| 📋 [4] Display All Employees                | \n";
-        cout << "| 🔙 [5] Summary of All Employees             | \n";
+        cout << "| ✏️  [3] Edit Employee                        | \n";
+        cout << "| ❌ [4] Remove Employee                      | \n";
+        cout << "| 📋 [5] Display All Employees                | \n";
+        cout << "| 🔙 [6] Summary of All Employees             | \n";
         cout << "| 🔙 [0] Return to Main Menu                  | \n";
         cout << "+---------------------------------------------+\n";
         
@@ -43,12 +44,15 @@ void EmployeeMenu() {
                 manager.search_employee(); break;
             }
             case '3': {
+                manager.edit_employee(); break;
+                
+            }case '4': {
                 manager.remove_employee(); break;
             }
-            case '4': {
-                if(manager.display_all())continue;break; //เป็น polymorphism แล้วเพราะ inherit มาจาก Person
-            }
             case '5': {
+                if(manager.display_sort_menu())continue;break; //เป็น polymorphism แล้วเพราะ inherit มาจาก Person
+            }
+            case '6': {
                 manager.getSummary(); break; //เป็น polymorphism
             }
             case '0': return;
@@ -111,8 +115,9 @@ void ProductMenu() {
         cout << "| 📦       PRODUCT MANAGEMENT        📦 | \n";
         cout << "+=======================================+\033[0m\n";
         cout << "| 🆕 [1] Add Product                    | \n";
-        cout << "| 👀 [2] Display Products               | \n";
-        cout << "| 🗑  [3] Remove Product                 | \n";
+        cout << "| ✏️  [2] Edit Product                   | \n";
+        cout << "| 👀 [3] Display Products               | \n";
+        cout << "| 🗑  [4] Remove Product                 | \n";
         cout << "| 🔙 [0] Return to Main Menu            | \n";
         cout << "+---------------------------------------+\n";
         
@@ -123,13 +128,15 @@ void ProductMenu() {
         switch(choice) {
             case '1': {
                 list.add_new_product();break;
-            }
-            case '2': {
+            }case '2': {
+                list.edit_product();break;
+            }   
+            case '3': {
                 list.SortproductMenu(list);
                 continue;
                 break;
             }   
-            case '3': {
+            case '4': {
                 string target;
                 list.displayAll();
                 cout << "\033[1;34mEnter the name of the product you want to remove: \033[0m";

@@ -330,7 +330,7 @@ class EmployeeManager {
         
             *headRef = sortedMerge(a, b, mode, ascending);
         }
-        bool display_all() {
+        bool display_sort_menu() {
 
             if (!head) {
                 cout << "No employees to sort.\n";
@@ -339,15 +339,18 @@ class EmployeeManager {
             while(true){
                 system("clear");
                 char option;
-                cout << "\033[1;34m************** Employee Sort Menu **************\033[0m\n";
-                cout << "\033[1;32m[1]\033[0m Sort by Salary (Ascending)\n";
-                cout << "\033[1;32m[2]\033[0m Sort by Salary (Descending)\n";
-                cout << "\033[1;32m[3]\033[0m Sort by Name (A-Z)\n";
-                cout << "\033[1;32m[4]\033[0m Sort by Name (Z-A)\n";
-                cout << "\033[1;32m[5]\033[0m Sort by ID (Ascending)\n";
-                cout << "\033[1;32m[6]\033[0m Sort by ID (Descending)\n";
-                cout << "\033[1;32m[0]\033[0m Return to Employee Menu\n";
-                cout << "\033[1;36m************************************************\033[0m\n";
+                cout << "\033[1;34m";
+                cout << "+=================================================+\n";
+                cout << "| 🔽           EMPLOYEE SORT MENU                 |\n";
+                cout << "+=================================================+\033[0m\n";
+                cout << "| \033[1;32m[1]\033[0m 💵 Salary (Low to High)                     |\n";
+                cout << "| \033[1;32m[2]\033[0m 💰 Salary (High to Low)                     |\n";
+                cout << "| \033[1;32m[3]\033[0m 🔤 Name (A-Z)                               |\n";
+                cout << "| \033[1;32m[4]\033[0m 🔡 Name (Z-A)                               |\n";
+                cout << "| \033[1;32m[5]\033[0m 🆔 ID (Ascending)                           |\n";
+                cout << "| \033[1;32m[6]\033[0m 🆔 ID (Descending)                          |\n";
+                cout << "| \033[1;32m[0]\033[0m 🔙 Return to Employee Menu                  |\n";
+                cout << "+-------------------------------------------------+\n";
                 option = getch();
 
                 bool ascending = true;
@@ -365,14 +368,18 @@ class EmployeeManager {
                 mergeSort(&head, mode, ascending);
                 system("clear");
                 displayTableHeader();
-                Node* current = head;
+                display_all();
+                Pause();
+            }
+            return false;
+        }
+
+        void display_all(){
+            Node* current = head;
                 while (current) {
                     current->data.display();
                     current = current->next;
                 }
-                Pause();
-            }
-            return false;
         }
 
         void displayTableHeader() {
@@ -386,5 +393,136 @@ class EmployeeManager {
             cout << string(80, '-') << endl;
         }
 
+        void edit_employee() {
+            string id;
+            system("clear");
+            displayTableHeader();
+            display_all();
+            cout << "\033[1;34mEnter ID to edit: \033[0m";
+            cin >> id;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        
+            Node* current = head;
+            while (current) {
+                if (current->data.getId() == id) {
+                    string empID = current->data.getId();
+                    string name = current->data.getName();
+                    int age = current->data.getAge();
+                    float salary = current->data.getSalary();
+                    string role = current->data.getRole();
+        
+                    char option;
+                    do {
+                        system("clear");
+                        cout << "\033[1;36m";
+                        cout << "+---------------------------------------------+\n";
+                        cout << "|       ✏️  Edit Employee Information          |\n";
+                        cout << "+---------------------------------------------+\033[0m\n";
+
+                        cout << "\033[1;33mCurrent Employee Info:\033[0m\n";
+                        cout << left
+                            << setw(12) << "ID"
+                            << "| " << setw(20) << "Name"
+                            << "| " << setw(5)  << "Age"
+                            << "| " << setw(12) << "Role"
+                            << "| " << setw(10) << "Salary"<< endl;
+                        cout << string(80, '-') << endl;
+                        cout << fixed << setprecision(2);
+                        cout << left
+                            << setw(12) << empID
+                            << "| " << setw(20) << name
+                            << "| " << setw(5)  << age
+                            << "| " << setw(12) << role
+                            << "| " << setw(10) << salary<< endl;
+
+                        cout << "\n\033[1;34mChoose the field you want to edit:\033[0m\n";
+                        cout << "\033[1;36m";
+                        cout << "  [1] \033[0mEdit \033[1mID\033[0m\n";
+                        cout << "\033[1;36m  [2] \033[0mEdit \033[1mName\033[0m\n";
+                        cout << "\033[1;36m  [3] \033[0mEdit \033[1mAge\033[0m\n";
+                        cout << "\033[1;36m  [4] \033[0mEdit \033[1mSalary\033[0m\n";
+                        cout << "\033[1;36m  [5] \033[0mEdit \033[1mRole\033[0m\n";
+                        cout << "\033[1;32m  [S] \033[0m\033[1mSave and Exit\033[0m\n";
+                        cout << "\033[1;31m  [C] \033[0m\033[1mCancel\033[0m\n";
+                        option = getch();
+                        string input;
+                        switch (option) {
+                            case '1':
+                                cout << "Enter new ID (leave blank to keep current): ";
+                                getline(cin, input);
+                                if (!input.empty()) {
+                                    if (!isDuplicateID(input) && isValidID(input)) empID = input;
+                                    else cout << "\033[1;31mInvalid or duplicate ID. Keeping current.\033[0m\n";
+                                }
+                                Pause();
+                                break;
+                            case '2':
+                                cout << "Enter new name (leave blank to keep current): ";
+                                getline(cin, input);
+                                if (!input.empty()) {
+                                    if (isValidName(input)) name = input;
+                                    else cout << "\033[1;31mInvalid name. Keeping current.\033[0m\n";
+                                }
+                                Pause();
+                                break;
+                            case '3':
+                                cout << "Enter new age (or type 'cancel' to skip): ";
+                                getline(cin, input);
+                                if (input != "cancel") {
+                                    try {
+                                        int newAge = stoi(input);
+                                        if (check() && newAge > 0) age = newAge;
+                                        else cout << "\033[1;31mInvalid age. Keeping current.\033[0m\n";
+                                    } catch (...) {
+                                        cout << "\033[1;31mInvalid input. Keeping current.\033[0m\n";
+                                    }
+                                }
+                                Pause();
+                                break;
+                            case '4':
+                                cout << "Enter new salary (or type 'cancel' to skip): ";
+                                getline(cin, input);
+                                if (input != "cancel") {
+                                    try {
+                                        float newSalary = stof(input);
+                                        if (check() && newSalary >= 0) salary = newSalary;
+                                        else cout << "\033[1;31mInvalid salary. Keeping current.\033[0m\n";
+                                    } catch (...) {
+                                        cout << "\033[1;31mInvalid input. Keeping current.\033[0m\n";
+                                    }
+                                }
+                                Pause();
+                                break;
+                            case '5':
+                                cout << "Enter new role (leave blank to keep current): ";
+                                getline(cin, input);
+                                if (!input.empty()) {
+                                    if (isValidName(input)) role = input;
+                                    else cout << "\033[1;31mInvalid role. Keeping current.\033[0m\n";
+                                }
+                                Pause();
+                                break;
+                            case 'S':
+                            case 's':
+                                current->data = Employee(empID, name, age, salary, role);
+                                save_to_file();
+                                cout << "\033[1;32m✅ Employee updated successfully!\033[0m\n";
+                                return;
+                            case 'C':
+                            case 'c':
+                                cout << "\033[1;33mChanges cancelled..\033[0m\n";
+                                return;
+                            default:
+                                cout << "\033[1;31mInvalid option. Try again.\033[0m\n";
+                                Pause();
+                                break;
+                        }
+                    } while (true);
+                }
+                current = current->next;
+            }
+        
+            cout << "\033[1;31mEmployee with ID '" << id << "' not found.\033[0m\n";
+        }
 };
 #endif

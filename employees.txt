@@ -1,1 +1,1 @@
-000,Beta Test,1,0.00,Beta Tester
+999,Beta Test,20,10.00,CEO
