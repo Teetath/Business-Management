@@ -1,2 +1,4 @@
 Sigma,10,487.92
 Sigma,5,243.96
+Bosslnwza,1,85.60
+Bosslnwza,10,856.00

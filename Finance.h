@@ -21,7 +21,7 @@ void ProductList::sell() {
                 current->product->setStock(stock-amount);
                 float earned = amount * current->product->getPriceWithVAT();
                 totalincome += earned;
-                cout << "Sold" << amount << "of" << name << "Reamining in stock: " << stock - amount << endl;
+                cout << "Sold " << amount << " of '" << name << "' Remaining in stock: " << stock - amount << endl;
                 saveToFile("products.txt");
 
                 ofstream saleoutput("sales.txt", ios::app);
@@ -52,7 +52,7 @@ void ProductList::summaryIncome(const string& filename) const {
         total += income;
     }
     file.close();
-    cout << "Total income : " << fixed << setprecision(2) << total << "Bath" << endl;
+    cout << "Total income : " << fixed << setprecision(2) << total << " Bath" << endl;
 }
 
 void ProductList::printSalesData(const string& filename) const {
