@@ -136,8 +136,12 @@ class EmployeeManager {
             string id, name, role;
 
             system("clear");
-            cout << "Enter ID: ";
-            cin >> id;
+            while(true) {
+                cout << "Enter ID: ";
+                cin >> id;
+                if(isDuplicateID(id)) cout << "ID: " << id << " Already Exists. Please Enter a New ID" << endl;
+                else break;
+            }
 
             cin.ignore(); // สำคัญ!
             cout << "Enter name: ";
@@ -157,6 +161,17 @@ class EmployeeManager {
             add_to_list(emp);
             save_to_file();
             cout << "Employee added and saved to file.\n";
+        }
+
+        bool isDuplicateID(const string& id) const {
+            Node* current = head;
+            while (current) {
+                if (current->data.getId() == id) {
+                    return true; // พบไอดีซ้ำ
+                }
+                current = current->next;
+            }
+            return false; // ไม่ซ้ำ
         }
 
         void search_employee() {
