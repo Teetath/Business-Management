@@ -364,8 +364,15 @@ class ProductList {
 
             if (isDuplicateName(name)) {
                 cout << "\033[1;31m❌ Product \'"<< name << "\' already exists! Cannot add duplicate.\033[0m\n";
-                break;
+                Pause();
+                continue;
             }
+            else if (!isValidName(name)){
+                cout << "\033[1;31mError: Product must contain only English letters.\033[0m\n";
+                Pause();
+                continue;
+            }
+            else break;
         }
         
 
@@ -445,8 +452,8 @@ class ProductList {
                             cout << "Enter new name (leave blank to keep current): ";
                             getline(cin, input);
                             if (!input.empty()) {
-                                if (isValidName(input)) productName = input;
-                                else cout << "\033[1;31mInvalid name. Keeping current.\033[0m\n";
+                                if (isValidName(input) && !isDuplicateName(input)) productName = input;
+                                else cout << "\033[1;31mInvalid or duplicated name. Keeping current.\033[0m\n";
                             }
                             Pause();
                             break;
