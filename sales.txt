@@ -2,3 +2,17 @@ Sigma,10,487.92
 Sigma,5,243.96
 Bosslnwza,1,85.60
 Bosslnwza,10,856.00
+Beta,2,214.00
+Beta,2,214.00
+Bacon,2,192.60
+Beta,2,214.00
+Beta,2,214.00
+Bacon,2,192.60
+Beta,1,107.00
+Natwarit,2,214.00
+Natwarit,3,321.00
+Beta,2,214.00
+Bacon,2,192.60
+Beta,2,214.00
+Bacon,2,192.60
+Natwarit,3,321.00

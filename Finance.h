@@ -1,10 +1,12 @@
 #include "Product.h"
+#include <limits>
 
 void ProductList::sell() {
     string name;
     int amount=0;
     int stock;
     displayAll();
+    
     cout << "Enter name: ";
     getline(cin, name);
     while(amount<=0) {
