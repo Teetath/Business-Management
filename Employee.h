@@ -76,7 +76,8 @@ class EmployeeManager {
     private:
         Node* head = nullptr;
         const string filename = "employees.txt";
-
+        int size = 0;
+        
         void save_to_file() {
             ofstream file(filename);
             Node* current = head;
@@ -110,6 +111,7 @@ class EmployeeManager {
                     current = current->next;
                 current->next = newNode;
             }
+            size++;
         }
 
         void clear_list() {
@@ -120,6 +122,7 @@ class EmployeeManager {
                 delete toDelete;
             }
             head = nullptr;
+            size = 0;
         }
 
     public:
@@ -130,6 +133,8 @@ class EmployeeManager {
         ~EmployeeManager() {
             clear_list();
         }
+
+        int getSize() const { return size; }
 
         void add_employee() {
             int age;
@@ -249,6 +254,7 @@ class EmployeeManager {
                         head = current->next;
 
                     delete current;
+                    size--;
                     save_to_file();
                     cout << "Employee removed and file updated.\n";
                     return;
@@ -380,6 +386,7 @@ class EmployeeManager {
                     current->data.display();
                     current = current->next;
                 }
+            cout << "\n\033[1;36m👥 Total Employees: \033[1;33m" << size << "\033[0m\n";
         }
 
         void displayTableHeader() {

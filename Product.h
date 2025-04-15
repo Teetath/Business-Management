@@ -29,11 +29,13 @@ class ProductList {
     private:
         ProductNode* head;
         float totalincome;
+        int size = 0;
     
     public:
         ProductList();
         ~ProductList();
         
+        int getSize(){ return size; }
         bool isDuplicateName(const string& name) const;
         void addProduct(Product* product);
         void add_new_product();
@@ -124,6 +126,7 @@ class ProductList {
         ProductNode* node = new ProductNode(product);
         node->next = head;
         head = node;
+        size++;
     }
 
     void ProductList::removeProduct(const string& name) {
@@ -140,6 +143,7 @@ class ProductList {
                 }
                 delete current->product;
                 delete current;
+                size--;
                 cout << "Product \"" << name << "\" removed successfully." << endl;
 
                 // หลังลบ อัพเดตไฟล์
@@ -224,6 +228,7 @@ class ProductList {
             current->product->displayProduct();
             current = current->next;
         }
+        cout << "\n\033[1;36m📊 Total Products: \033[1;33m" << size << "\033[0m\n";
     }
 
     void ProductList::clearLL() {
@@ -235,6 +240,7 @@ class ProductList {
             delete temp;
         }
         head = nullptr;
+        size = 0;
     }
 
     void ProductList::loadFromFile(const string& filename) {
