@@ -3,19 +3,23 @@
 
 #include "Product.h"
 #include <limits>
+#include <ctime>
 
 void ProductList::sell() {
     string name;
     int amount=0;
     int stock;
+
     displayAll();
-    
+
     cout << "Enter name: ";
     getline(cin, name);
+
     while(amount<=0) {
-    cout << "Enter amount: ";
-    cin >> amount;
+        cout << "Enter amount: ";
+        cin >> amount;
     }
+
     ProductNode* current = head;
     while (current) {
         if(current->product->getName() == name) {
@@ -29,8 +33,25 @@ void ProductList::sell() {
                 cout << "Sold " << amount << " of '" << name << "' Remaining in stock: " << stock - amount << endl;
                 saveToFile("products.txt");
 
+                time_t now = time(0);
+                tm* localTime = localtime(&now);
+                char timestamp[100];
+                strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", localTime);
+
                 ofstream saleoutput("sales.txt", ios::app);
-                saleoutput << name << "," << amount << "," << fixed << setprecision(2) << earned << endl;
+                if (saleoutput.tellp() == 0) {
+                    saleoutput << left << setw(20) << "Product Name"
+                               << setw(10) << "Qty"
+                               << setw(15) << "Earned (Baht)"
+                               << "Date & Time" << endl;
+                    saleoutput << string(65, '-') << endl;
+                }
+
+                saleoutput << left << setw(20) << name
+                           << setw(10) << amount
+                           << setw(15) << fixed << setprecision(2) << earned
+                           << timestamp << endl;
+
                 saleoutput.close();
             }
             return;
@@ -47,7 +68,7 @@ void ProductList::summaryIncome(const string& filename) const {
 
     while (getline(file, line)) {
         stringstream ss(line);
-        string name,quan,income_string;
+        string name, quan, income_string, time_String;
 
         getline(ss, name, ',');
         getline(ss, quan, ',');
@@ -68,31 +89,14 @@ void ProductList::printSalesData(const string& filename) const {
     }
     
     string line;
-    bool Printed = false;
-    set<string> printedNames;
-    system("clear");
+
+    cout << "\n=========== Sales Log ===========" << endl;
+
     while(getline(file, line)) {
-        stringstream ss(line);
-        string name, quan, earned;
-
-        getline(ss, name, ',');
-        if(printedNames.count(name)) continue;
-        getline(ss, quan, ',');
-        getline(ss, earned);
-        
-        if(!Printed) {
-            Printed = true;
-            cout << left << setw(20) << "Product Name" << setw(10) << "|Quantity" << setw(15) << "|Earned (Baht)" << endl;
-            cout << string(55, '-') << endl; 
+            cout << line << endl;
         }
-
-        cout << left << setw(20) << name
-             << setw(10) << quan
-             << setw(15) << earned << endl;
-
-        printedNames.insert(name);
-    }
     file.close();
+    cout << "=================================" << endl;
 }
 
 #endif
