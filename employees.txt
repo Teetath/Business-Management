@@ -1,1 +1,2 @@
 999,Beta Test,20,10.00,CEO
+000,Beta Test,1,0.00,Tester

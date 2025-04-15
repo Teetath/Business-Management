@@ -3,13 +3,13 @@
 
 class Product {
     private:
-        string name;
+        string name, timestamp;
         float price;
         float cost;
         int stock;
     
     public:
-        Product(string name, float price, float cost, int stock);
+        Product(string name, float price, float cost, int stock, string timestamp);
         void displayProduct() const;
         string getName() const;
         float getPrice() const;
@@ -18,6 +18,7 @@ class Product {
         float getVAT() const;
         float getPriceWithVAT() const;
         int getStock() const;
+        string getTimestamp() const;
         void setStock(int newStock);
         string getLine() const;
     };
@@ -45,6 +46,7 @@ class ProductList {
         void removeProduct(const string& name);
         void sortByNameAZ();
         void sortByNewest();
+        void sortByOldest();
         void sortByHighPrice();
         void sortByLowStock();
         void displayTableHeader();
@@ -61,28 +63,25 @@ class ProductList {
         void edit_product();
     };
 
-    Product::Product(string name, float price, float cost, int stock)
-    : name(name), price(price), cost(cost), stock(stock) {}
+    Product::Product(string n, float p, float c, int s, string t)
+    : name(n), price(p), cost(c), stock(s), timestamp(t) {}
 
     void Product::displayProduct() const {
         cout << fixed << setprecision(2);
+        cout << left << setw(15) << name
+             << "| " << setw(8) << price
+             << "| " << setw(8) << cost
+             << "| " << setw(8) << getVAT()
+             << "| " << setw(8) << getPriceWithVAT()
+             << "| " << setw(8) << getProfitPerUnit();
+    
         if (stock == 0) {
-            cout << left << setw(15) << name
-                << "| " << setw(8) << price
-                << "| " << setw(8) << cost
-                << "| " << setw(8) << getVAT()
-                << "| " << setw(8) << getPriceWithVAT()
-                << "| " << setw(8) << getProfitPerUnit()
-                << "| \033[1;31mOut of Stock\033[0m" << endl;
+            cout << "| \033[1;31mOut of Stock \033[0m";
         } else {
-            cout << left << setw(15) << name
-                << "| " << setw(8) << price
-                << "| " << setw(8) << cost
-                << "| " << setw(8) << getVAT()
-                << "| " << setw(8) << getPriceWithVAT()
-                << "| " << setw(8) << getProfitPerUnit()
-                << "| " << setw(5) << stock << endl;
+            cout << "| " << setw(13) << stock;
         }
+    
+        cout << "| " << setw(20) << timestamp << endl;
     }
 
     string Product::getName() const { return name; }
@@ -92,13 +91,14 @@ class ProductList {
     float Product::getPriceWithVAT() const { return price + getVAT(); }
     float Product::getProfitPerUnit() const { return price - cost; }
     int Product::getStock() const { return stock; }
+    string Product::getTimestamp() const { return timestamp; }
 
     string Product::getLine() const {
         stringstream ss;
-        ss << fixed << setprecision(2);  // พิมพ์ทศนิยม 2 ตำแหน่ง
-        ss << name << "," << price << "," << cost << "," << stock;
+        ss << name << "," << price << "," << cost << "," << stock << "," << timestamp;
         return ss.str();
     }
+    
 
     // ProductList Implementation
 
@@ -176,15 +176,66 @@ class ProductList {
         ProductNode* prev = nullptr;
         ProductNode* current = head;
         ProductNode* next = nullptr;
-
+    
         while (current) {
             next = current->next;
             current->next = prev;
             prev = current;
             current = next;
         }
-
         head = prev;
+
+        if (head == nullptr || head->next == nullptr) return;
+    
+        bool swapped;
+        do {
+            swapped = false;
+            ProductNode* temp = head;
+            while (temp != nullptr && temp->next != nullptr) {
+                if (temp->product->getTimestamp() < temp->next->product->getTimestamp()) {
+
+                    Product* tempProduct = temp->product;
+                    temp->product = temp->next->product;
+                    temp->next->product = tempProduct;
+    
+                    swapped = true;
+                }
+                temp = temp->next;
+            }
+        } while (swapped);
+    }
+
+    void ProductList::sortByOldest() {
+        ProductNode* prev = nullptr;
+        ProductNode* current = head;
+        ProductNode* next = nullptr;
+    
+        while (current) {
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+        head = prev;
+
+        if (head == nullptr || head->next == nullptr) return;
+    
+        bool swapped;
+        do {
+            swapped = false;
+            ProductNode* temp = head;
+            while (temp != nullptr && temp->next != nullptr) {
+                if (temp->product->getTimestamp() > temp->next->product->getTimestamp()) {
+
+                    Product* tempProduct = temp->product;
+                    temp->product = temp->next->product;
+                    temp->next->product = tempProduct;
+    
+                    swapped = true;
+                }
+                temp = temp->next;
+            }
+        } while (swapped);
     }
 
     void ProductList::sortByHighPrice() {
@@ -219,8 +270,9 @@ class ProductList {
             << "| " << setw(8)  << "VAT"
             << "| " << setw(8)  << "Total"
             << "| " << setw(8)  << "Profit"
-            << "| " << setw(8)  << "Stock" << endl;
-        cout << string(80, '-') << endl;
+            << "| " << setw(13)  << "Stock"
+            << "| " << setw(20) << "Last Updated" << endl;
+        cout << string(110, '-') << endl;
     }
 
     void ProductList::displayAll() {
@@ -251,22 +303,24 @@ class ProductList {
         
         ifstream file(filename);
         string line;
-
+    
         while (getline(file, line)) {
             stringstream ss(line);
-            string name, priceStr, stockStr, costStr;
+            string name, priceStr, costStr, stockStr, timestamp;
+    
             getline(ss, name, ',');
             getline(ss, priceStr, ',');
             getline(ss, costStr, ',');
-            getline(ss, stockStr);
-
+            getline(ss, stockStr, ',');
+            getline(ss, timestamp);
+    
             float price = stof(priceStr);
             float cost = stof(costStr);
             int stock = stoi(stockStr);
-
-            addProduct(new Product(name, price, cost, stock));
+    
+            addProduct(new Product(name, price, cost, stock, timestamp));
         }
-
+    
         file.close();
     }
 
@@ -333,7 +387,7 @@ class ProductList {
                     break;
                 case '2':
                     system("clear");
-                    loadFromFile("products.txt");
+                    sortByOldest();
                     displayAll();
                     break;
                 case '3':
@@ -360,10 +414,10 @@ class ProductList {
         }
     }
     void ProductList::add_new_product() {
-        string name;
+        string name, time_added = getCurrentTimestamp();;
         float price, cost;
         int stock;
-    
+
         while (true) {
             system("clear");
             cout << "\033[1;36m+------------------------------------+\n";
@@ -451,11 +505,12 @@ class ProductList {
             }
         }
     
-        addProduct(new Product(name, price, cost, stock));
+        addProduct(new Product(name, price, cost, stock, time_added));
         saveToFile("products.txt");
     
         cout << "\n\033[1;32m✅ Product \"" << name << "\" added successfully! 🎉\033[0m\n";
     }
+
     void ProductList::edit_product() {
         string name;
         system("clear");
@@ -487,7 +542,7 @@ class ProductList {
                         << "| " << setw(8)  << "Price"
                         << "| " << setw(8)  << "Cost"
                         << "| " << setw(8)  << "Stock" << endl;
-                    cout << string(80, '-') << endl;
+                    cout << string(50, '-') << endl;
                     cout << fixed << setprecision(2);
     
                     if (stock == 0) {
@@ -567,11 +622,14 @@ class ProductList {
                             break;
                         case 'S':
                         case 's':
+                            {
+                            string timestamp = getCurrentTimestamp();
                             delete current->product;
-                            current->product = new Product(productName, price, cost, stock);
+                            current->product = new Product(productName, price, cost, stock, timestamp);
                             saveToFile("products.txt");
                             cout << "\033[1;32mProduct updated successfully!\033[0m\n";
                             return;
+                            }
                         case 'C':
                         case 'c':
                             cout << "\033[1;33mChanges cancelled. Nothing was saved.\033[0m\n";

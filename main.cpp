@@ -8,6 +8,7 @@
 #include <set>
 #include <termios.h>
 #include <unistd.h>
+#include <ctime>
 using namespace std;
 
 #include "Function.h"

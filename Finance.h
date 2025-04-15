@@ -2,8 +2,6 @@
 #define FINANCE_H
 
 #include "Product.h"
-#include <limits>
-#include <ctime>
 
 void ProductList::sell() {
     string name;
@@ -33,10 +31,7 @@ void ProductList::sell() {
                 cout << "Sold " << amount << " of '" << name << "' Remaining in stock: " << stock - amount << endl;
                 saveToFile("products.txt");
 
-                time_t now = time(0);
-                tm* localTime = localtime(&now);
-                char timestamp[100];
-                strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", localTime);
+                string timestamp = getCurrentTimestamp();
 
                 ofstream saleoutput("sales.txt", ios::app);
                 if (saleoutput.tellp() == 0) {

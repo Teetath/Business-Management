@@ -1,6 +1,13 @@
 #ifndef FUNCTION_H
 #define FUNCTION_H
 
+string getCurrentTimestamp() {
+    time_t now = time(0);
+    char timestamp[100];
+    strftime(timestamp, sizeof(timestamp), "%Y-%m-%d %H:%M:%S", localtime(&now));
+    return string(timestamp);
+}
+
 char getch() {
     char buf = 0;
     termios old = {};
