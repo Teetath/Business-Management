@@ -24,10 +24,16 @@ class Employee : public Person {
                  << "| " << setw(5)  << age
                  << "| " << setw(12) << role
                  << "| " << setw(10) << salary
-                 << "| " << setw(10) << calculateBonus() << endl;
+                 << "| " << setw(10) << calculateBonus() 
+                 << "| " << setw(10) << getSocialSecurity() << endl;
         }
         float calculateBonus() const {
             return salary * 0.1f; // พนักงานได้โบนัส 10%
+        }
+
+        float getSocialSecurity() const {
+            float ss = salary * 0.05f;
+            return (ss > 750.0f) ? 750.0f : ss;
         }
 
         string getSummary() const override {
@@ -432,8 +438,9 @@ class EmployeeManager {
                 << "| " << setw(5)  << "Age"
                 << "| " << setw(12) << "Role"
                 << "| " << setw(10) << "Salary"
-                << "| " << setw(10) << "Bonus" << endl;
-            cout << string(80, '-') << endl;
+                << "| " << setw(10) << "Bonus" 
+                << "| " << setw(10) << "SSO" << endl;
+            cout << string(85, '-') << endl;
         }
 
         void edit_employee() {
