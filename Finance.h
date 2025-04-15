@@ -78,20 +78,45 @@ void ProductList::summaryIncome(const string& filename) const {
 
 void ProductList::printSalesData(const string& filename) const {
     ifstream file(filename);
-    if(!file) {
-        cout << "Can't open file" << endl;
-        return;
-    }
-    
+     if(!file) {
+         cout << "Can't open file" << endl;
+         return;
+     }
+ 
     string line;
-
-    cout << "\n=========== Sales Log ===========" << endl;
+    map<string, pair<int, double>> salesData;
+    system("clear");
 
     while(getline(file, line)) {
-            cout << line << endl;
+         stringstream ss(line);
+         string name, quan, earned;
+ 
+         getline(ss, name, ',');
+         getline(ss, quan, ',');
+         getline(ss, earned);
+
+        int quantity = stoi(quan);
+        double earnedValue = stod(earned);
+
+        salesData[name].first += quantity;
+        salesData[name].second += earnedValue;
+     }
+     file.close();
+
+     if (!salesData.empty()) {
+        cout << "\n=========== Sales Log ===========" << endl;
+        cout << left << setw(20) << "Product Name"
+             << setw(10) << "|Quantity"
+             << setw(15) << "|Earned (Baht)" << endl;
+        cout << string(55, '-') << endl;
+
+        for (const auto& entry : salesData) {
+            cout << left << setw(20) << entry.first
+                 << setw(10) << entry.second.first
+                 << fixed << setprecision(2)
+                 << setw(15) << entry.second.second << endl;
         }
-    file.close();
-    cout << "=================================" << endl;
+    } else cout << "No Sales Data!!" << endl;
 }
 
 #endif
