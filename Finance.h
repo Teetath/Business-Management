@@ -69,23 +69,28 @@ void ProductList::printSalesData(const string& filename) const {
     
     string line;
     bool Printed = false;
+    set<string> printedNames;
     system("clear");
     while(getline(file, line)) {
         stringstream ss(line);
         string name, quan, earned;
 
+        getline(ss, name, ',');
+        if(printedNames.count(name)) continue;
+        getline(ss, quan, ',');
+        getline(ss, earned);
+        
         if(!Printed) {
             Printed = true;
             cout << left << setw(20) << "Product Name" << setw(10) << "|Quantity" << setw(15) << "|Earned (Baht)" << endl;
             cout << string(55, '-') << endl; 
         }
-        getline(ss, name, ',');
-        getline(ss, quan, ',');
-        getline(ss, earned);
 
         cout << left << setw(20) << name
              << setw(10) << quan
              << setw(15) << earned << endl;
+
+        printedNames.insert(name);
     }
     file.close();
 }
