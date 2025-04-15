@@ -1,5 +1,6 @@
 #ifndef FUNCTION_H
 #define FUNCTION_H
+
 char getch() {
     char buf = 0;
     termios old = {};

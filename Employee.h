@@ -146,8 +146,12 @@ class EmployeeManager {
             cout << "|        🆕 Add New Employee         |\n";
             cout << "+------------------------------------+\033[0m\n";
             while (true) {
-                cout << "\033[1;34mEnter ID: \033[0m ";
-                cin >> id;
+                cout << "\033[1;34mEnter ID (leave blank to cancel): \033[0m ";
+                getline(cin, id);
+                if (id.empty()) {
+                    cout << "\033[1;33mCancelled. No employee was added.\033[0m\n";
+                    return;
+                }
             
                 if (!isValidID(id)) {
                     cout << "\033[1;31mError: ID must contain only English letters or digits.\033[0m\n";
@@ -160,35 +164,57 @@ class EmployeeManager {
                 break;
             }
 
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            while(true){
-                cout << "\033[1;34mEnter name: \033[0m";
+            while (true) {
+                cout << "\033[1;34mEnter name (leave blank to cancel): \033[0m";
                 getline(cin, name);
+                if (name.empty()) {
+                    cout << "\033[1;33mCancelled. No employee was added.\033[0m\n";
+                    return;
+                }
                 if (!isValidName(name)) {
                     cout << "\033[1;31mError: Name must contain only English letters.\033[0m\n";
                     continue;
                 }
                 break;
             }
-
-            while(true){
-                cout << "\033[1;34mEnter age: \033[0m";
-                cin >> age;
-                if(check() && age > 0)break;
-                else cout << "\033[1;31mError!?! Please try again.\033[0m\n";
+        
+            while (true) {
+                string input;
+                cout << "\033[1;34mEnter age (leave blank to cancel): \033[0m";
+                getline(cin, input);
+                if (input.empty()) {
+                    cout << "\033[1;33mCancelled. No employee was added.\033[0m\n";
+                    return;
+                }
+                try {
+                    age = stoi(input);
+                    if (check() && age > 0) break;
+                } catch (...) {}
+                cout << "\033[1;31mError!?! Please try again.\033[0m\n";
             }
-            
-            while(true){
-                cout << "\033[1;34mEnter salary: \033[0m";
-                cin >> salary;
-                if(check() && salary >= 0)break;
-                else cout << "\033[1;31mError!?! Please try again.\033[0m\n";
+        
+            while (true) {
+                string input;
+                cout << "\033[1;34mEnter salary (leave blank to cancel): \033[0m";
+                getline(cin, input);
+                if (input.empty()) {
+                    cout << "\033[1;33mCancelled. No employee was added.\033[0m\n";
+                    return;
+                }
+                try {
+                    salary = stof(input);
+                    if (check() && salary >= 0) break;
+                } catch (...) {}
+                cout << "\033[1;31mError!?! Please try again.\033[0m\n";
             }
-
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            while(true){
-                cout << "\033[1;34mEnter role: \033[0m";
+        
+            while (true) {
+                cout << "\033[1;34mEnter role (leave blank to cancel): \033[0m";
                 getline(cin, role);
+                if (role.empty()) {
+                    cout << "\033[1;33mCancelled. No employee was added.\033[0m\n";
+                    return;
+                }
                 if (!isValidName(role)) {
                     cout << "\033[1;31mError: Role must contain only English letters.\033[0m\n";
                     continue;
@@ -216,13 +242,18 @@ class EmployeeManager {
         void search_employee() {
             string input;
             system("clear");
-            cout << "\033[1;34mEnter ID or name to search: \033[0m";
-            cin >> input;
+            cout << "\033[1;34mEnter ID or name to search (leave blank to cancel): \033[0m";
+            getline(cin, input);
+        
+            if (input.empty()) {
+                cout << "\033[1;33mSearch cancelled.\033[0m\n";
+                return;
+            }
+        
             system("clear");
-
             Node* current = head;
             bool found = false;
-
+        
             while (current) {
                 if (current->data.getId() == input || current->data.getName() == input) {
                     current->data.display();
@@ -230,41 +261,46 @@ class EmployeeManager {
                 }
                 current = current->next;
             }
-
+        
             if (!found) {
-                cout << "Employee not found.\n";
+                cout << "\033[1;31mEmployee not found.\033[0m\n";
             }
         }
 
         void remove_employee() {
             string id;
             system("clear");
-            cout << "\033[1;34mEnter ID to remove: \033[0m";
-            cin >> id;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "\033[1;34mEnter ID to remove (leave blank to cancel): \033[0m";
+            getline(cin, id);
+        
+            if (id.empty()) {
+                cout << "\033[1;33mRemoval cancelled.\033[0m\n";
+                return;
+            }
+        
             system("clear");
             Node* current = head;
             Node* prev = nullptr;
-
+        
             while (current) {
                 if (current->data.getId() == id) {
                     if (prev)
                         prev->next = current->next;
                     else
                         head = current->next;
-
+        
                     delete current;
                     size--;
                     save_to_file();
-                    cout << "Employee removed and file updated.\n";
+                    cout << "\033[1;32m✅ Employee removed and file updated.\033[0m\n";
                     return;
                 }
-
+        
                 prev = current;
                 current = current->next;
             }
-
-            cout << "Employee not found.\n";
+        
+            cout << "\033[1;31mEmployee with ID '" << id << "' not found.\033[0m\n";
         }
 
         void getSummary() {
@@ -405,9 +441,9 @@ class EmployeeManager {
             system("clear");
             displayTableHeader();
             display_all();
-            cout << "\033[1;34mEnter ID to edit: \033[0m";
-            cin >> id;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "\033[1;34mEnter ID to edit (leave blank to return): \033[0m";
+            getline(cin, id);
+            if (id.empty()) return;
         
             Node* current = head;
             while (current) {
@@ -455,7 +491,7 @@ class EmployeeManager {
                         string input;
                         switch (option) {
                             case '1':
-                                cout << "Enter new ID (leave blank to keep current): ";
+                                cout << "Enter new ID (leave blank to cancel): ";
                                 getline(cin, input);
                                 if (!input.empty()) {
                                     if (!isDuplicateID(input) && isValidID(input)) empID = input;
@@ -464,7 +500,7 @@ class EmployeeManager {
                                 Pause();
                                 break;
                             case '2':
-                                cout << "Enter new name (leave blank to keep current): ";
+                                cout << "Enter new name (leave blank to cancel): ";
                                 getline(cin, input);
                                 if (!input.empty()) {
                                     if (isValidName(input)) name = input;
@@ -473,9 +509,9 @@ class EmployeeManager {
                                 Pause();
                                 break;
                             case '3':
-                                cout << "Enter new age (or type 'cancel' to skip): ";
+                                cout << "Enter new age (leave blank to cancel): ";
                                 getline(cin, input);
-                                if (input != "cancel") {
+                                if (!input.empty()) {
                                     try {
                                         int newAge = stoi(input);
                                         if (check() && newAge > 0) age = newAge;
@@ -487,9 +523,9 @@ class EmployeeManager {
                                 Pause();
                                 break;
                             case '4':
-                                cout << "Enter new salary (or type 'cancel' to skip): ";
+                                cout << "Enter new salary (leave blank to cancel): ";
                                 getline(cin, input);
-                                if (input != "cancel") {
+                                if (!input.empty()) {
                                     try {
                                         float newSalary = stof(input);
                                         if (check() && newSalary >= 0) salary = newSalary;
@@ -501,7 +537,7 @@ class EmployeeManager {
                                 Pause();
                                 break;
                             case '5':
-                                cout << "Enter new role (leave blank to keep current): ";
+                                cout << "Enter new role (leave blank to cancel): ";
                                 getline(cin, input);
                                 if (!input.empty()) {
                                     if (isValidName(input)) role = input;

@@ -1,3 +1,6 @@
+#ifndef FINANCE_H
+#define FINANCE_H
+
 #include "Product.h"
 
 void ProductList::sell() {
@@ -84,3 +87,5 @@ void ProductList::printSalesData(const string& filename) const {
     }
     file.close();
 }
+
+#endif

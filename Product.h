@@ -1,3 +1,6 @@
+#ifndef PRODUCT_H
+#define PRODUCT_H
+
 class Product {
     private:
         string name;
@@ -35,7 +38,7 @@ class ProductList {
         ProductList();
         ~ProductList();
         
-        int getSize(){ return size; }
+        int getSize() const { return size; }
         bool isDuplicateName(const string& name) const;
         void addProduct(Product* product);
         void add_new_product();
@@ -356,54 +359,111 @@ class ProductList {
             Pause();
         }
     }
-    void ProductList::add_new_product(){
+    void ProductList::add_new_product() {
         string name;
         float price, cost;
         int stock;
-        while(true){
+    
+        while (true) {
             system("clear");
             cout << "\033[1;36m+------------------------------------+\n";
             cout << "|        🆕 Add New Product          |\n";
             cout << "+------------------------------------+\033[0m\n";
-            cout << "\033[1;34m📦 Product Name   : \033[0m";
+            cout << "\033[1;34m📦 Product Name (leave blank to cancel): \033[0m ";
             getline(cin, name);
-
+    
+            if (name.empty()) {
+                cout << "\033[1;33m⚠️  Product creation cancelled.\033[0m\n";
+                return;
+            }
+    
             if (isDuplicateName(name)) {
-                cout << "\033[1;31m❌ Product \'"<< name << "\' already exists! Cannot add duplicate.\033[0m\n";
+                cout << "\033[1;31m❌ Product \'" << name << "\' already exists! Cannot add duplicate.\033[0m\n";
                 Pause();
-                continue;
-            }
-            else if (!isValidName(name)){
-                cout << "\033[1;31mError: Product must contain only English letters.\033[0m\n";
+            } else if (!isValidName(name)) {
+                cout << "\033[1;31m❌ Error: Product name must contain only English letters.\033[0m\n";
                 Pause();
-                continue;
+            } else {
+                break;
             }
-            else break;
         }
-        
-
-        cout << "\033[1;34m💲 Product Price  : \033[0m";
-        cin >> price;
-
-        cout << "\033[1;34m💲 Product Cost   : \033[0m";
-        cin >> cost;
-
-        cout << "\033[1;34m📦 Product Stock  : \033[0m";
-        cin >> stock;
-
+    
+        while (true) {
+            cout << "\033[1;34m💲 Product Price (leave blank to cancel): \033[0m ";
+            string price_input;
+            getline(cin, price_input);
+            if (price_input.empty()) {
+                cout << "\033[1;33m⚠️  Product creation cancelled.\033[0m\n";
+                return;
+            }
+    
+            try {
+                price = stof(price_input);
+                if (price < 0) {
+                    cout << "\033[1;31m❌ Invalid price! Please enter a positive number.\033[0m\n";
+                } else {
+                    break;
+                }
+            } catch (const invalid_argument& e) {
+                cout << "\033[1;31m❌ Invalid price! Please enter a valid number.\033[0m\n";
+            }
+        }
+    
+        while (true) {
+            cout << "\033[1;34m💲 Product Cost (leave blank to cancel): \033[0m ";
+            string cost_input;
+            getline(cin, cost_input);
+            if (cost_input.empty()) {
+                cout << "\033[1;33m⚠️  Product creation cancelled.\033[0m\n";
+                return;
+            }
+    
+            try {
+                cost = stof(cost_input);
+                if (cost < 0 || cost > price) {
+                    cout << "\033[1;31m❌ Invalid cost! It must be positive and not greater than price.\033[0m\n";
+                } else {
+                    break;
+                }
+            } catch (const invalid_argument& e) {
+                cout << "\033[1;31m❌ Invalid cost! Please enter a valid number.\033[0m\n";
+            }
+        }
+    
+        while (true) {
+            cout << "\033[1;34m📦 Product Stock (leave blank to cancel): \033[0m";
+            string stock_input;
+            getline(cin, stock_input);
+            if (stock_input.empty()) {
+                cout << "\033[1;33m⚠️  Product creation cancelled.\033[0m\n";
+                return;
+            }
+    
+            try {
+                stock = stoi(stock_input);
+                if (stock < 0) {
+                    cout << "\033[1;31m❌ Invalid stock! Please enter a non-negative integer.\033[0m\n";
+                } else {
+                    break;
+                }
+            } catch (const invalid_argument& e) {
+                cout << "\033[1;31m❌ Invalid stock! Please enter a valid number.\033[0m\n";
+            }
+        }
+    
         addProduct(new Product(name, price, cost, stock));
         saveToFile("products.txt");
-        
+    
         cout << "\n\033[1;32m✅ Product \"" << name << "\" added successfully! 🎉\033[0m\n";
-        return;
     }
     void ProductList::edit_product() {
         string name;
         system("clear");
         displayAll();
-        cout << "\033[1;34mEnter name to edit: \033[0m";
-        cin >> name;
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "\033[1;34mEnter name to edit (leave blank to return): \033[0m";
+        getline(cin, name);
+        if (name.empty()) return;
+        
     
         ProductNode* current = head;
         while (current) {
@@ -418,9 +478,9 @@ class ProductList {
                     system("clear");
                     cout << "\033[1;36m";
                     cout << "+---------------------------------------------+\n";
-                    cout << "|       ✏️  Edit Employee Information          |\n";
+                    cout << "|         ✏️  Edit Product Information         |\n";
                     cout << "+---------------------------------------------+\033[0m\n";
-
+    
                     cout << "\n\033[1;33mCurrent Product Info:\033[0m\n";
                     cout << left
                         << setw(15) << "Name"
@@ -429,7 +489,7 @@ class ProductList {
                         << "| " << setw(8)  << "Stock" << endl;
                     cout << string(80, '-') << endl;
                     cout << fixed << setprecision(2);
-
+    
                     if (stock == 0) {
                         cout << left << setw(15) << productName
                             << "| " << setw(8) << price
@@ -441,7 +501,7 @@ class ProductList {
                             << "| " << setw(8) << cost
                             << "| " << setw(5) << stock << endl;
                     }
-
+    
                     cout << "\n\033[1;34mChoose the field you want to edit:\033[0m\n";
                     cout << "\033[1;36m";
                     cout << "  [1] \033[0mEdit \033[1mName\033[0m\n";
@@ -455,7 +515,7 @@ class ProductList {
                     string input;
                     switch (option) {
                         case '1':
-                            cout << "Enter new name (leave blank to keep current): ";
+                            cout << "Enter new name (leave blank to cancel): ";
                             getline(cin, input);
                             if (!input.empty()) {
                                 if (isValidName(input) && !isDuplicateName(input)) productName = input;
@@ -464,9 +524,9 @@ class ProductList {
                             Pause();
                             break;
                         case '2':
-                            cout << "Enter new price (or type 'cancel' to skip): ";
+                            cout << "Enter new price (leave blank to cancel): ";
                             getline(cin, input);
-                            if (input != "cancel") {
+                            if (!input.empty()) {
                                 try {
                                     float newPrice = stof(input);
                                     if (check() && newPrice >= 0) price = newPrice;
@@ -478,9 +538,9 @@ class ProductList {
                             Pause();
                             break;
                         case '3':
-                            cout << "Enter new cost (or type 'cancel' to skip): ";
+                            cout << "Enter new cost (leave blank to cancel): ";
                             getline(cin, input);
-                            if (input != "cancel") {
+                            if (!input.empty()) {
                                 try {
                                     float newCost = stof(input);
                                     if (check() && newCost >= 0) cost = newCost;
@@ -492,9 +552,9 @@ class ProductList {
                             Pause();
                             break;
                         case '4':
-                            cout << "Enter new stock (or type 'cancel' to skip): ";
+                            cout << "Enter new stock (leave blank to cancel): ";
                             getline(cin, input);
-                            if (input != "cancel") {
+                            if (!input.empty()) {
                                 try {
                                     int newStock = stoi(input);
                                     if (check() && newStock >= 0) stock = newStock;
@@ -507,7 +567,6 @@ class ProductList {
                             break;
                         case 'S':
                         case 's':
-                            // Update product with new info
                             delete current->product;
                             current->product = new Product(productName, price, cost, stock);
                             saveToFile("products.txt");
@@ -529,3 +588,4 @@ class ProductList {
     
         cout << "\033[1;31mProduct '" << name << "' not found.\033[0m\n";
     }
+#endif
