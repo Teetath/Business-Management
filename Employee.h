@@ -141,7 +141,7 @@ class EmployeeManager {
         }
 
         int getSize() const { return size; }
-
+        Node* getHead() const { return head; }
         void add_employee() {
             int age;
             float salary;

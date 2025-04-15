@@ -2,6 +2,7 @@
 #define FINANCE_H
 
 #include "Product.h"
+#include "Employee.h"
 
 void ProductList::sell() {
     string name;
@@ -60,7 +61,7 @@ void ProductList::summaryIncome(const string& filename) const {
         total += income;
     }
     file.close();
-    cout << "Total income : " << fixed << setprecision(2) << total << " Bath" << endl;
+    cout << "💰 Total income : " << "\033[32m" << fixed << setprecision(2) << total << "\033[0m" << " Bath" << endl;
 }
 
 void ProductList::printSalesData(const string& filename) const {
@@ -91,7 +92,7 @@ void ProductList::printSalesData(const string& filename) const {
      file.close();
 
      if (!salesData.empty()) {
-        cout << "\n====================== Sales Log ====================== " << endl;
+        cout << "====================== Sales Log ====================== " << endl;
         cout << left << setw(20) << "Product Name"
              << setw(20) << "|Quantity"
              << setw(20) << "|Earned (Baht)" << endl;
@@ -109,30 +110,33 @@ void ProductList::printSalesData(const string& filename) const {
 void ProductList::summaryProfitFromSales(const string& filename) const {
     ifstream file(filename);
     if (!file) {
-        cout << "⚠️ Cannot open sales file.\n";
+        cerr << "❌ Failed to open sales.txt" << endl;
         return;
-}
+    }
+
     string line;
-    float totalProfit = 0.0;
-    int lineCount = 0;
+    float totalProfit = 0.0f;
+    float totalSSO = 0.0f;
+    float net = 0.0f;
 
     while (getline(file, line)) {
-        lineCount++;
-        if (lineCount <= 2) continue;  // Skip header
 
         stringstream ss(line);
-        string name, quantityStr;
+        string name, quantityStr, earnedStr, timestamp;
         getline(ss, name, ',');
         getline(ss, quantityStr, ',');
+        getline(ss, earnedStr, ',');
+        getline(ss, timestamp);
 
         int quantity = stoi(quantityStr);
-
-        // Find the matching product in the list
+        
+        //Get Sales income
         ProductNode* current = head;
         while (current) {
             if (current->product->getName() == name) {
-                float unitProfit = current->product->getProfitPerUnit();
-                totalProfit += unitProfit * quantity;
+                float profitPerUnit = current->product->getProfitPerUnit();
+                float profit = quantity * profitPerUnit;
+                totalProfit += profit;
                 break;
             }
             current = current->next;
@@ -140,6 +144,27 @@ void ProductList::summaryProfitFromSales(const string& filename) const {
     }
 
     file.close();
-    cout << "\n📈 Total Profit from Sold Products: " << fixed << setprecision(2) << totalProfit << " Baht\n";
+    
+    //Get Salary and SSo
+    EmployeeManager EmpManager;
+    Node* currentEmp = EmpManager.getHead();
+    float totalSalaries = 0.0f;
+    while (currentEmp) {
+        totalSalaries += currentEmp->data.getSalary() - currentEmp->data.getSocialSecurity();
+        totalSSO += currentEmp->data.getSocialSecurity();
+        currentEmp=currentEmp->next;
+
+    }
+    cout << "🫂  Total Salary : " << "\033[31m" << fixed << setprecision(2) << totalSalaries << "\033[0m" << " Baht " << "(Withholding tax)" << endl;
+    cout << "🧾 SSO TAX      : " <<"\033[31m" << fixed << setprecision(2) << totalSSO << "\033[0m" << " Baht" << endl;
+    cout << "-------------------------------------------------------" << endl;
+    net = totalProfit - (totalSalaries + totalSSO);
+    if (net < 0) {
+        cout << "📊 Total Profit : " << "\033[31m" << fixed << setprecision(2) << net << "\033[0m" << " Baht" << endl;
+    }else {
+        cout << "📊 Total Profit : " << "\033[32m" << fixed << setprecision(2) << net << "\033[0m" << " Baht" << endl;
+    }
+    return;
 }
+
 #endif

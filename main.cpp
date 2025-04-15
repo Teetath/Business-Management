@@ -94,7 +94,9 @@ void FinanceMenu() {
                 ProductList list;
                 cout << "\033[1;36m📈 Showing Income/Expense/Profit...\033[0m\n";
                 list.printSalesData("sales.txt");
+                cout << "=======================================================" << endl;
                 list.summaryIncome("sales.txt");
+                list.loadFromFile("products.txt");
                 list.summaryProfitFromSales("sales.txt");
                 break;
             }
