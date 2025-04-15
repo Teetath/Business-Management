@@ -5,6 +5,7 @@
 #include <string>
 #include <limits>
 #include <vector>
+#include <set>
 #include <termios.h>
 #include <unistd.h>
 using namespace std;
