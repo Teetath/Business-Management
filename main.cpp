@@ -85,7 +85,6 @@ void FinanceMenu() {
                 ProductList list;
                 list.loadFromFile("products.txt");
                 list.sell();
-                cout << "\033[1;36m💰 Selling Product...\033[0m\n";
                 break;
             }
             case '2': {
@@ -100,6 +99,7 @@ void FinanceMenu() {
             default : continue;
         }
         Pause();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
     }
 }
 
