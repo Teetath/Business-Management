@@ -32,21 +32,8 @@ void ProductList::sell() {
                 saveToFile("products.txt");
 
                 string timestamp = getCurrentTimestamp();
-
                 ofstream saleoutput("sales.txt", ios::app);
-                if (saleoutput.tellp() == 0) {
-                    saleoutput << left << setw(20) << "Product Name"
-                               << setw(10) << "Qty"
-                               << setw(15) << "Earned (Baht)"
-                               << "Date & Time" << endl;
-                    saleoutput << string(65, '-') << endl;
-                }
-
-                saleoutput << left << setw(20) << name
-                           << setw(10) << amount
-                           << setw(15) << fixed << setprecision(2) << earned
-                           << timestamp << endl;
-
+                saleoutput << name << "," << amount << "," << fixed << setprecision(2) << earned << "," << timestamp << endl;
                 saleoutput.close();
             }
             return;
@@ -104,19 +91,55 @@ void ProductList::printSalesData(const string& filename) const {
      file.close();
 
      if (!salesData.empty()) {
-        cout << "\n=========== Sales Log ===========" << endl;
+        cout << "\n====================== Sales Log ====================== " << endl;
         cout << left << setw(20) << "Product Name"
-             << setw(10) << "|Quantity"
-             << setw(15) << "|Earned (Baht)" << endl;
+             << setw(20) << "|Quantity"
+             << setw(20) << "|Earned (Baht)" << endl;
         cout << string(55, '-') << endl;
 
         for (const auto& entry : salesData) {
             cout << left << setw(20) << entry.first
-                 << setw(10) << entry.second.first
+                 << setw(20) << entry.second.first
                  << fixed << setprecision(2)
-                 << setw(15) << entry.second.second << endl;
+                 << setw(20) << entry.second.second << endl;
         }
     } else cout << "No Sales Data!!" << endl;
 }
 
+void ProductList::summaryProfitFromSales(const string& filename) const {
+    ifstream file(filename);
+    if (!file) {
+        cout << "⚠️ Cannot open sales file.\n";
+        return;
+}
+    string line;
+    float totalProfit = 0.0;
+    int lineCount = 0;
+
+    while (getline(file, line)) {
+        lineCount++;
+        if (lineCount <= 2) continue;  // Skip header
+
+        stringstream ss(line);
+        string name, quantityStr;
+        getline(ss, name, ',');
+        getline(ss, quantityStr, ',');
+
+        int quantity = stoi(quantityStr);
+
+        // Find the matching product in the list
+        ProductNode* current = head;
+        while (current) {
+            if (current->product->getName() == name) {
+                float unitProfit = current->product->getProfitPerUnit();
+                totalProfit += unitProfit * quantity;
+                break;
+            }
+            current = current->next;
+        }
+    }
+
+    file.close();
+    cout << "\n📈 Total Profit from Sold Products: " << fixed << setprecision(2) << totalProfit << " Baht\n";
+}
 #endif
