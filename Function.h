@@ -1,6 +1,13 @@
 #ifndef FUNCTION_H
 #define FUNCTION_H
 
+template<typename T>
+bool tryParse(const std::string& input, T& result) {
+    std::istringstream iss(input);
+    iss >> std::noskipws >> result;
+    return iss.eof() && !iss.fail();
+}
+
 string getCurrentTimestamp() {
     time_t now = time(0);
     char timestamp[100];

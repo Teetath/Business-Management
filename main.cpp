@@ -139,13 +139,7 @@ void ProductMenu() {
                 break;
             }   
             case '4': {
-                string target;
-                list.displayAll();
-                cout << "\033[1;34mEnter the name of the product you want to remove (leave blank to return): \033[0m";
-                getline(cin, target);
-                if(target.empty()) { continue; }
-                list.removeProduct(target);
-                list.saveToFile("products.txt");
+                list.removeProduct();
                 break;
             }
             case '0': return;

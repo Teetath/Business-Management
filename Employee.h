@@ -192,10 +192,7 @@ class EmployeeManager {
                     cout << "\033[1;33mCancelled. No employee was added.\033[0m\n";
                     return;
                 }
-                try {
-                    age = stoi(input);
-                    if (check() && age > 0) break;
-                } catch (...) {}
+                if (check() && tryParse(input, age) && age > 0) break;
                 cout << "\033[1;31mError!?! Please try again.\033[0m\n";
             }
         
@@ -207,10 +204,7 @@ class EmployeeManager {
                     cout << "\033[1;33mCancelled. No employee was added.\033[0m\n";
                     return;
                 }
-                try {
-                    salary = stof(input);
-                    if (check() && salary >= 0) break;
-                } catch (...) {}
+                if (check() && tryParse(input, salary) && salary >= 0) break;
                 cout << "\033[1;31mError!?! Please try again.\033[0m\n";
             }
         
@@ -502,55 +496,63 @@ class EmployeeManager {
                                 getline(cin, input);
                                 if (!input.empty()) {
                                     if (!isDuplicateID(input) && isValidID(input)) empID = input;
-                                    else cout << "\033[1;31mInvalid or duplicate ID. Keeping current.\033[0m\n";
+                                    else {
+                                        cout << "\033[1;31mInvalid or duplicate ID. Keeping current.\033[0m\n";
+                                        Pause();
+                                    }
                                 }
-                                Pause();
                                 break;
+
                             case '2':
                                 cout << "Enter new name (leave blank to cancel): ";
                                 getline(cin, input);
                                 if (!input.empty()) {
                                     if (isValidName(input)) name = input;
-                                    else cout << "\033[1;31mInvalid name. Keeping current.\033[0m\n";
+                                    else {
+                                        cout << "\033[1;31mInvalid name. Keeping current.\033[0m\n";
+                                        Pause();
+                                    }
                                 }
-                                Pause();
                                 break;
+
                             case '3':
                                 cout << "Enter new age (leave blank to cancel): ";
                                 getline(cin, input);
                                 if (!input.empty()) {
-                                    try {
-                                        int newAge = stoi(input);
-                                        if (check() && newAge > 0) age = newAge;
-                                        else cout << "\033[1;31mInvalid age. Keeping current.\033[0m\n";
-                                    } catch (...) {
-                                        cout << "\033[1;31mInvalid input. Keeping current.\033[0m\n";
+                                    int newAge;
+                                    if (tryParse(input, newAge) && check() && newAge > 0) {
+                                        age = newAge;
+                                    } else {
+                                        cout << "\033[1;31mInvalid age. Keeping current.\033[0m\n";
+                                        Pause();
                                     }
                                 }
-                                Pause();
                                 break;
+
                             case '4':
                                 cout << "Enter new salary (leave blank to cancel): ";
                                 getline(cin, input);
                                 if (!input.empty()) {
-                                    try {
-                                        float newSalary = stof(input);
-                                        if (check() && newSalary >= 0) salary = newSalary;
-                                        else cout << "\033[1;31mInvalid salary. Keeping current.\033[0m\n";
-                                    } catch (...) {
-                                        cout << "\033[1;31mInvalid input. Keeping current.\033[0m\n";
+                                    float newSalary;
+                                    if (tryParse(input, newSalary) && check() && newSalary >= 0) {
+                                        salary = newSalary;
+                                    } else {
+                                        cout << "\033[1;31mInvalid salary. Keeping current.\033[0m\n";
+                                        Pause();
                                     }
                                 }
-                                Pause();
                                 break;
+
                             case '5':
                                 cout << "Enter new role (leave blank to cancel): ";
                                 getline(cin, input);
                                 if (!input.empty()) {
                                     if (isValidName(input)) role = input;
-                                    else cout << "\033[1;31mInvalid role. Keeping current.\033[0m\n";
+                                    else {
+                                        cout << "\033[1;31mInvalid role. Keeping current.\033[0m\n";
+                                        Pause();
+                                    }
                                 }
-                                Pause();
                                 break;
                             case 'S':
                             case 's':

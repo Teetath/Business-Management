@@ -43,7 +43,7 @@ class ProductList {
         bool isDuplicateName(const string& name) const;
         void addProduct(Product* product);
         void add_new_product();
-        void removeProduct(const string& name);
+        void removeProduct();
         void sortByNameAZ();
         void sortByNewest();
         void sortByOldest();
@@ -132,10 +132,21 @@ class ProductList {
         size++;
     }
 
-    void ProductList::removeProduct(const string& name) {
+    void ProductList::removeProduct() {
         ProductNode* current = head;
         ProductNode* previous = nullptr;
-
+        string name;
+        system("clear");
+        cout << "\n\033[1;36m+-------------------------------------------+\n";
+        cout << "|         🗑️  Remove Product Menu            |\n";
+        cout << "+-------------------------------------------+\033[0m\n";
+        displayAll();
+        cout << "\033[1;34mEnter the name of the product you want to remove (leave blank to return): \033[0m";
+        getline(cin, name);
+        if(name.empty()) { 
+            cout << "\033[1;33mRemoval cancelled.\033[0m\n";
+            return;
+        }
         while (current) {
             if (current->product->getName() == name) {
                 if (previous) {
@@ -149,7 +160,6 @@ class ProductList {
                 size--;
                 cout << "Product \"" << name << "\" removed successfully." << endl;
 
-                // หลังลบ อัพเดตไฟล์
                 saveToFile("products.txt");
                 return;
             }
@@ -276,7 +286,6 @@ class ProductList {
     }
 
     void ProductList::displayAll() {
-        system("clear");
         displayTableHeader();
         ProductNode* current = head;
         while (current) {
@@ -418,11 +427,12 @@ class ProductList {
         float price, cost;
         int stock;
 
-        while (true) {
+        
             system("clear");
             cout << "\033[1;36m+------------------------------------+\n";
             cout << "|        🆕 Add New Product          |\n";
             cout << "+------------------------------------+\033[0m\n";
+        while (true) {
             cout << "\033[1;34m📦 Product Name (leave blank to cancel): \033[0m ";
             getline(cin, name);
     
@@ -433,10 +443,8 @@ class ProductList {
     
             if (isDuplicateName(name)) {
                 cout << "\033[1;31m❌ Product \'" << name << "\' already exists! Cannot add duplicate.\033[0m\n";
-                Pause();
             } else if (!isValidName(name)) {
                 cout << "\033[1;31m❌ Error: Product name must contain only English letters.\033[0m\n";
-                Pause();
             } else {
                 break;
             }
@@ -451,16 +459,8 @@ class ProductList {
                 return;
             }
     
-            try {
-                price = stof(price_input);
-                if (price < 0) {
-                    cout << "\033[1;31m❌ Invalid price! Please enter a positive number.\033[0m\n";
-                } else {
-                    break;
-                }
-            } catch (const invalid_argument& e) {
-                cout << "\033[1;31m❌ Invalid price! Please enter a valid number.\033[0m\n";
-            }
+            if (check() && tryParse(price_input, price) && price >= 0) break;
+            cout << "\033[1;31m❌ Invalid price! Please enter a valid number.\033[0m\n";
         }
     
         while (true) {
@@ -472,16 +472,10 @@ class ProductList {
                 return;
             }
     
-            try {
-                cost = stof(cost_input);
-                if (cost < 0 || cost > price) {
-                    cout << "\033[1;31m❌ Invalid cost! It must be positive and not greater than price.\033[0m\n";
-                } else {
-                    break;
-                }
-            } catch (const invalid_argument& e) {
-                cout << "\033[1;31m❌ Invalid cost! Please enter a valid number.\033[0m\n";
-            }
+            if (check() && tryParse(cost_input, cost) && cost >= 0 && cost < price) break;
+            else cout << "\033[1;31m❌ Invalid cost! It must be positive and not greater than price.\033[0m\n";
+            cout << "\033[1;31m❌ Invalid cost! Please enter a valid number.\033[0m\n";
+
         }
     
         while (true) {
@@ -493,16 +487,9 @@ class ProductList {
                 return;
             }
     
-            try {
-                stock = stoi(stock_input);
-                if (stock < 0) {
-                    cout << "\033[1;31m❌ Invalid stock! Please enter a non-negative integer.\033[0m\n";
-                } else {
-                    break;
-                }
-            } catch (const invalid_argument& e) {
-                cout << "\033[1;31m❌ Invalid stock! Please enter a valid number.\033[0m\n";
-            }
+            if (check() && tryParse(stock_input, stock) && stock >= 0) break;
+            cout << "\033[1;31m❌ Invalid stock! Please enter a valid number.\033[0m\n";
+
         }
     
         addProduct(new Product(name, price, cost, stock, time_added));
@@ -574,51 +561,53 @@ class ProductList {
                             getline(cin, input);
                             if (!input.empty()) {
                                 if (isValidName(input) && !isDuplicateName(input)) productName = input;
-                                else cout << "\033[1;31mInvalid or duplicated name. Keeping current.\033[0m\n";
+                                else {
+                                    cout << "\033[1;31mInvalid or duplicated name. Keeping current.\033[0m\n";
+                                    Pause();
+                                }
                             }
-                            Pause();
                             break;
+
                         case '2':
                             cout << "Enter new price (leave blank to cancel): ";
                             getline(cin, input);
                             if (!input.empty()) {
-                                try {
-                                    float newPrice = stof(input);
-                                    if (check() && newPrice >= 0) price = newPrice;
-                                    else cout << "\033[1;31mInvalid price. Keeping current.\033[0m\n";
-                                } catch (...) {
-                                    cout << "\033[1;31mInvalid input. Keeping current.\033[0m\n";
+                                float newPrice;
+                                if (tryParse(input, newPrice) && check() && newPrice >= 0) {
+                                    price = newPrice;
+                                } else {
+                                    cout << "\033[1;31mInvalid price. Keeping current.\033[0m\n";
+                                    Pause();
                                 }
                             }
-                            Pause();
                             break;
+
                         case '3':
                             cout << "Enter new cost (leave blank to cancel): ";
                             getline(cin, input);
                             if (!input.empty()) {
-                                try {
-                                    float newCost = stof(input);
-                                    if (check() && newCost >= 0) cost = newCost;
-                                    else cout << "\033[1;31mInvalid cost. Keeping current.\033[0m\n";
-                                } catch (...) {
-                                    cout << "\033[1;31mInvalid input. Keeping current.\033[0m\n";
+                                float newCost;
+                                if (tryParse(input, newCost) && check() && newCost >= 0) {
+                                    cost = newCost;
+                                } else {
+                                    cout << "\033[1;31mInvalid cost. Keeping current.\033[0m\n";
+                                    Pause();
                                 }
                             }
-                            Pause();
                             break;
+
                         case '4':
                             cout << "Enter new stock (leave blank to cancel): ";
                             getline(cin, input);
                             if (!input.empty()) {
-                                try {
-                                    int newStock = stoi(input);
-                                    if (check() && newStock >= 0) stock = newStock;
-                                    else cout << "\033[1;31mInvalid stock. Keeping current.\033[0m\n";
-                                } catch (...) {
-                                    cout << "\033[1;31mInvalid input. Keeping current.\033[0m\n";
+                                int newStock;
+                                if (tryParse(input, newStock) && check() && newStock >= 0) {
+                                    stock = newStock;
+                                } else {
+                                    cout << "\033[1;31mInvalid stock. Keeping current.\033[0m\n";
+                                    Pause();
                                 }
                             }
-                            Pause();
                             break;
                         case 'S':
                         case 's':
