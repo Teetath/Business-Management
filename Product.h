@@ -61,6 +61,7 @@ class ProductList {
         void summaryIncome(const string& name) const;
         void SortproductMenu(ProductList& list);
         void edit_product();
+        void summaryProfitFromSales(const string& name) const;
     };
 
     Product::Product(string n, float p, float c, int s, string t)
