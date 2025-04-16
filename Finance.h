@@ -76,7 +76,7 @@ void ProductList::printSalesData(const string& filename,const string& targetMont
  
     string line;
     map<string, pair<int, double>> salesData;
-    system("clear");
+    // system("clear");
 
     while(getline(file, line)) {
          stringstream ss(line);

@@ -96,8 +96,10 @@ void FinanceMenu() {
                 ProductList list;
                 string month;
                 cout << "\033[1;36m📈 Showing Income/Expense/Profit...\033[0m\n";
-                cout << "Enter month to view sales (e.g. 2025-04): ";
+                cout << "Enter month to view sales (example 2025-04): ";
                 getline(cin, month);
+                system("clear");
+                cout << "Sale Data on YYYY-MM: \033[1;34m" << month << "\033[0m" << endl;
                 list.printSalesData("sales.txt",month);
                 cout << "=======================================================" << endl;
                 list.summaryIncome("sales.txt",month);
