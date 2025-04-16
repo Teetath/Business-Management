@@ -44,18 +44,21 @@ void ProductList::sell() {
     cout << "Product not found." << endl;
 }
 
-void ProductList::summaryIncome(const string& filename) const {
+void ProductList::summaryIncome(const string& filename,const string& targetMonth) const {
     ifstream file(filename);
     string line;
     float total = 0;
 
     while (getline(file, line)) {
         stringstream ss(line);
-        string name, quan, income_string, time_String;
+        string name, quan, income_string, timestamp;
 
         getline(ss, name, ',');
         getline(ss, quan, ',');
-        getline(ss, income_string);
+        getline(ss, income_string, ',');
+        getline(ss, timestamp);
+
+        if (timestamp.substr(0, 7) != targetMonth) continue;
 
         float income = stof(income_string);
         total += income;
@@ -64,7 +67,7 @@ void ProductList::summaryIncome(const string& filename) const {
     cout << "💰 Total income : " << "\033[32m" << fixed << setprecision(2) << total << "\033[0m" << " Bath" << endl;
 }
 
-void ProductList::printSalesData(const string& filename) const {
+void ProductList::printSalesData(const string& filename,const string& targetMonth) const {
     ifstream file(filename);
      if(!file) {
          cout << "Can't open file" << endl;
@@ -77,11 +80,15 @@ void ProductList::printSalesData(const string& filename) const {
 
     while(getline(file, line)) {
          stringstream ss(line);
-         string name, quan, earned;
+         string name, quan, earned,timestamp;
  
          getline(ss, name, ',');
          getline(ss, quan, ',');
-         getline(ss, earned);
+         getline(ss, earned, ',');
+         getline(ss, timestamp);
+
+
+         if (timestamp.substr(0, 7) != targetMonth) continue;
 
         int quantity = stoi(quan);
         double earnedValue = stod(earned);
@@ -107,7 +114,7 @@ void ProductList::printSalesData(const string& filename) const {
     } else cout << "No Sales Data!!" << endl;
 }
 
-void ProductList::summaryProfitFromSales(const string& filename) const {
+void ProductList::summaryProfitFromSales(const string& filename, const string& targetMonth) const {
     ifstream file(filename);
     if (!file) {
         cerr << "❌ Failed to open sales.txt" << endl;
@@ -127,6 +134,8 @@ void ProductList::summaryProfitFromSales(const string& filename) const {
         getline(ss, quantityStr, ',');
         getline(ss, earnedStr, ',');
         getline(ss, timestamp);
+
+        if (timestamp.substr(0, 7) != targetMonth) continue;
 
         int quantity = stoi(quantityStr);
         
@@ -160,9 +169,9 @@ void ProductList::summaryProfitFromSales(const string& filename) const {
     cout << "-------------------------------------------------------" << endl;
     net = totalProfit - (totalSalaries + totalSSO);
     if (net < 0) {
-        cout << "📊 Total Profit : " << "\033[31m" << fixed << setprecision(2) << net << "\033[0m" << " Baht" << endl;
+        cout << "📊 Total Profit : " << "\033[31m" << fixed << setprecision(2) << net << "\033[0m" << " Baht" << endl;    //loss
     }else {
-        cout << "📊 Total Profit : " << "\033[32m" << fixed << setprecision(2) << net << "\033[0m" << " Baht" << endl;
+        cout << "📊 Total Profit : " << "\033[32m" << fixed << setprecision(2) << net << "\033[0m" << " Baht" << endl;    //profit
     }
     return;
 }

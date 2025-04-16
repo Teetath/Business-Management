@@ -57,11 +57,11 @@ class ProductList {
         void comparePrice(float price);
         void compareStock(int stock);
         void sell();
-        void printSalesData(const string& name) const;
-        void summaryIncome(const string& name) const;
+        void printSalesData(const string& name,const string& targetMonth) const;
+        void summaryIncome(const string& name,const string& targetMonth) const;
         void SortproductMenu(ProductList& list);
         void edit_product();
-        void summaryProfitFromSales(const string& name) const;
+        void summaryProfitFromSales(const string& name,const string& targetMonth) const;
     };
 
     Product::Product(string n, float p, float c, int s, string t)

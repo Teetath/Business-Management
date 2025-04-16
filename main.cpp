@@ -69,13 +69,15 @@ void FinanceMenu() {
     while(true) {
         system("clear");
         cout << "\033[1;32m";
-        cout << "+=======================================+\n";
-        cout << "| 💰       FINANCE MANAGEMENT        💰 | \n";
-        cout << "+=======================================+\033[0m\n";
-        cout << "| 💸 [1] Sell Product                   | \n";
-        cout << "| 📊 [2] Show Income/Expense/Profit     | \n";
-        cout << "| 🔙 [0] Return to Main Menu            | \n";
-        cout << "+---------------------------------------+\n";
+        cout << "+=============================================+\n";
+        cout << "|           💰 FINANCE MANAGEMENT 💰           |\n";
+        cout << "+=============================================+\033[0m\n";
+        cout << "| 💸 [1] Sell Product                          |\n";
+        cout << "| 📅 [2] Show Income/Expense/Profit per Month  |\n";
+        cout << "| 📊 [3] Show Total Income/Expense/Profit      |\n";
+        cout << "| 🔙 [0] Return to Main Menu                   |\n";
+        cout << "+---------------------------------------------+\n";
+        
         
         choice = getch();  // รับตัวอักษรแบบไม่ต้องกด Enter
         
@@ -92,13 +94,19 @@ void FinanceMenu() {
             case '2': {
                 // Add functionality for showing income/expense/profit
                 ProductList list;
+                string month;
                 cout << "\033[1;36m📈 Showing Income/Expense/Profit...\033[0m\n";
-                list.printSalesData("sales.txt");
+                cout << "Enter month to view sales (e.g. 2025-04): ";
+                getline(cin, month);
+                list.printSalesData("sales.txt",month);
                 cout << "=======================================================" << endl;
-                list.summaryIncome("sales.txt");
+                list.summaryIncome("sales.txt",month);
                 list.loadFromFile("products.txt");
-                list.summaryProfitFromSales("sales.txt");
+                list.summaryProfitFromSales("sales.txt",month);
                 break;
+            }
+            case '3' : {
+                
             }
             case '0': return;
             default : continue;
