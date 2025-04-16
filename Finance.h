@@ -139,7 +139,6 @@ void ProductList::summaryProfitFromSales(const string& filename, const string& t
 
         int quantity = stoi(quantityStr);
         
-        //Get Sales income
         ProductNode* current = head;
         while (current) {
             if (current->product->getName() == name) {
@@ -154,7 +153,6 @@ void ProductList::summaryProfitFromSales(const string& filename, const string& t
 
     file.close();
     
-    //Get Salary and SSo
     EmployeeManager EmpManager;
     Node* currentEmp = EmpManager.getHead();
     float totalSalaries = 0.0f;
