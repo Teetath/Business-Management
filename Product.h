@@ -43,6 +43,7 @@ class ProductList {
         bool isDuplicateName(const string& name) const;
         void addProduct(Product* product);
         void add_new_product();
+        void search_product();
         void removeProduct();
         void sortByNameAZ();
         void sortByNewest();
@@ -497,6 +498,44 @@ class ProductList {
         saveToFile("products.txt");
     
         cout << "\n\033[1;32m✅ Product \"" << name << "\" added successfully! 🎉\033[0m\n";
+    }
+
+    void ProductList::search_product() {
+        string input;
+        system("clear");
+    
+        while (true) {
+            cout << "\033[1;34mEnter product ID or name to search (leave blank to cancel): \033[0m";
+            getline(cin, input);
+    
+            if (input.empty() || all_of(input.begin(), input.end(), ::isspace)) {
+                cout << "\033[1;33mSearch cancelled.\033[0m\n";
+                return;
+            }
+    
+            if (!isValidID(input) && !isValidName(input)) {
+                cout << "\033[1;31mError: Input must contain only English letters or digits.\033[0m\n";
+                continue;
+            } else {
+                break;
+            }
+        }
+    
+        system("clear");
+        ProductNode* current = head;
+        bool found = false;
+        displayTableHeader();
+        while (current) {
+            if (current->product->getName() == input) {
+                current->product->displayProduct();
+                found = true;
+            }
+            current = current->next;
+        }
+    
+        if (!found) {
+            cout << "\033[1;31mProduct not found.\033[0m\n";
+        }
     }
 
     void ProductList::edit_product() {

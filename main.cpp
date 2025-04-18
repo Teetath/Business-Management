@@ -130,30 +130,34 @@ void ProductMenu() {
         cout << "| 📦       PRODUCT MANAGEMENT        📦 | \n";
         cout << "+=======================================+\033[0m\n";
         cout << "| 🆕 [1] Add Product                    | \n";
-        cout << "| ✏️  [2] Edit Product                   | \n";
-        cout << "| 👀 [3] Display Products               | \n";
-        cout << "| 🗑  [4] Remove Product                 | \n";
+        cout << "| 🔍 [2] Search Product                 | \n";
+        cout << "| ✏️  [3] Edit Product                   | \n";
+        cout << "| 👀 [4] Display Products               | \n";
+        cout << "| 🗑  [5] Remove Product                 | \n";
         cout << "| 🔙 [0] Return to Main Menu            | \n";
         cout << "+---------------------------------------+\n";
         
         choice = getch();
         
         system("clear");
-
+    
         switch(choice) {
             case '1': {
-                list.add_new_product();break;
-            }case '2': {
-                list.edit_product();break;
-            }   
+                list.add_new_product(); break;
+            }
+            case '2': {
+                list.search_product(); break;
+            }
             case '3': {
+                list.edit_product(); break;
+            }
+            case '4': {
                 list.SortproductMenu(list);
                 continue;
                 break;
-            }   
-            case '4': {
-                list.removeProduct();
-                break;
+            }
+            case '5': {
+                list.removeProduct(); break;
             }
             case '0': return;
             default : continue;
