@@ -74,8 +74,14 @@ string getTargetMonthInput() {
     while (true) {
         cout << "\033[1;34m📅 Enter month (MM): \033[0m";
         getline(cin, month);
-        if ((month == "01" || month == "02" || month == "03" || month == "04" || month == "05" || month == "06" || month == "07" || month == "08" ||month == "09" || month == "10" || month == "11" || month == "12")) 
-        break;
+        if(!month.empty() && all_of(month.begin(),month.end(), ::isdigit)) {
+            int m = stoi(month);
+            if (m >= 1 && m <=12 ) {
+                if(m < 10) month = "0" + to_string(m);
+                else month = to_string(m);
+                break;
+            }
+        }
         cout << "\033[1;31m❌ Invalid month. Must be 01 - 12.\033[0m\n";
     }
 
