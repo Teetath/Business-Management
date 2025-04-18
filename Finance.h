@@ -5,25 +5,50 @@
 #include "Employee.h"
 
 void ProductList::sell() {
-    string name;
-    int amount=0;
+    string name, input;
+    int amount;
     int stock;
 
     displayAll();
 
-    cout << "Enter name: ";
-    getline(cin, name);
+    while (true) {
+        cout << "\033[1;34m📦 Enter Product Name (leave blank to cancel): \033[0m ";
+        getline(cin, name);
 
-    while(amount<=0) {
-        cout << "Enter amount: ";
-        cin >> amount;
+        if (name.empty() || all_of(input.begin(), input.end(), ::isspace)) {
+            cout << "\033[1;33m⚠️  Product creation cancelled.\033[0m\n";
+            return;
+        }
+        if (!isValidName(name)) {
+            cout << "\033[1;31m❌ Error: Product name must contain only English letters.\033[0m\n";
+        } else {
+            break;
+        }
+    }
+
+    while (true) {
+        cout << "\033[1;34mEnter amount (leave blank to cancel):\033[0m ";
+        getline(cin, input);
+
+        if (input.empty() || all_of(input.begin(), input.end(), ::isspace)) {
+            cout << "\033[1;33m⚠️  Product creation cancelled.\033[0m\n";
+            return;
+        }
+
+        if (check() && tryParse(input, amount) && amount > 0) break;
+        else if(amount <= 0) {
+            cout << "\033[1;31m❌ Invalid amount! It must be positive.\033[0m\n";
+            continue;
+        }
+        cout << "\033[1;31m❌ Invalid amount! Please enter a valid number.\033[0m\n";
+
     }
 
     ProductNode* current = head;
     while (current) {
         if(current->product->getName() == name) {
             stock = current->product->getStock();
-            if(amount > stock) {
+            if (amount > stock) {
                 cout << "Not enough stock" << endl;
             }else {
                 current->product->setStock(stock-amount);

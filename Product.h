@@ -437,7 +437,7 @@ class ProductList {
             cout << "\033[1;34m📦 Product Name (leave blank to cancel): \033[0m ";
             getline(cin, name);
     
-            if (name.empty()) {
+            if (name.empty() || all_of(name.begin(), name.end(), ::isspace)) {
                 cout << "\033[1;33m⚠️  Product creation cancelled.\033[0m\n";
                 return;
             }
@@ -455,7 +455,7 @@ class ProductList {
             cout << "\033[1;34m💲 Product Price (leave blank to cancel): \033[0m ";
             string price_input;
             getline(cin, price_input);
-            if (price_input.empty()) {
+            if (price_input.empty() || all_of(price_input.begin(), price_input.end(), ::isspace)) {
                 cout << "\033[1;33m⚠️  Product creation cancelled.\033[0m\n";
                 return;
             }
@@ -468,7 +468,7 @@ class ProductList {
             cout << "\033[1;34m💲 Product Cost (leave blank to cancel): \033[0m ";
             string cost_input;
             getline(cin, cost_input);
-            if (cost_input.empty()) {
+            if (cost_input.empty() || all_of(cost_input.begin(), cost_input.end(), ::isspace)) {
                 cout << "\033[1;33m⚠️  Product creation cancelled.\033[0m\n";
                 return;
             }
@@ -483,7 +483,7 @@ class ProductList {
             cout << "\033[1;34m📦 Product Stock (leave blank to cancel): \033[0m";
             string stock_input;
             getline(cin, stock_input);
-            if (stock_input.empty()) {
+            if (stock_input.empty() || all_of(stock_input.begin(), stock_input.end(), ::isspace)) {
                 cout << "\033[1;33m⚠️  Product creation cancelled.\033[0m\n";
                 return;
             }
@@ -505,7 +505,7 @@ class ProductList {
         displayAll();
         cout << "\033[1;34mEnter name to edit (leave blank to return): \033[0m";
         getline(cin, name);
-        if (name.empty()) return;
+        if (name.empty() || all_of(name.begin(), name.end(), ::isspace)) return;
         
     
         ProductNode* current = head;
@@ -560,7 +560,7 @@ class ProductList {
                         case '1':
                             cout << "Enter new name (leave blank to cancel): ";
                             getline(cin, input);
-                            if (!input.empty()) {
+                            if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
                                 if (isValidName(input) && !isDuplicateName(input)) productName = input;
                                 else {
                                     cout << "\033[1;31mInvalid or duplicated name. Keeping current.\033[0m\n";
@@ -572,7 +572,7 @@ class ProductList {
                         case '2':
                             cout << "Enter new price (leave blank to cancel): ";
                             getline(cin, input);
-                            if (!input.empty()) {
+                            if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
                                 float newPrice;
                                 if (tryParse(input, newPrice) && check() && newPrice >= 0) {
                                     price = newPrice;
@@ -586,7 +586,7 @@ class ProductList {
                         case '3':
                             cout << "Enter new cost (leave blank to cancel): ";
                             getline(cin, input);
-                            if (!input.empty()) {
+                            if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
                                 float newCost;
                                 if (tryParse(input, newCost) && check() && newCost >= 0) {
                                     cost = newCost;
@@ -600,7 +600,7 @@ class ProductList {
                         case '4':
                             cout << "Enter new stock (leave blank to cancel): ";
                             getline(cin, input);
-                            if (!input.empty()) {
+                            if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
                                 int newStock;
                                 if (tryParse(input, newStock) && check() && newStock >= 0) {
                                     stock = newStock;

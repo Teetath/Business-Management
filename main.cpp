@@ -9,6 +9,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <ctime>
+#include <algorithm>
 using namespace std;
 
 #include "Function.h"
@@ -114,7 +115,6 @@ void FinanceMenu() {
             default : continue;
         }
         Pause();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
     }
 }
 

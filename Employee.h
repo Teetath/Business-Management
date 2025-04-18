@@ -154,7 +154,7 @@ class EmployeeManager {
             while (true) {
                 cout << "\033[1;34mEnter ID (leave blank to cancel): \033[0m ";
                 getline(cin, id);
-                if (id.empty()) {
+                if (id.empty() || all_of(id.begin(), id.end(), ::isspace)) {
                     cout << "\033[1;33mCancelled. No employee was added.\033[0m\n";
                     return;
                 }
@@ -173,7 +173,7 @@ class EmployeeManager {
             while (true) {
                 cout << "\033[1;34mEnter name (leave blank to cancel): \033[0m";
                 getline(cin, name);
-                if (name.empty()) {
+                if (name.empty() || all_of(name.begin(), name.end(), ::isspace)) {
                     cout << "\033[1;33mCancelled. No employee was added.\033[0m\n";
                     return;
                 }
@@ -188,7 +188,7 @@ class EmployeeManager {
                 string input;
                 cout << "\033[1;34mEnter age (leave blank to cancel): \033[0m";
                 getline(cin, input);
-                if (input.empty()) {
+                if (input.empty() || all_of(input.begin(), input.end(), ::isspace)) {
                     cout << "\033[1;33mCancelled. No employee was added.\033[0m\n";
                     return;
                 }
@@ -200,7 +200,7 @@ class EmployeeManager {
                 string input;
                 cout << "\033[1;34mEnter salary (leave blank to cancel): \033[0m";
                 getline(cin, input);
-                if (input.empty()) {
+                if (input.empty() || all_of(input.begin(), input.end(), ::isspace)) {
                     cout << "\033[1;33mCancelled. No employee was added.\033[0m\n";
                     return;
                 }
@@ -211,7 +211,7 @@ class EmployeeManager {
             while (true) {
                 cout << "\033[1;34mEnter role (leave blank to cancel): \033[0m";
                 getline(cin, role);
-                if (role.empty()) {
+                if (role.empty() || all_of(role.begin(), role.end(), ::isspace)) {
                     cout << "\033[1;33mCancelled. No employee was added.\033[0m\n";
                     return;
                 }
@@ -242,12 +242,20 @@ class EmployeeManager {
         void search_employee() {
             string input;
             system("clear");
-            cout << "\033[1;34mEnter ID or name to search (leave blank to cancel): \033[0m";
-            getline(cin, input);
-        
-            if (input.empty()) {
-                cout << "\033[1;33mSearch cancelled.\033[0m\n";
-                return;
+            while(true){
+                cout << "\033[1;34mEnter ID or name to search (leave blank to cancel): \033[0m";
+                getline(cin, input);
+                
+                if (input.empty() || all_of(input.begin(), input.end(), ::isspace)) {
+                    cout << "\033[1;33mSearch cancelled.\033[0m\n";
+                    return;
+                }
+                if (!isValidID(input) && !isValidName(input)) {
+                    cout << "\033[1;31mError: Input must contain only English letters or digits.\033[0m\n";
+                    continue;
+                }else {
+                    break;
+                }
             }
         
             system("clear");
@@ -273,7 +281,7 @@ class EmployeeManager {
             cout << "\033[1;34mEnter ID to remove (leave blank to cancel): \033[0m";
             getline(cin, id);
         
-            if (id.empty()) {
+            if (id.empty() || all_of(id.begin(), id.end(), ::isspace)) {
                 cout << "\033[1;33mRemoval cancelled.\033[0m\n";
                 return;
             }
@@ -444,7 +452,7 @@ class EmployeeManager {
             display_all();
             cout << "\033[1;34mEnter ID to edit (leave blank to return): \033[0m";
             getline(cin, id);
-            if (id.empty()) return;
+            if (id.empty() || all_of(id.begin(), id.end(), ::isspace)) return;
         
             Node* current = head;
             while (current) {
@@ -494,7 +502,7 @@ class EmployeeManager {
                             case '1':
                                 cout << "Enter new ID (leave blank to cancel): ";
                                 getline(cin, input);
-                                if (!input.empty()) {
+                                if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
                                     if (!isDuplicateID(input) && isValidID(input)) empID = input;
                                     else {
                                         cout << "\033[1;31mInvalid or duplicate ID. Keeping current.\033[0m\n";
@@ -506,7 +514,7 @@ class EmployeeManager {
                             case '2':
                                 cout << "Enter new name (leave blank to cancel): ";
                                 getline(cin, input);
-                                if (!input.empty()) {
+                                if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
                                     if (isValidName(input)) name = input;
                                     else {
                                         cout << "\033[1;31mInvalid name. Keeping current.\033[0m\n";
@@ -518,7 +526,7 @@ class EmployeeManager {
                             case '3':
                                 cout << "Enter new age (leave blank to cancel): ";
                                 getline(cin, input);
-                                if (!input.empty()) {
+                                if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
                                     int newAge;
                                     if (tryParse(input, newAge) && check() && newAge > 0) {
                                         age = newAge;
@@ -532,7 +540,7 @@ class EmployeeManager {
                             case '4':
                                 cout << "Enter new salary (leave blank to cancel): ";
                                 getline(cin, input);
-                                if (!input.empty()) {
+                                if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
                                     float newSalary;
                                     if (tryParse(input, newSalary) && check() && newSalary >= 0) {
                                         salary = newSalary;
@@ -546,7 +554,7 @@ class EmployeeManager {
                             case '5':
                                 cout << "Enter new role (leave blank to cancel): ";
                                 getline(cin, input);
-                                if (!input.empty()) {
+                                if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
                                     if (isValidName(input)) role = input;
                                     else {
                                         cout << "\033[1;31mInvalid role. Keeping current.\033[0m\n";
