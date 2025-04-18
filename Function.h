@@ -62,4 +62,24 @@ bool isValidName(const string& name) {
     return true;
 }
 
+string getTargetMonthInput() {
+    string year, month;
+    while (true) {
+        cout << "\033[1;34m📅 Enter year (YYYY): \033[0m";
+        getline(cin, year);
+        if (year.size() == 4 && all_of(year.begin(), year.end(), ::isdigit)) break;
+        cout << "\033[1;31m❌ Invalid year. Please enter a 4-digit year.\033[0m\n";
+    }
+
+    while (true) {
+        cout << "\033[1;34m📅 Enter month (MM): \033[0m";
+        getline(cin, month);
+        if ((month == "01" || month == "02" || month == "03" || month == "04" || month == "05" || month == "06" || month == "07" || month == "08" ||month == "09" || month == "10" || month == "11" || month == "12")) 
+        break;
+        cout << "\033[1;31m❌ Invalid month. Must be 01 - 12.\033[0m\n";
+    }
+
+    return year + "-" + month;
+}
+
 #endif

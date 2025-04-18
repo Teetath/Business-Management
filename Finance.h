@@ -5,69 +5,67 @@
 #include "Employee.h"
 
 void ProductList::sell() {
-    string name, input;
+    string id, input;
     int amount;
-    int stock;
 
     displayAll();
 
     while (true) {
-        cout << "\033[1;34m📦 Enter Product Name (leave blank to cancel): \033[0m ";
-        getline(cin, name);
+        cout << "\033[1;34m🆔 Enter Product ID (leave blank to cancel): \033[0m ";
+        getline(cin, id);
 
-        if (name.empty() || all_of(input.begin(), input.end(), ::isspace)) {
-            cout << "\033[1;33m⚠️  Product creation cancelled.\033[0m\n";
+        if (id.empty() || all_of(id.begin(), id.end(), ::isspace)) {
+            cout << "\033[1;33m⚠️  Sale cancelled.\033[0m\n";
             return;
         }
-        if (!isValidName(name)) {
-            cout << "\033[1;31m❌ Error: Product name must contain only English letters.\033[0m\n";
+
+        if (!isValidID(id)) {
+            cout << "\033[1;31m❌ Error: Product ID must contain only letters or digits.\033[0m\n";
         } else {
             break;
         }
     }
 
-    while (true) {
-        cout << "\033[1;34mEnter amount (leave blank to cancel):\033[0m ";
-        getline(cin, input);
-
-        if (input.empty() || all_of(input.begin(), input.end(), ::isspace)) {
-            cout << "\033[1;33m⚠️  Product creation cancelled.\033[0m\n";
-            return;
-        }
-
-        if (check() && tryParse(input, amount) && amount > 0) break;
-        else if(amount <= 0) {
-            cout << "\033[1;31m❌ Invalid amount! It must be positive.\033[0m\n";
-            continue;
-        }
-        cout << "\033[1;31m❌ Invalid amount! Please enter a valid number.\033[0m\n";
-
-    }
-
     ProductNode* current = head;
     while (current) {
-        if(current->product->getName() == name) {
-            stock = current->product->getStock();
-            if (amount > stock) {
-                cout << "Not enough stock" << endl;
-            }else {
-                current->product->setStock(stock-amount);
-                float earned = amount * current->product->getPriceWithVAT();
-                totalincome += earned;
-                cout << "Sold " << amount << " of '" << name << "' Remaining in stock: " << stock - amount << endl;
-                saveToFile("products.txt");
-
-                string timestamp = getCurrentTimestamp();
-                ofstream saleoutput("sales.txt", ios::app);
-                saleoutput << name << "," << amount << "," << fixed << setprecision(2) << earned << "," << timestamp << endl;
-                saleoutput.close();
+        if (current->product->getID() == id) {
+            while (true) {
+                cout << "\033[1;34mEnter amount to sell (leave blank to cancel):\033[0m ";
+                getline(cin, input);
+        
+                if (input.empty() || all_of(input.begin(), input.end(), ::isspace)) {
+                    cout << "\033[1;33m⚠️  Sale cancelled.\033[0m\n";
+                    return;
+                }
+        
+                if (check() && tryParse(input, amount) && amount > 0) break;
+                cout << "\033[1;31m❌ Invalid amount! Please enter a positive number.\033[0m\n";
             }
+            int stock = current->product->getStock();
+            if (amount > stock) {
+                cout << "\033[1;31m❌ Not enough stock.\033[0m\n";
+                return;
+            }
+
+            current->product->setStock(stock - amount);
+            float earned = amount * current->product->getPriceWithVAT();
+            totalincome += earned;
+            saveToFile("products.txt");
+
+            string timestamp = getCurrentTimestamp();
+            ofstream saleoutput("sales.txt", ios::app);
+            saleoutput << current->product->getName() << "," << amount << "," << fixed << setprecision(2) << earned << "," << timestamp << endl;
+            saleoutput.close();
+
+            cout << "✅ Sold " << amount << " of product '" << current->product->getName() << "' (ID: " << id << ")\n";
+            cout << "📦 Remaining in stock: " << current->product->getStock() << endl;
             return;
         }
         current = current->next;
     }
-    cout << "Product not found." << endl;
+    cout << "\033[1;31m❌ Product with ID '" << id << "' not found.\033[0m\n";
 }
+
 
 void ProductList::summaryIncome(const string& filename,const string& targetMonth) const {
     ifstream file(filename);
@@ -89,7 +87,7 @@ void ProductList::summaryIncome(const string& filename,const string& targetMonth
         total += income;
     }
     file.close();
-    cout << "💰 Total income : " << "\033[32m" << fixed << setprecision(2) << total << "\033[0m" << " Bath" << endl;
+    cout << "💰 Total income : " << "\033[32m" << fixed << setprecision(2) << total << "\033[0m" << " Bath";
 }
 
 void ProductList::printSalesData(const string& filename,const string& targetMonth) const {
@@ -101,7 +99,6 @@ void ProductList::printSalesData(const string& filename,const string& targetMont
  
     string line;
     map<string, pair<int, double>> salesData;
-    // system("clear");
 
     while(getline(file, line)) {
          stringstream ss(line);
@@ -197,6 +194,19 @@ void ProductList::summaryProfitFromSales(const string& filename, const string& t
         cout << "📊 Total Profit : " << "\033[32m" << fixed << setprecision(2) << net << "\033[0m" << " Baht" << endl;    //profit
     }
     return;
+}
+
+void showMonthlyFinanceSummary(ProductList& products) {
+    string targetMonth = getTargetMonthInput();
+
+    system("clear");
+    cout << "\033[1;36m===== 📈 Monthly Summary for " << targetMonth << " =====\033[0m\n";
+
+    products.printSalesData("sales.txt", targetMonth);
+    cout << endl;
+    products.summaryIncome("sales.txt", targetMonth);
+    cout << endl;
+    products.summaryProfitFromSales("sales.txt", targetMonth);
 }
 
 #endif
