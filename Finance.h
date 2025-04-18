@@ -6,7 +6,7 @@
 
 void ProductList::sell() {
     string id, input;
-    int amount;
+    unsigned int amount;
 
     displayAll();
 
@@ -37,15 +37,18 @@ void ProductList::sell() {
                     cout << "\033[1;33m⚠️  Sale cancelled.\033[0m\n";
                     return;
                 }
-        
-                if (check() && tryParse(input, amount) && amount > 0) break;
+                if (check() && tryParse(input, amount) && amount > 0) {
+                    if(amount > current->product->getStock()) {
+                        cout << "\033[1;31m❌ Not enough stock.\033[0m\n";
+                        continue;
+                    }
+                    else break;
+                }
                 cout << "\033[1;31m❌ Invalid amount! Please enter a positive number.\033[0m\n";
+    
             }
+
             int stock = current->product->getStock();
-            if (amount > stock) {
-                cout << "\033[1;31m❌ Not enough stock.\033[0m\n";
-                return;
-            }
 
             current->product->setStock(stock - amount);
             float earned = amount * current->product->getPriceWithVAT();
@@ -198,6 +201,9 @@ void ProductList::summaryProfitFromSales(const string& filename, const string& t
 
 void showMonthlyFinanceSummary(ProductList& products) {
     string targetMonth = getTargetMonthInput();
+    if (targetMonth.empty()) {
+        return; 
+    }
 
     system("clear");
     cout << "\033[1;36m===== 📈 Monthly Summary for " << targetMonth << " =====\033[0m\n";

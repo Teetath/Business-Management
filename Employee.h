@@ -261,7 +261,8 @@ class EmployeeManager {
             system("clear");
             Node* current = head;
             bool found = false;
-        
+            
+            displayTableHeader();
             while (current) {
                 if (current->data.getId() == input || current->data.getName() == input) {
                     current->data.display();
