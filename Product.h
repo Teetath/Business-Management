@@ -3,14 +3,15 @@
 
 class Product {
     private:
-        string name, timestamp;
+        string name, timestamp, id;
         float price;
         float cost;
         int stock;
     
     public:
-        Product(string name, float price, float cost, int stock, string timestamp);
+        Product(string id, string name, float price, float cost, int stock, string timestamp);
         void displayProduct() const;
+        string getID() const;
         string getName() const;
         float getPrice() const;
         float getCost() const; 
@@ -40,6 +41,7 @@ class ProductList {
         ~ProductList();
         
         int getSize() const { return size; }
+        bool isDuplicateID(const string& id) const;
         bool isDuplicateName(const string& name) const;
         void addProduct(Product* product);
         void add_new_product();
@@ -65,17 +67,18 @@ class ProductList {
         void summaryProfitFromSales(const string& name,const string& targetMonth) const;
     };
 
-    Product::Product(string n, float p, float c, int s, string t)
-    : name(n), price(p), cost(c), stock(s), timestamp(t) {}
+    Product::Product(string id, string n, float p, float c, int s, string t)
+    : id(id), name(n), price(p), cost(c), stock(s), timestamp(t) {}
 
     void Product::displayProduct() const {
         cout << fixed << setprecision(2);
-        cout << left << setw(15) << name
-             << "| " << setw(8) << price
-             << "| " << setw(8) << cost
-             << "| " << setw(8) << getVAT()
-             << "| " << setw(8) << getPriceWithVAT()
-             << "| " << setw(8) << getProfitPerUnit();
+        cout << left << setw(10) << id
+        << "| " << setw(15) << name
+        << "| " << setw(8)  << price
+        << "| " << setw(8)  << cost
+        << "| " << setw(8)  << getVAT()
+        << "| " << setw(8)  << getPriceWithVAT()
+        << "| " << setw(8)  << getProfitPerUnit();
     
         if (stock == 0) {
             cout << "| \033[1;31mOut of Stock \033[0m";
@@ -86,6 +89,7 @@ class ProductList {
         cout << "| " << setw(20) << timestamp << endl;
     }
 
+    string Product::getID() const { return id; }
     string Product::getName() const { return name; }
     float Product::getPrice() const { return price; }
     float Product::getCost() const { return cost; }
@@ -97,7 +101,7 @@ class ProductList {
 
     string Product::getLine() const {
         stringstream ss;
-        ss << name << "," << price << "," << cost << "," << stock << "," << timestamp;
+        ss << id << "," << name << "," << price << "," << cost << "," << stock << "," << timestamp;
         return ss.str();
     }
     
@@ -115,6 +119,18 @@ class ProductList {
             delete temp;
         }
     }
+
+    bool ProductList::isDuplicateID(const string& id) const {
+        ProductNode* current = head;
+        while (current) {
+            if (current->product->getID() == id) {
+                return true; // พบไอดีซ้ำ
+            }
+            current = current->next;
+        }
+        return false; // ไม่ซ้ำ
+    }
+
 
     bool ProductList::isDuplicateName(const string& name) const {
         ProductNode* current = head;
@@ -276,15 +292,17 @@ class ProductList {
 
     void ProductList::displayTableHeader() {
         cout << left
-            << setw(15) << "Name"
-            << "| " << setw(8)  << "Price"
-            << "| " << setw(8)  << "Cost"
-            << "| " << setw(8)  << "VAT"
-            << "| " << setw(8)  << "Total"
-            << "| " << setw(8)  << "Profit"
-            << "| " << setw(13)  << "Stock"
-            << "| " << setw(20) << "Last Updated" << endl;
-        cout << string(110, '-') << endl;
+             << setw(10) << "ID"
+             << "| " << setw(15) << "Name"
+             << "| " << setw(8)  << "Price"
+             << "| " << setw(8)  << "Cost"
+             << "| " << setw(8)  << "VAT"
+             << "| " << setw(8)  << "Total"
+             << "| " << setw(8)  << "Profit"
+             << "| " << setw(13) << "Stock"
+             << "| " << setw(20) << "Last Updated" << endl;
+    
+        cout << string(115, '-') << endl;
     }
 
     void ProductList::displayAll() {
@@ -317,8 +335,9 @@ class ProductList {
     
         while (getline(file, line)) {
             stringstream ss(line);
-            string name, priceStr, costStr, stockStr, timestamp;
+            string id, name, priceStr, costStr, stockStr, timestamp;
     
+            getline(ss, id, ',');
             getline(ss, name, ',');
             getline(ss, priceStr, ',');
             getline(ss, costStr, ',');
@@ -329,7 +348,7 @@ class ProductList {
             float cost = stof(costStr);
             int stock = stoi(stockStr);
     
-            addProduct(new Product(name, price, cost, stock, timestamp));
+            addProduct(new Product(id, name, price, cost, stock, timestamp));
         }
     
         file.close();
@@ -425,7 +444,7 @@ class ProductList {
         }
     }
     void ProductList::add_new_product() {
-        string name, time_added = getCurrentTimestamp();;
+        string id, name, time_added = getCurrentTimestamp();;
         float price, cost;
         int stock;
 
@@ -434,6 +453,24 @@ class ProductList {
             cout << "\033[1;36m+------------------------------------+\n";
             cout << "|        🆕 Add New Product          |\n";
             cout << "+------------------------------------+\033[0m\n";
+
+        while (true) {
+            cout << "\033[1;34m🆔 Product ID (leave blank to cancel): \033[0m ";
+            getline(cin, id);
+
+            if (id.empty() || all_of(id.begin(), id.end(), ::isspace)) {
+                cout << "\033[1;33m⚠️  Product creation cancelled.\033[0m\n";
+                return;
+            }
+    
+            if (isDuplicateID(id)) {
+                cout << "\033[1;31m❌ Product \'" << id << "\' already exists! Cannot add duplicate.\033[0m\n";
+            } else if (!isValidID(id)) {
+                cout << "\033[1;31m❌ Error: Product id must contain only English letters or digits.\033[0m\n";
+            } else {
+                break;
+            }
+        }
         while (true) {
             cout << "\033[1;34m📦 Product Name (leave blank to cancel): \033[0m ";
             getline(cin, name);
@@ -474,8 +511,8 @@ class ProductList {
                 return;
             }
     
-            if (check() && tryParse(cost_input, cost) && cost >= 0 && cost < price) break;
-            else cout << "\033[1;31m❌ Invalid cost! It must be positive and not greater than price.\033[0m\n";
+            if (check() && tryParse(cost_input, cost) && cost >= 0) break;
+            else cout << "\033[1;31m❌ Invalid cost! It must be positive.\033[0m\n";
             cout << "\033[1;31m❌ Invalid cost! Please enter a valid number.\033[0m\n";
 
         }
@@ -494,7 +531,7 @@ class ProductList {
 
         }
     
-        addProduct(new Product(name, price, cost, stock, time_added));
+        addProduct(new Product(id, name, price, cost, stock, time_added));
         saveToFile("products.txt");
     
         cout << "\n\033[1;32m✅ Product \"" << name << "\" added successfully! 🎉\033[0m\n";
@@ -539,17 +576,18 @@ class ProductList {
     }
 
     void ProductList::edit_product() {
-        string name;
+        string id;
         system("clear");
         displayAll();
-        cout << "\033[1;34mEnter name to edit (leave blank to return): \033[0m";
-        getline(cin, name);
-        if (name.empty() || all_of(name.begin(), name.end(), ::isspace)) return;
+        cout << "\033[1;34mEnter Product ID to edit (leave blank to return): \033[0m";
+        getline(cin, id);
+        if (id.empty() || all_of(id.begin(), id.end(), ::isspace)) return;
         
     
         ProductNode* current = head;
         while (current) {
-            if (current->product->getName() == name) {
+            if (current->product->getID() == id) {
+                string productID = current->product->getID();
                 string productName = current->product->getName();
                 float price  = current->product->getPrice();
                 float cost = current->product->getCost();
@@ -565,106 +603,111 @@ class ProductList {
     
                     cout << "\n\033[1;33mCurrent Product Info:\033[0m\n";
                     cout << left
-                        << setw(15) << "Name"
-                        << "| " << setw(8)  << "Price"
-                        << "| " << setw(8)  << "Cost"
-                        << "| " << setw(8)  << "Stock" << endl;
-                    cout << string(50, '-') << endl;
+                    << setw(10) << "ID"
+                    << "| " << setw(15) << "Name"
+                    << "| " << setw(8) << "Price"
+                    << "| " << setw(8) << "Cost"
+                    << "| " << setw(8) << "Stock" << endl;
+                    cout << string(60, '-') << endl;
                     cout << fixed << setprecision(2);
     
-                    if (stock == 0) {
-                        cout << left << setw(15) << productName
-                            << "| " << setw(8) << price
-                            << "| " << setw(8) << cost
-                            << "| \033[1;31mOut of Stock\033[0m" << endl;
-                    } else {
-                        cout << left << setw(15) << productName
-                            << "| " << setw(8) << price
-                            << "| " << setw(8) << cost
-                            << "| " << setw(5) << stock << endl;
-                    }
+                    cout << left << setw(10) << productID
+                    << "| " << setw(15) << productName
+                    << "| " << setw(8) << price
+                    << "| " << setw(8) << cost;
+               if (stock == 0)
+                   cout << "| \033[1;31mOut of Stock\033[0m" << endl;
+               else
+                   cout << "| " << setw(5) << stock << endl;
     
-                    cout << "\n\033[1;34mChoose the field you want to edit:\033[0m\n";
-                    cout << "\033[1;36m";
-                    cout << "  [1] \033[0mEdit \033[1mName\033[0m\n";
-                    cout << "\033[1;36m  [2] \033[0mEdit \033[1mPrice\033[0m\n";
-                    cout << "\033[1;36m  [3] \033[0mEdit \033[1mCost\033[0m\n";
-                    cout << "\033[1;36m  [4] \033[0mEdit \033[1mStock\033[0m\n";
-                    cout << "\033[1;32m  [S] \033[0m\033[1mSave and Exit\033[0m\n";
-                    cout << "\033[1;31m  [C] \033[0m\033[1mCancel\033[0m\n";
+                   cout << "\n\033[1;34mChoose the field you want to edit:\033[0m\n";
+                   cout << "\033[1;36m";
+                   cout << "  [1] \033[0mEdit \033[1mID\033[0m\n";
+                   cout << "\033[1;36m  [2] \033[0mEdit \033[1mName\033[0m\n";
+                   cout << "\033[1;36m  [3] \033[0mEdit \033[1mPrice\033[0m\n";
+                   cout << "\033[1;36m  [4] \033[0mEdit \033[1mCost\033[0m\n";
+                   cout << "\033[1;36m  [5] \033[0mEdit \033[1mStock\033[0m\n";
+                   cout << "\033[1;32m  [S] \033[0m\033[1mSave and Exit\033[0m\n";
+                   cout << "\033[1;31m  [C] \033[0m\033[1mCancel\033[0m\n";
                     option = getch();
     
                     string input;
                     switch (option) {
-                        case '1':
+                        case '1': {
+                            cout << "Enter new ID (leave blank to cancel): ";
+                            getline(cin, input);
+                            if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
+                                if (!isDuplicateID(input)) productID = input;
+                                else {
+                                    cout << "\033[1;31m❌ Duplicate ID. Keeping current.\033[0m\n";
+                                    Pause();
+                                }
+                            }
+                            break;
+                        }
+                        case '2': {
                             cout << "Enter new name (leave blank to cancel): ";
                             getline(cin, input);
                             if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
                                 if (isValidName(input) && !isDuplicateName(input)) productName = input;
                                 else {
-                                    cout << "\033[1;31mInvalid or duplicated name. Keeping current.\033[0m\n";
+                                    cout << "\033[1;31m❌ Invalid or duplicated name. Keeping current.\033[0m\n";
                                     Pause();
                                 }
                             }
                             break;
-
-                        case '2':
+                        }
+                        case '3': {
                             cout << "Enter new price (leave blank to cancel): ";
                             getline(cin, input);
-                            if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
-                                float newPrice;
-                                if (tryParse(input, newPrice) && check() && newPrice >= 0) {
-                                    price = newPrice;
-                                } else {
-                                    cout << "\033[1;31mInvalid price. Keeping current.\033[0m\n";
-                                    Pause();
-                                }
+                            float newPrice;
+                            if (!input.empty() && tryParse(input, newPrice) && check() && newPrice >= 0) {
+                                price = newPrice;
+                            } else if (!input.empty()) {
+                                cout << "\033[1;31m❌ Invalid price. Keeping current.\033[0m\n";
+                                Pause();
                             }
                             break;
-
-                        case '3':
+                        }
+                        case '4': {
                             cout << "Enter new cost (leave blank to cancel): ";
                             getline(cin, input);
-                            if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
-                                float newCost;
-                                if (tryParse(input, newCost) && check() && newCost >= 0) {
-                                    cost = newCost;
-                                } else {
-                                    cout << "\033[1;31mInvalid cost. Keeping current.\033[0m\n";
-                                    Pause();
-                                }
+                            float newCost;
+                            if (!input.empty() && tryParse(input, newCost) && check() && newCost >= 0) {
+                                cost = newCost;
+                            } else if (!input.empty()) {
+                                cout << "\033[1;31m❌ Invalid cost. Keeping current.\033[0m\n";
+                                Pause();
                             }
                             break;
-
-                        case '4':
+                        }
+                        case '5': {
                             cout << "Enter new stock (leave blank to cancel): ";
                             getline(cin, input);
-                            if (!(input.empty() || all_of(input.begin(), input.end(), ::isspace))) {
-                                int newStock;
-                                if (tryParse(input, newStock) && check() && newStock >= 0) {
-                                    stock = newStock;
-                                } else {
-                                    cout << "\033[1;31mInvalid stock. Keeping current.\033[0m\n";
-                                    Pause();
-                                }
+                            int newStock;
+                            if (!input.empty() && tryParse(input, newStock) && check() && newStock >= 0) {
+                                stock = newStock;
+                            } else if (!input.empty()) {
+                                cout << "\033[1;31m❌ Invalid stock. Keeping current.\033[0m\n";
+                                Pause();
                             }
                             break;
+                        }
                         case 'S':
-                        case 's':
-                            {
+                        case 's': {
                             string timestamp = getCurrentTimestamp();
                             delete current->product;
-                            current->product = new Product(productName, price, cost, stock, timestamp);
+                            current->product = new Product(productID, productName, price, cost, stock, timestamp);
                             saveToFile("products.txt");
-                            cout << "\033[1;32mProduct updated successfully!\033[0m\n";
+                            cout << "\033[1;32m✅ Product updated successfully!\033[0m\n";
                             return;
-                            }
+                        }
                         case 'C':
                         case 'c':
-                            cout << "\033[1;33mChanges cancelled. Nothing was saved.\033[0m\n";
+                            cout << "\033[1;33m❌ Changes cancelled. Nothing saved.\033[0m\n";
                             return;
                         default:
-                            cout << "\033[1;31mInvalid option. Try again.\033[0m\n";
+                            cout << "\033[1;31m❌ Invalid option.\033[0m\n";
                             Pause();
                             break;
                     }
@@ -673,6 +716,6 @@ class ProductList {
             current = current->next;
         }
     
-        cout << "\033[1;31mProduct '" << name << "' not found.\033[0m\n";
+        cout << "\033[1;31m❌ Product with ID '" << id << "' not found.\033[0m\n";
     }
 #endif
