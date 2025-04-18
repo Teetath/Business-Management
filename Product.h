@@ -563,7 +563,7 @@ class ProductList {
         bool found = false;
         displayTableHeader();
         while (current) {
-            if (current->product->getName() == input) {
+            if (current->product->getName() == input || current->product->getID() == input) {
                 current->product->displayProduct();
                 found = true;
             }
