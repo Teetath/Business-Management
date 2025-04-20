@@ -1,20 +1,40 @@
-1,Jamie Brown,54,94.12,Chief Executive Officer,2023-03-15 09:42:18  
-2,Morgan Wilson,49,83.75,Chief Financial Officer,2022-06-22 11:25:09  
-3,Casey Smith,38,71.60,Chief Operating Officer,2021-11-30 14:38:55  
-4,Alex Anderson,29,55.40,Marketing Manager,2024-07-05 08:10:44  
-5,Taylor Moore,33,48.25,Sales Representative,2025-01-20 17:56:21  
-6,Riley Johnson,41,62.30,Accountant,2023-09-11 13:20:03  
-7,Drew Lee,35,45.50,HR Specialist,2022-12-07 10:45:37  
-8,Jordan Davis,27,51.00,Business Analyst,2024-05-03 16:33:29  
-9,Skyler Taylor,44,66.45,Operations Manager,2021-08-26 07:55:12  
-10,Peyton Miller,30,43.20,Customer Support,2025-04-15 18:02:48  
-11,Jamie Brown,36,57.70,Financial Analyst,2022-02-14 12:41:10  
-12,Morgan Wilson,31,39.90,Administrative Assistant,2023-10-01 15:29:33  
-13,Casey Smith,42,68.80,Product Manager,2025-03-27 09:18:56  
-14,Alex Anderson,34,50.35,IT Support Specialist,2021-04-19 19:47:05  
-15,Taylor Moore,28,47.60,Recruiter,2024-11-12 06:14:22  
-16,Riley Johnson,37,56.10,Content Strategist,2023-07-08 20:36:15  
-17,Drew Lee,32,60.00,UX Designer,2022-01-25 11:23:40  
-18,Jordan Davis,45,69.30,Project Manager,2021-10-30 17:00:01  
-19,Skyler Taylor,39,75.00,Data Analyst,2023-05-14 08:58:09  
-20,Peyton Miller,46,79.90,Legal Advisor,2025-02-19 14:11:30  
+1,Chris Bailey,31,40315.33,Sales Executive,2024-01-08 08:42:00
+2,Jordan Carter,57,49737.80,Product Manager,2023-07-13 09:16:00
+3,Drew Carter,22,59411.11,Data Analyst,2024-05-07 07:00:00
+4,Drew Bennett,27,52161.97,Logistics Coordinator,2023-12-01 08:57:00
+5,Jamie Anderson,47,42040.85,HR Officer,2024-12-20 10:48:00
+6,Reese Walker,24,32799.88,Accountant,2023-09-13 07:57:00
+7,Chris Bennett,41,44796.80,Logistics Coordinator,2024-06-25 08:58:00
+8,Jamie Carter,31,40495.61,HR Officer,2023-03-03 08:14:00
+9,Taylor Carter,57,30818.48,Sales Executive,2024-11-06 10:24:00
+10,Drew Smith,45,24435.60,Logistics Coordinator,2024-12-14 09:30:00
+11,Chris Lee,47,62740.35,Data Analyst,2023-03-06 09:56:00
+12,Chris Bailey,48,36444.16,Accountant,2024-09-21 06:25:00
+13,Jamie Bailey,53,57167.83,HR Officer,2024-05-10 07:08:00
+14,Reese Lee,33,67345.79,Customer Service,2024-09-14 08:47:00
+15,Chris Lee,58,23820.14,Customer Service,2023-06-07 09:23:00
+16,Drew Turner,30,32888.77,HR Officer,2024-10-05 09:23:00
+17,Drew Bailey,54,52092.95,Customer Service,2023-10-27 08:36:00
+18,Chris Kim,46,49407.34,Data Analyst,2023-09-06 09:43:00
+19,Chris Anderson,40,35927.14,Software Engineer,2023-11-19 09:01:00
+20,Skyler Bailey,59,50137.71,Accountant,2024-06-03 08:49:00
+21,Alex Walker,53,40117.77,Marketing Manager,2024-04-15 09:02:00
+22,Drew Anderson,43,65833.18,Sales Executive,2023-10-30 07:03:00
+23,Reese Turner,43,44789.07,Admin Staff,2023-02-03 10:30:00
+24,Morgan Walker,48,24602.86,Customer Service,2023-06-04 09:09:00
+25,Reese Bennett,43,41258.86,Software Engineer,2024-01-30 10:38:00
+26,Alex Turner,40,29761.35,Accountant,2024-06-01 07:48:00
+27,Taylor Walker,51,18633.84,Marketing Manager,2023-11-17 06:51:00
+28,Jordan Walker,56,60881.42,Admin Staff,2024-05-06 08:03:00
+29,Skyler Kim,52,52487.09,Sales Executive,2023-05-12 10:03:00
+30,Skyler Walker,59,69280.08,Logistics Coordinator,2023-10-29 10:51:00
+31,Morgan Carter,29,44777.56,Admin Staff,2024-03-11 10:17:00
+32,Drew Walker,55,27553.90,Software Engineer,2023-01-06 10:15:00
+33,Casey Bailey,43,57946.88,Logistics Coordinator,2023-10-28 09:43:00
+34,Reese Carter,44,53335.76,Data Analyst,2023-02-12 10:19:00
+35,Morgan Kim,60,38779.43,Customer Service,2024-02-28 10:31:00
+36,Alex Walker,38,57874.01,Admin Staff,2023-09-07 07:29:00
+37,Reese Carter,45,55002.70,Customer Service,2023-08-14 10:29:00
+38,Chris Carter,50,37097.84,Sales Executive,2024-06-30 07:32:00
+39,Morgan Anderson,47,63984.77,Sales Executive,2023-02-19 07:49:00
+40,Morgan Anderson,53,23457.08,Accountant,2024-04-28 09:59:00
