@@ -1,2 +1,20 @@
-999,Beta,1,0.00,Beta tester,2025-04-20 13:11:29
-000,Beta test,1,100000.00,Beta tester,2025-04-20 13:11:02
+1,Jamie Brown,54,94.12,Chief Executive Officer  
+2,Morgan Wilson,49,83.75,Chief Financial Officer  
+3,Casey Smith,38,71.60,Chief Operating Officer  
+4,Alex Anderson,29,55.40,Marketing Manager  
+5,Taylor Moore,33,48.25,Sales Representative  
+6,Riley Johnson,41,62.30,Accountant  
+7,Drew Lee,35,45.50,HR Specialist  
+8,Jordan Davis,27,51.00,Business Analyst  
+9,Skyler Taylor,44,66.45,Operations Manager  
+10,Peyton Miller,30,43.20,Customer Support  
+11,Jamie Brown,36,57.70,Financial Analyst  
+12,Morgan Wilson,31,39.90,Administrative Assistant  
+13,Casey Smith,42,68.80,Product Manager  
+14,Alex Anderson,34,50.35,IT Support Specialist  
+15,Taylor Moore,28,47.60,Recruiter  
+16,Riley Johnson,37,56.10,Content Strategist  
+17,Drew Lee,32,60.00,UX Designer  
+18,Jordan Davis,45,69.30,Project Manager  
+19,Skyler Taylor,39,75.00,Data Analyst  
+20,Peyton Miller,46,79.90,Legal Advisor  
