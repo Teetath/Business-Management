@@ -1,20 +1,20 @@
-1,Jamie Brown,54,94.12,Chief Executive Officer  
-2,Morgan Wilson,49,83.75,Chief Financial Officer  
-3,Casey Smith,38,71.60,Chief Operating Officer  
-4,Alex Anderson,29,55.40,Marketing Manager  
-5,Taylor Moore,33,48.25,Sales Representative  
-6,Riley Johnson,41,62.30,Accountant  
-7,Drew Lee,35,45.50,HR Specialist  
-8,Jordan Davis,27,51.00,Business Analyst  
-9,Skyler Taylor,44,66.45,Operations Manager  
-10,Peyton Miller,30,43.20,Customer Support  
-11,Jamie Brown,36,57.70,Financial Analyst  
-12,Morgan Wilson,31,39.90,Administrative Assistant  
-13,Casey Smith,42,68.80,Product Manager  
-14,Alex Anderson,34,50.35,IT Support Specialist  
-15,Taylor Moore,28,47.60,Recruiter  
-16,Riley Johnson,37,56.10,Content Strategist  
-17,Drew Lee,32,60.00,UX Designer  
-18,Jordan Davis,45,69.30,Project Manager  
-19,Skyler Taylor,39,75.00,Data Analyst  
-20,Peyton Miller,46,79.90,Legal Advisor  
+1,Jamie Brown,54,94.12,Chief Executive Officer,2023-03-15 09:42:18  
+2,Morgan Wilson,49,83.75,Chief Financial Officer,2022-06-22 11:25:09  
+3,Casey Smith,38,71.60,Chief Operating Officer,2021-11-30 14:38:55  
+4,Alex Anderson,29,55.40,Marketing Manager,2024-07-05 08:10:44  
+5,Taylor Moore,33,48.25,Sales Representative,2025-01-20 17:56:21  
+6,Riley Johnson,41,62.30,Accountant,2023-09-11 13:20:03  
+7,Drew Lee,35,45.50,HR Specialist,2022-12-07 10:45:37  
+8,Jordan Davis,27,51.00,Business Analyst,2024-05-03 16:33:29  
+9,Skyler Taylor,44,66.45,Operations Manager,2021-08-26 07:55:12  
+10,Peyton Miller,30,43.20,Customer Support,2025-04-15 18:02:48  
+11,Jamie Brown,36,57.70,Financial Analyst,2022-02-14 12:41:10  
+12,Morgan Wilson,31,39.90,Administrative Assistant,2023-10-01 15:29:33  
+13,Casey Smith,42,68.80,Product Manager,2025-03-27 09:18:56  
+14,Alex Anderson,34,50.35,IT Support Specialist,2021-04-19 19:47:05  
+15,Taylor Moore,28,47.60,Recruiter,2024-11-12 06:14:22  
+16,Riley Johnson,37,56.10,Content Strategist,2023-07-08 20:36:15  
+17,Drew Lee,32,60.00,UX Designer,2022-01-25 11:23:40  
+18,Jordan Davis,45,69.30,Project Manager,2021-10-30 17:00:01  
+19,Skyler Taylor,39,75.00,Data Analyst,2023-05-14 08:58:09  
+20,Peyton Miller,46,79.90,Legal Advisor,2025-02-19 14:11:30  
