@@ -96,7 +96,7 @@ struct Node {
 class EmployeeManager {
     private:
         Node* head;
-        const string filename;
+        const string filename = "employees.txt";
         int size;
     
         void save_to_file();

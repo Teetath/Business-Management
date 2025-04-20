@@ -8,6 +8,11 @@ void ProductList::sell() {
     string id, input;
     int amount;
 
+    if (!head) {
+        cout << "⚠️ No product data loaded.\n";
+        return;
+    }
+
     displayAll();
 
     while (true) {
@@ -209,17 +214,16 @@ struct MonthlyFinanceData {
     float profit;
 };
 
-MonthlyFinanceData calculateMonthlyFinance(ProductList& products, const string& targetMonth) {
+MonthlyFinanceData calculateMonthlyFinance(ProductList& products, EmployeeManager& empManager, const string& targetMonth){
     float income = products.getMonthlyIncome("sales.txt", targetMonth);
     float salary = 0, sso = 0;
 
-    for (Node* curr = EmployeeManager().getHead(); curr; curr = curr->next) {
+    for (Node* curr = empManager.getHead(); curr; curr = curr->next) {
         sso += curr->data.getSocialSecurity();
         salary += curr->data.getSalary() - curr->data.getSocialSecurity();
     }
 
     float profit = income - salary - sso;
-
     return { targetMonth, income, salary, sso, profit };
 }
 
@@ -236,7 +240,7 @@ void printFinanceRow(const MonthlyFinanceData& data) {
          << ssoColor << setw(18) << data.sso << reset << " ║ "
          << profitColor << setw(18) << data.profit << reset << " ║\n";
 }
-void showMonthlyFinanceSummary(ProductList& products) {
+void showMonthlyFinanceSummary(ProductList& products, EmployeeManager& empManager) {
     string targetMonth = getTargetMonthInput();
     if (targetMonth.empty()) return;
 
@@ -252,7 +256,7 @@ void showMonthlyFinanceSummary(ProductList& products) {
     products.summaryIncome("sales.txt", targetMonth);
     cout << endl;
 
-    MonthlyFinanceData data = calculateMonthlyFinance(products, targetMonth);
+    MonthlyFinanceData data = calculateMonthlyFinance(products, empManager, targetMonth);
 
     cout << "╔════════════╦═════════════════════════╦═════════════════════════╦════════════════════╦════════════════════╗\n";
     cout << "║   Month    ║     Total Income (฿)    ║     Total Salary (฿)    ║     SSO TAX (฿)    ║  Total Profit (฿)  ║\n";
@@ -261,7 +265,7 @@ void showMonthlyFinanceSummary(ProductList& products) {
     cout << "╚════════════╩═════════════════════════╩═════════════════════════╩════════════════════╩════════════════════╝\n";
 }
 
-void showYearlyFinanceSummary(ProductList& products) {
+void showYearlyFinanceSummary(ProductList& products, EmployeeManager& empManager) {
     string targetYear = getTargetYearInput();
     if (targetYear.empty()) return;
 
@@ -281,7 +285,7 @@ void showYearlyFinanceSummary(ProductList& products) {
         ss << targetYear << "-" << (m < 10 ? "0" : "") << m;
         string targetMonth = ss.str();
 
-        MonthlyFinanceData data = calculateMonthlyFinance(products, targetMonth);
+        MonthlyFinanceData data = calculateMonthlyFinance(products, empManager, targetMonth);
 
         totalIncomeYear += data.income;
         totalSalaryYear += data.salary;

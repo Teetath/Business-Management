@@ -53,7 +53,7 @@ void EmployeeMenu() {
                 manager.remove_employee(); break;
             }
             case '5': {
-                if(manager.display_sort_menu())continue;break; //เป็น polymorphism แล้วเพราะ inherit มาจาก Person
+                if(manager.display_sort_menu())continue;break;
             }
             case '6': {
                 manager.getSummary(); break; //เป็น polymorphism
@@ -95,14 +95,16 @@ void FinanceMenu() {
             case '2': {
                 // Add functionality for showing income/expense/profit
                 ProductList list;
+                EmployeeManager emp;
                 list.loadFromFile("products.txt");
-                showMonthlyFinanceSummary(list);
+                showMonthlyFinanceSummary(list, emp);
                 break;
             }
             case '3' : {
                 ProductList list;
+                EmployeeManager emp;
                 list.loadFromFile("products.txt");
-                showYearlyFinanceSummary(list);
+                showYearlyFinanceSummary(list, emp);
                 break;
             }
             case '0': return;
