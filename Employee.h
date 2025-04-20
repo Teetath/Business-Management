@@ -59,8 +59,8 @@ string Employee::getSummary() const {
     stringstream ss;
     ss << fixed << setprecision(2);
 
-    ss << "\033[1;32m" << left << setw(20) << name
-       << "\033[1;36m" << setw(20) << role 
+    ss << "\033[1;32m" << left << setw(25) << name
+       << "\033[1;36m" << setw(25) << role 
        << "\033[1;33m" << "(Total: "
        << setw(10) << salary + calculateBonus()
        << " Baht) \033[0m";
@@ -368,9 +368,9 @@ class EmployeeManager {
             cout << "No employees to summarize.\n";
             return;
         }
-        cout << "\033[1;34m+=================================================================+\033[0m" << endl;
-        cout << "| \033[1;32mName                \033[0m| \033[1;36mRole                \033[0m| \033[1;33mTotal Salary (Baht) \033[0m|" << endl;
-        cout << "\033[1;34m+=================================================================+\033[0m" << endl;
+        cout << "\033[1;34m+===========================================================================+\033[0m" << endl;
+        cout << "| \033[1;32mName                     \033[0m| \033[1;36mRole                     \033[0m| \033[1;33mTotal Salary (Baht) \033[0m|" << endl;
+        cout << "\033[1;34m+===========================================================================+\033[0m" << endl;
         Node* current = head;
         while (current) {
             cout << current->data.getSummary() << endl;
