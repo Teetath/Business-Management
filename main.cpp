@@ -75,7 +75,6 @@ void FinanceMenu() {
         cout << "+=============================================+\033[0m\n";
         cout << "| 💸 [1] Sell Product                          |\n";
         cout << "| 📅 [2] Show Income/Expense/Profit per Month  |\n";
-        cout << "| 📊 [3] Show Total Income/Expense/Profit      |\n";
         cout << "| 🔙 [0] Return to Main Menu                   |\n";
         cout << "+---------------------------------------------+\n";
         
