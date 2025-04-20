@@ -40,6 +40,7 @@ class ProductList {
         ProductList();
         ~ProductList();
         
+        ProductNode* getHead() const { return head; }
         int getSize() const { return size; }
         bool isDuplicateID(const string& id) const;
         bool isDuplicateName(const string& name) const;
@@ -60,6 +61,7 @@ class ProductList {
         void comparePrice(float price);
         void compareStock(int stock);
         void sell();
+        float getMonthlyIncome(const string& filename, const string& targetMonth) const;
         void printSalesData(const string& name,const string& targetMonth) const;
         void summaryIncome(const string& name,const string& targetMonth) const;
         void SortproductMenu(ProductList& list);
@@ -443,6 +445,36 @@ class ProductList {
             Pause();
         }
     }
+
+    float ProductList::getMonthlyIncome(const string& filename, const string& targetMonth) const {
+        ifstream file(filename);
+        if (!file) {
+            cerr << "❌ Failed to open file: " << filename << endl;
+            return 0.0f;
+        }
+    
+        string line;
+        float total = 0.0f;
+    
+        while (getline(file, line)) {
+            stringstream ss(line);
+            string name, quan, income_string, timestamp;
+    
+            getline(ss, name, ',');
+            getline(ss, quan, ',');
+            getline(ss, income_string, ',');
+            getline(ss, timestamp);
+    
+            if (timestamp.substr(0, targetMonth.length()) != targetMonth) continue;
+    
+            float income = stof(income_string);
+            total += income;
+        }
+    
+        file.close();
+        return total;
+    }
+
     void ProductList::add_new_product() {
         string id, name, time_added = getCurrentTimestamp();;
         float price, cost;

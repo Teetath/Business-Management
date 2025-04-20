@@ -62,20 +62,27 @@ bool isValidName(const string& name) {
     return true;
 }
 
-string getTargetMonthInput() {
-    string year, month;
+string getTargetYearInput() {
+    string year;
     while (true) {
-            cout << "\033[1;34m📅 Enter year (YYYY) (leave blank to cancel): \033[0m";
-            getline(cin, year);
-            if (year.empty() || all_of(year.begin(), year.end(), ::isspace)) {
-                cout << "\033[1;33m⚠️  Input cancelled.\033[0m\n";
-                return "";
-            }
-            if (year.size() == 4 && all_of(year.begin(), year.end(), ::isdigit)) break;
-            cout << "\033[1;31m❌ Invalid year. Please enter a 4-digit year.\033[0m\n";
-        
+        cout << "\033[1;34m📅 Enter year (YYYY) (leave blank to cancel): \033[0m";
+        getline(cin, year);
+        if (year.empty() || all_of(year.begin(), year.end(), ::isspace)) {
+            cout << "\033[1;33m⚠️  Input cancelled.\033[0m\n";
+            return "";
+        }
+        if (year.size() == 4 && all_of(year.begin(), year.end(), ::isdigit)) {
+            return year;
+        }
+        cout << "\033[1;31m❌ Invalid year. Please enter a 4-digit year.\033[0m\n";
     }
+}
 
+string getTargetMonthInput() {
+    string year = getTargetYearInput();
+    if (year.empty()) return "";
+
+    string month;
     while (true) {
         cout << "\033[1;34m📅 Enter month (MM) (leave blank to cancel): \033[0m";
         getline(cin, month);
@@ -83,18 +90,15 @@ string getTargetMonthInput() {
             cout << "\033[1;33m⚠️  Input cancelled.\033[0m\n";
             return "";
         }
-        if(!month.empty() && all_of(month.begin(),month.end(), ::isdigit) && (month.size()==2 ||month.size()==1)) {
+        if (all_of(month.begin(), month.end(), ::isdigit) && (month.size() == 1 || month.size() == 2)) {
             int m = stoi(month);
-            if (m >= 1 && m <=12 ) {
-                if(m < 10) month = "0" + to_string(m);
-                else month = to_string(m);
-                break;
+            if (m >= 1 && m <= 12) {
+                if (m < 10) month = "0" + to_string(m);
+                return year + "-" + month;
             }
         }
         cout << "\033[1;31m❌ Invalid month. Must be 01 - 12.\033[0m\n";
     }
-
-    return year + "-" + month;
 }
 
 #endif

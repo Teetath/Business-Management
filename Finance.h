@@ -85,7 +85,7 @@ void ProductList::summaryIncome(const string& filename,const string& targetMonth
         getline(ss, income_string, ',');
         getline(ss, timestamp);
 
-        if (timestamp.substr(0, 7) != targetMonth) continue;
+        if (timestamp.substr(0, targetMonth.length()) != targetMonth) continue;
 
         float income = stof(income_string);
         total += income;
@@ -94,50 +94,51 @@ void ProductList::summaryIncome(const string& filename,const string& targetMonth
     cout << "💰 Total income : " << "\033[32m" << fixed << setprecision(2) << total << "\033[0m" << " Bath";
 }
 
-void ProductList::printSalesData(const string& filename,const string& targetMonth) const {
+void ProductList::printSalesData(const string& filename, const string& targetMonth) const {
     ifstream file(filename);
-     if(!file) {
-         cout << "Can't open file" << endl;
-         return;
-     }
- 
+    if (!file) {
+        cout << "Can't open file" << endl;
+        return;
+    }
+
     string line;
     map<string, pair<int, double>> salesData;
 
-    while(getline(file, line)) {
-         stringstream ss(line);
-         string name, quan, earned,timestamp;
- 
-         getline(ss, name, ',');
-         getline(ss, quan, ',');
-         getline(ss, earned, ',');
-         getline(ss, timestamp);
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string name, quan, earned, timestamp;
 
+        getline(ss, name, ',');
+        getline(ss, quan, ',');
+        getline(ss, earned, ',');
+        getline(ss, timestamp);
 
-         if (timestamp.substr(0, 7) != targetMonth) continue;
+        if (timestamp.substr(0, 7) != targetMonth) continue;
 
         int quantity = stoi(quan);
         double earnedValue = stod(earned);
 
         salesData[name].first += quantity;
         salesData[name].second += earnedValue;
-     }
-     file.close();
+    }
+    file.close();
 
-     if (!salesData.empty()) {
-        cout << "====================== Sales Log ====================== " << endl;
+    if (!salesData.empty()) {
+        cout << "\033[1;36m================= 📊 Sales Log for " << targetMonth << " =================\033[0m" << endl;
         cout << left << setw(20) << "Product Name"
-             << setw(20) << "|Quantity"
-             << setw(20) << "|Earned (Baht)" << endl;
-        cout << string(55, '-') << endl;
+             << setw(15) << "Quantity"
+             << setw(25) << "Earned (Baht)" << endl;
+        cout << "\033[1;36m" << string(60, '=') << "\033[0m" << endl;
 
         for (const auto& entry : salesData) {
             cout << left << setw(20) << entry.first
-                 << setw(20) << entry.second.first
+                 << setw(15) << entry.second.first
                  << fixed << setprecision(2)
-                 << setw(20) << entry.second.second << endl;
+                 << setw(25) << entry.second.second << endl;
         }
-    } else cout << "No Sales Data!!" << endl;
+    } else {
+        cout << "\033[1;31mNo Sales Data for " << targetMonth << "!!\033[0m" << endl;
+    }
 }
 
 void ProductList::summaryProfitFromSales(const string& filename, const string& targetMonth) const {
@@ -200,20 +201,102 @@ void ProductList::summaryProfitFromSales(const string& filename, const string& t
     return;
 }
 
-void showMonthlyFinanceSummary(ProductList& products) {
-    string targetMonth = getTargetMonthInput();
-    if (targetMonth.empty()) {
-        return; 
+struct MonthlyFinanceData {
+    string month;
+    float income;
+    float salary;
+    float sso;
+    float profit;
+};
+
+MonthlyFinanceData calculateMonthlyFinance(ProductList& products, const string& targetMonth) {
+    float income = products.getMonthlyIncome("sales.txt", targetMonth);
+    float salary = 0, sso = 0;
+
+    for (Node* curr = EmployeeManager().getHead(); curr; curr = curr->next) {
+        sso += curr->data.getSocialSecurity();
+        salary += curr->data.getSalary() - curr->data.getSocialSecurity();
     }
 
+    float profit = income - salary - sso;
+
+    return { targetMonth, income, salary, sso, profit };
+}
+
+void printFinanceRow(const MonthlyFinanceData& data) {
+    string incomeColor = data.income > 0 ? "\033[32m" : "\033[0m";
+    string profitColor = data.profit < 0 ? "\033[31m" : "\033[32m";
+    string salaryColor = "\033[31m"; 
+    string ssoColor = "\033[31m";
+    string reset = "\033[0m";
+
+    cout << "║ " << setw(10) << right << data.month << " ║ "
+         << incomeColor << setw(23) << fixed << setprecision(2) << data.income << reset << " ║ "
+         << salaryColor << setw(23) << data.salary << reset << " ║ "
+         << ssoColor << setw(18) << data.sso << reset << " ║ "
+         << profitColor << setw(18) << data.profit << reset << " ║\n";
+}
+void showMonthlyFinanceSummary(ProductList& products) {
+    string targetMonth = getTargetMonthInput();
+    if (targetMonth.empty()) return;
+
     system("clear");
-    cout << "\033[1;36m===== 📈 Monthly Summary for " << targetMonth << " =====\033[0m\n";
+    cout << "\033[1;36m"
+    << string(38, '=')
+    << " 📈 Monthly Summary for " << targetMonth << " "
+    << string(38, '=') << "\n\033[0m" << endl;
 
     products.printSalesData("sales.txt", targetMonth);
     cout << endl;
+
     products.summaryIncome("sales.txt", targetMonth);
     cout << endl;
-    products.summaryProfitFromSales("sales.txt", targetMonth);
+
+    MonthlyFinanceData data = calculateMonthlyFinance(products, targetMonth);
+
+    cout << "╔════════════╦═════════════════════════╦═════════════════════════╦════════════════════╦════════════════════╗\n";
+    cout << "║   Month    ║     Total Income (฿)    ║     Total Salary (฿)    ║     SSO TAX (฿)    ║  Total Profit (฿)  ║\n";
+    cout << "╠════════════╬═════════════════════════╬═════════════════════════╬════════════════════╬════════════════════╣\n";
+    printFinanceRow(data);
+    cout << "╚════════════╩═════════════════════════╩═════════════════════════╩════════════════════╩════════════════════╝\n";
+}
+
+void showYearlyFinanceSummary(ProductList& products) {
+    string targetYear = getTargetYearInput();
+    if (targetYear.empty()) return;
+
+    system("clear");
+    cout << "\033[1;36m"
+        << string(35, '=')
+        << " 📊 Yearly Financial Summary for " << targetYear << " "
+        << string(35, '=') << "\n\033[0m" << endl;
+    cout << "╔════════════╦═════════════════════════╦═════════════════════════╦════════════════════╦════════════════════╗\n";
+    cout << "║   Month    ║     Total Income (฿)    ║     Total Salary (฿)    ║     SSO TAX (฿)    ║  Total Profit (฿)  ║\n";
+    cout << "╠════════════╬═════════════════════════╬═════════════════════════╬════════════════════╬════════════════════╣\n";
+
+    float totalIncomeYear = 0, totalSalaryYear = 0, totalSSOYear = 0, totalProfitYear = 0;
+
+    for (int m = 1; m <= 12; ++m) {
+        stringstream ss;
+        ss << targetYear << "-" << (m < 10 ? "0" : "") << m;
+        string targetMonth = ss.str();
+
+        MonthlyFinanceData data = calculateMonthlyFinance(products, targetMonth);
+
+        totalIncomeYear += data.income;
+        totalSalaryYear += data.salary;
+        totalSSOYear += data.sso;
+        totalProfitYear += data.profit;
+
+        printFinanceRow(data);
+    }
+
+    cout << "╠════════════╬═════════════════════════╬═════════════════════════╬════════════════════╬════════════════════╣\n";
+
+    MonthlyFinanceData totalData = { "Total", totalIncomeYear, totalSalaryYear, totalSSOYear, totalProfitYear };
+    printFinanceRow(totalData);
+
+    cout << "╚════════════╩═════════════════════════╩═════════════════════════╩════════════════════╩════════════════════╝\n";
 }
 
 #endif

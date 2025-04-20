@@ -80,7 +80,7 @@ void FinanceMenu() {
         cout << "+---------------------------------------------+\n";
         
         
-        choice = getch();  // รับตัวอักษรแบบไม่ต้องกด Enter
+        choice = getch();
         
         system("clear");
 
@@ -100,7 +100,10 @@ void FinanceMenu() {
                 break;
             }
             case '3' : {
-                
+                ProductList list;
+                list.loadFromFile("products.txt");
+                showYearlyFinanceSummary(list);
+                break;
             }
             case '0': return;
             default : continue;
@@ -170,8 +173,7 @@ int main() {
         cout << "|  [0] ❌  Exit                             |\n";
         cout << "+-------------------------------------------+\n";
 
-        char choice = getch(); // รับตัวอักษรแบบไม่ต้องกด Enter
-
+        char choice = getch();
         system("clear");
 
         switch (choice) {
