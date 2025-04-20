@@ -298,7 +298,7 @@ class ProductList {
     
         for (ProductNode* i = head; i != nullptr; i = i->next) {
             for (ProductNode* j = i->next; j != nullptr; j = j->next) {
-                if (i->product->getID() > j->product->getID()) {
+                if (naturalCompare(j->product->getID(), i->product->getID())) {
                     swap(i->product, j->product);
                 }
             }
@@ -310,7 +310,7 @@ class ProductList {
     
         for (ProductNode* i = head; i != nullptr; i = i->next) {
             for (ProductNode* j = i->next; j != nullptr; j = j->next) {
-                if (i->product->getID() < j->product->getID()) {
+                if (naturalCompare(i->product->getID(), j->product->getID())) {
                     swap(i->product, j->product);
                 }
             }
@@ -464,13 +464,15 @@ class ProductList {
                     sortByLowStock();
                     displayAll();
                     break;
-                case 6:
+                case '6':
                     system("clear");
                     sortByIdAscending();
+                    displayAll();
                     break;
-                case 7:
+                case '7':
                     system("clear");
                     sortByIdDescending();
+                    displayAll();
                     break;
                 case '0':
                     return;
