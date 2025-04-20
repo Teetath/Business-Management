@@ -66,8 +66,11 @@ void EmployeeMenu() {
 }
 
 void FinanceMenu() {
+    static ProductList list;              // ใช้ static เพื่อไม่ให้ถูกลบซ้ำ
+    static EmployeeManager emp;           // ถ้าใช้ในหลายเมนู ก็ควรใช้ static เช่นกัน
+
     char choice;
-    while(true) {
+    while (true) {
         system("clear");
         cout << "\033[1;32m";
         cout << "+=============================================+\n";
@@ -78,41 +81,33 @@ void FinanceMenu() {
         cout << "| 📈 \033[1;32m[3]\033[0m Show Income/Expense/Profit per Year   |\n";
         cout << "| 🔙 \033[1;31m[0]\033[0m Return to Main Menu                   |\n";
         cout << "+---------------------------------------------+\n";
-        
-        
+
         choice = getch();
-        
         system("clear");
 
-        switch(choice) {
+        switch (choice) {
             case '1': {
-                // Add functionality for selling products
-                ProductList list;
-                list.loadFromFile("products.txt");
+                list.loadFromFile("products.txt");  // โหลดใหม่เสมอ แต่ใช้ object เดิม
                 list.sell();
                 break;
             }
             case '2': {
-                // Add functionality for showing income/expense/profit
-                ProductList list;
-                EmployeeManager emp;
                 list.loadFromFile("products.txt");
                 showMonthlyFinanceSummary(list, emp);
                 break;
             }
-            case '3' : {
-                ProductList list;
-                EmployeeManager emp;
+            case '3': {
                 list.loadFromFile("products.txt");
                 showYearlyFinanceSummary(list, emp);
                 break;
             }
             case '0': return;
-            default : continue;
+            default: continue;
         }
         Pause();
     }
 }
+
 
 void ProductMenu() {
     ProductList list;
