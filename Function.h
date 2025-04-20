@@ -101,4 +101,21 @@ string getTargetMonthInput() {
     }
 }
 
+bool naturalCompare(const string& a, const string& b) {
+    size_t i = 0, j = 0;
+    while (i < a.length() && j < b.length()) {
+        if (isdigit(a[i]) && isdigit(b[j])) {
+            int num1 = 0, num2 = 0;
+            while (i < a.length() && isdigit(a[i])) num1 = num1 * 10 + (a[i++] - '0');
+            while (j < b.length() && isdigit(b[j])) num2 = num2 * 10 + (b[j++] - '0');
+            if (num1 != num2) return num1 < num2;
+        } else {
+            if (a[i] != b[j]) return a[i] < b[j];
+            ++i;
+            ++j;
+        }
+    }
+    return a.length() < b.length();
+}
+
 #endif
