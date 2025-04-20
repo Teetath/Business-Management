@@ -407,11 +407,11 @@ class EmployeeManager {
             condition = ascending ? (a->data.getName() < b->data.getName())
                                     : (a->data.getName() > b->data.getName());
         }  else if (mode == 3) { // ID
-            condition = ascending ? (a->data.getId() < b->data.getId())
-                                  : (a->data.getId() > b->data.getId());
+            condition = ascending ? naturalCompare(a->data.getId(), b->data.getId())
+                                    : naturalCompare(b->data.getId(), a->data.getId());
         } else if (mode == 4) { // timestamp
             condition = ascending ? (a->data.getTimestamp() < b->data.getTimestamp())
-                                  : (a->data.getTimestamp() > b->data.getTimestamp());
+                                    : (a->data.getTimestamp() > b->data.getTimestamp());
         }
     
         Node* result = nullptr;
@@ -425,6 +425,7 @@ class EmployeeManager {
     
         return result;
     }
+
     void EmployeeManager::mergeSort(Node** headRef, int mode, bool ascending) {
         Node* head = *headRef;
         if (!head || !head->next) return;
