@@ -66,8 +66,8 @@ void EmployeeMenu() {
 }
 
 void FinanceMenu() {
-    static ProductList list;              // ใช้ static เพื่อไม่ให้ถูกลบซ้ำ
-    static EmployeeManager emp;           // ถ้าใช้ในหลายเมนู ก็ควรใช้ static เช่นกัน
+    static ProductList list;              
+    static EmployeeManager emp;           
 
     char choice;
     while (true) {
