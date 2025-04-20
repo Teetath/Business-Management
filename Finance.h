@@ -76,27 +76,9 @@ void ProductList::sell() {
 }
 
 
-void ProductList::summaryIncome(const string& filename,const string& targetMonth) const {
-    ifstream file(filename);
-    string line;
-    float total = 0;
-
-    while (getline(file, line)) {
-        stringstream ss(line);
-        string name, quan, income_string, timestamp;
-
-        getline(ss, name, ',');
-        getline(ss, quan, ',');
-        getline(ss, income_string, ',');
-        getline(ss, timestamp);
-
-        if (timestamp.substr(0, targetMonth.length()) != targetMonth) continue;
-
-        float income = stof(income_string);
-        total += income;
-    }
-    file.close();
-    cout << "💰 Total income : " << "\033[32m" << fixed << setprecision(2) << total << "\033[0m" << " Bath";
+void ProductList::summaryIncome(const string& filename, const string& targetMonth) const {
+    float total = getMonthlyIncome(filename, targetMonth);
+    cout << "💰 Total income : \033[32m" << fixed << setprecision(2) << total << "\033[0m Bath" << endl;
 }
 
 void ProductList::printSalesData(const string& filename, const string& targetMonth) const {
