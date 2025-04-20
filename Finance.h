@@ -43,7 +43,6 @@ void ProductList::sell() {
                     return;
                 }
                 if (check() && tryParse(input, amount) && amount > 0) {
-                    cout << amount;
                     if(amount > current->product->getStock()) {
                         cout << "\033[1;31m❌ Not enough stock.\033[0m\n";
                         continue;
