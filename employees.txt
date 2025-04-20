@@ -1,3 +1,2 @@
-000,Beta Test,1,0.00,Tester
-999,Beta Test,20,10.00,CEO
-13131,ChewChew,19,15000.00,Slave
+999,Beta,1,0.00,Beta tester,2025-04-20 13:11:29
+000,Beta test,1,100000.00,Beta tester,2025-04-20 13:11:02

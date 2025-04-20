@@ -26,13 +26,13 @@ void EmployeeMenu() {
         cout << "+=============================================+\n";
         cout << "| 👨‍💼       EMPLOYEE MANAGEMENT         👨‍💼 | \n";
         cout << "+=============================================+\033[0m\n";
-        cout << "| ➕ [1] Add Employee                         | \n";
-        cout << "| 🔍 [2] Search Employee                      | \n";
-        cout << "| ✏️  [3] Edit Employee                        | \n";
-        cout << "| ❌ [4] Remove Employee                      | \n";
-        cout << "| 📋 [5] Display All Employees                | \n";
-        cout << "| 🔙 [6] Summary of All Employees             | \n";
-        cout << "| 🔙 [0] Return to Main Menu                  | \n";
+        cout << "| ➕ \033[1;32m[1]\033[0m Add Employee                         | \n";
+        cout << "| 🔍 \033[1;32m[2]\033[0m Search Employee                      | \n";
+        cout << "| ✏️ \033[1;32m [3]\033[0m Edit Employee                        | \n";
+        cout << "| ❌ \033[1;32m[4]\033[0m Remove Employee                      | \n";
+        cout << "| 📋 \033[1;32m[5]\033[0m Display All Employees                | \n";
+        cout << "| 🔙 \033[1;32m[6]\033[0m Summary of All Employees             | \n";
+        cout << "| 🔙 \033[1;31m[0]\033[0m Return to Main Menu                  | \n";
         cout << "+---------------------------------------------+\n";
         
         choice = getch();
@@ -73,10 +73,10 @@ void FinanceMenu() {
         cout << "+=============================================+\n";
         cout << "|           💰 FINANCE MANAGEMENT 💰           |\n";
         cout << "+=============================================+\033[0m\n";
-        cout << "| 💸 [1] Sell Product                          |\n";
-        cout << "| 📅 [2] Show Income/Expense/Profit per Month  |\n";
-        cout << "| 📈 [3] Show Income/Expense/Profit per Year   |\n";
-        cout << "| 🔙 [0] Return to Main Menu                   |\n";
+        cout << "| 💸 \033[1;32m[1]\033[0m Sell Product                          |\n";
+        cout << "| 📅 \033[1;32m[2]\033[0m Show Income/Expense/Profit per Month  |\n";
+        cout << "| 📈 \033[1;32m[3]\033[0m Show Income/Expense/Profit per Year   |\n";
+        cout << "| 🔙 \033[1;31m[0]\033[0m Return to Main Menu                   |\n";
         cout << "+---------------------------------------------+\n";
         
         
@@ -125,12 +125,12 @@ void ProductMenu() {
         cout << "+=======================================+\n";
         cout << "| 📦       PRODUCT MANAGEMENT        📦 | \n";
         cout << "+=======================================+\033[0m\n";
-        cout << "| 🆕 [1] Add Product                    | \n";
-        cout << "| 🔍 [2] Search Product                 | \n";
-        cout << "| ✏️  [3] Edit Product                   | \n";
-        cout << "| 👀 [4] Display Products               | \n";
-        cout << "| 🗑  [5] Remove Product                 | \n";
-        cout << "| 🔙 [0] Return to Main Menu            | \n";
+        cout << "| 🆕 \033[1;32m[1]\033[0m Add Product                    | \n";
+        cout << "| 🔍 \033[1;32m[2]\033[0m Search Product                 | \n";
+        cout << "| ✏️ \033[1;32m [3]\033[0m Edit Product                   | \n";
+        cout << "| 👀 \033[1;32m[4]\033[0m Display Products               | \n";
+        cout << "| 🗑  \033[1;32m[5]\033[0m Remove Product                 | \n";
+        cout << "| 🔙 \033[1;31m[0]\033[0m Return to Main Menu            | \n";
         cout << "+---------------------------------------+\n";
         
         choice = getch();
@@ -169,10 +169,10 @@ int main() {
         cout << "+===========================================+\n";
         cout << "|        BUSINESS MANAGEMENT SYSTEM         |\n";
         cout << "+===========================================+\033[0m\n";
-        cout << "|  [1] 👨‍💼  Employee Management            |\n";
-        cout << "|  [2] 💰  Finance                          |\n";
-        cout << "|  [3] 📦  Product Management               |\n";
-        cout << "|  [0] ❌  Exit                             |\n";
+        cout << "|  \033[1;32m[1]\033[0m 👨‍💼  Employee Management            |\n";
+        cout << "|  \033[1;32m[2]\033[0m 💰  Finance                          |\n";
+        cout << "|  \033[1;32m[3]\033[0m 📦  Product Management               |\n";
+        cout << "|  \033[1;31m[0]\033[0m ❌  Exit                             |\n";
         cout << "+-------------------------------------------+\n";
 
         char choice = getch();

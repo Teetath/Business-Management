@@ -6,14 +6,15 @@
 class Employee : public Person {
     private:
         float salary;
-        string id, role;
+        string id, role, timestamp;
     
     public:
-        Employee(string id, string name, int age, float salary, string role);
+        Employee(string id, string name, int age, float salary, string role, string timestamp);
     
         string getId() const;
         string getRole() const;
         float getSalary() const;
+        string getTimestamp() const;
     
         void display() const;
         float calculateBonus() const;
@@ -24,12 +25,13 @@ class Employee : public Person {
         static Employee from_file_string(const string& line);
     };
 
-Employee::Employee(string id, string name, int age, float salary, string role)
-: Person(name, age), id(id), salary(salary), role(role) {}
+    Employee::Employee(string id, string name, int age, float salary, string role, string timestamp)
+    : Person(name, age), id(id), salary(salary), role(role), timestamp(timestamp) {}
 
 string Employee::getId() const { return id; }
 string Employee::getRole() const { return role; }
 float Employee::getSalary() const { return salary; }
+string Employee::getTimestamp() const { return timestamp; }
 
 void Employee::display() const {
     cout << fixed << setprecision(2);
@@ -39,8 +41,9 @@ void Employee::display() const {
          << "| " << setw(5)  << age
          << "| " << setw(12) << role
          << "| " << setw(10) << salary
-         << "| " << setw(10) << calculateBonus() 
-         << "| " << setw(10) << getSocialSecurity() << endl;
+         << "| " << setw(10) << calculateBonus()
+         << "| " << setw(10) << getSocialSecurity()
+         << "| " << setw(19) << timestamp << endl;
 }
 
 float Employee::calculateBonus() const {
@@ -55,19 +58,24 @@ float Employee::getSocialSecurity() const {
 string Employee::getSummary() const {
     stringstream ss;
     ss << fixed << setprecision(2);
-    ss << name << " - " << role
-       << " (Total: " << (salary + calculateBonus()) << " Bath)";
+
+    ss << "\033[1;32m" << left << setw(20) << name
+       << "\033[1;36m" << setw(20) << role 
+       << "\033[1;33m" << "(Total: "
+       << setw(10) << salary + calculateBonus()
+       << " Baht) \033[0m";
+
     return ss.str();
 }
 
 string Employee::to_file_string() const {
     stringstream ss;
     ss << fixed << setprecision(2) << salary;
-    return id + "," + name + "," + to_string(age) + "," + ss.str() + "," + role;
+    return id + "," + name + "," + to_string(age) + "," + ss.str() + "," + role + "," + timestamp;
 }
 
 Employee Employee::from_file_string(const string& line) {
-    string id, name, role;
+    string id, name, role, timestamp;
     int age;
     float salary;
 
@@ -75,14 +83,16 @@ Employee Employee::from_file_string(const string& line) {
     size_t pos2 = line.find(',', pos1 + 1);
     size_t pos3 = line.find(',', pos2 + 1);
     size_t pos4 = line.find(',', pos3 + 1);
+    size_t pos5 = line.find(',', pos4 + 1);
 
     id = line.substr(0, pos1);
     name = line.substr(pos1 + 1, pos2 - pos1 - 1);
     age = stoi(line.substr(pos2 + 1, pos3 - pos2 - 1));
     salary = stof(line.substr(pos3 + 1, pos4 - pos3 - 1));
-    role = line.substr(pos4 + 1);
+    role = line.substr(pos4 + 1, pos5 - pos4 - 1);
+    timestamp = line.substr(pos5 + 1);
 
-    return Employee(id, name, age, salary, role);
+    return Employee(id, name, age, salary, role, timestamp);
 }
 
 // ------------------- Linked List Version ----------------------
@@ -261,7 +271,8 @@ class EmployeeManager {
             break;
         }
 
-        Employee emp(id, name, age, salary, role);
+        string timestamp = getCurrentTimestamp();
+        Employee emp(id, name, age, salary, role, timestamp);
         add_to_list(emp);
         save_to_file();
         cout << "Employee added and saved to file.\n";
@@ -357,13 +368,16 @@ class EmployeeManager {
             cout << "No employees to summarize.\n";
             return;
         }
-    
+        cout << "\033[1;34m+=================================================================+\033[0m" << endl;
+        cout << "| \033[1;32mName                \033[0m| \033[1;36mRole                \033[0m| \033[1;33mTotal Salary (Baht) \033[0m|" << endl;
+        cout << "\033[1;34m+=================================================================+\033[0m" << endl;
         Node* current = head;
         while (current) {
             cout << current->data.getSummary() << endl;
             current = current->next;
         }
     }
+
     void EmployeeManager::split(Node* source, Node** frontRef, Node** backRef) {
         Node* slow = source;
         Node* fast = source->next;
@@ -391,9 +405,12 @@ class EmployeeManager {
         } else if (mode == 2) { // name
             condition = ascending ? (a->data.getName() < b->data.getName())
                                     : (a->data.getName() > b->data.getName());
-        } else { // ID
+        }  else if (mode == 3) { // ID
             condition = ascending ? (a->data.getId() < b->data.getId())
-                                    : (a->data.getId() > b->data.getId());
+                                  : (a->data.getId() > b->data.getId());
+        } else if (mode == 4) { // timestamp
+            condition = ascending ? (a->data.getTimestamp() < b->data.getTimestamp())
+                                  : (a->data.getTimestamp() > b->data.getTimestamp());
         }
     
         Node* result = nullptr;
@@ -420,6 +437,7 @@ class EmployeeManager {
     
         *headRef = sortedMerge(a, b, mode, ascending);
     }
+
     bool EmployeeManager::display_sort_menu() {
 
         if (!head) {
@@ -439,7 +457,9 @@ class EmployeeManager {
             cout << "| \033[1;32m[4]\033[0m 🔡 Name (Z-A)                               |\n";
             cout << "| \033[1;32m[5]\033[0m 🆔 ID (Ascending)                           |\n";
             cout << "| \033[1;32m[6]\033[0m 🆔 ID (Descending)                          |\n";
-            cout << "| \033[1;32m[0]\033[0m 🔙 Return to Employee Menu                  |\n";
+            cout << "| \033[1;32m[7]\033[0m 📅 Date (Newest First)                      |\n";
+            cout << "| \033[1;32m[8]\033[0m 📆 Date (Oldest First)                      |\n";
+            cout << "| \033[1;31m[0]\033[0m 🔙 Return to Employee Menu                  |\n";
             cout << "+-------------------------------------------------+\n";
             option = getch();
 
@@ -452,6 +472,8 @@ class EmployeeManager {
                 case 4: mode = 2; ascending = false; break; // Name Z-A
                 case 5: mode = 3; ascending = true; break; // ID ASC
                 case 6: mode = 3; ascending = false; break; // ID DESC
+                case 7: mode = 4; ascending = false; break; // Timestamp DESC (Newest First)
+                case 8: mode = 4; ascending = true; break;  // Timestamp ASC (Oldest First)
                 case 0: return true;
                 default: continue;
             }
@@ -480,9 +502,10 @@ class EmployeeManager {
             << "| " << setw(5)  << "Age"
             << "| " << setw(12) << "Role"
             << "| " << setw(10) << "Salary"
-            << "| " << setw(10) << "Bonus" 
-            << "| " << setw(10) << "SSO" << endl;
-        cout << string(85, '-') << endl;
+            << "| " << setw(10) << "Bonus"
+            << "| " << setw(10) << "SSO"
+            << "| " << setw(19) << "Timestamp" << endl;
+        cout << string(110, '-') << endl;
     }
 
     void EmployeeManager::edit_employee() {
@@ -604,10 +627,13 @@ class EmployeeManager {
                             break;
                         case 'S':
                         case 's':
-                            current->data = Employee(empID, name, age, salary, role);
+                        {
+                            string timestamp = current->data.getTimestamp();
+                            current->data = Employee(empID, name, age, salary, role, timestamp);
                             save_to_file();
                             cout << "\033[1;32m✅ Employee updated successfully!\033[0m\n";
                             return;
+                        }
                         case 'C':
                         case 'c':
                             cout << "\033[1;33mChanges cancelled..\033[0m\n";

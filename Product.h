@@ -53,6 +53,8 @@ class ProductList {
         void sortByOldest();
         void sortByHighPrice();
         void sortByLowStock();
+        void sortByIdAscending();
+        void sortByIdDescending(); 
         void displayTableHeader();
         void displayAll();
         void clearLL();
@@ -155,30 +157,29 @@ class ProductList {
     void ProductList::removeProduct() {
         ProductNode* current = head;
         ProductNode* previous = nullptr;
-        string name;
+        string id;
         system("clear");
         cout << "\n\033[1;36m+-------------------------------------------+\n";
         cout << "|         🗑️  Remove Product Menu            |\n";
         cout << "+-------------------------------------------+\033[0m\n";
         displayAll();
-        cout << "\033[1;34mEnter the name of the product you want to remove (leave blank to return): \033[0m";
-        getline(cin, name);
-        if(name.empty()) { 
+        cout << "\033[1;34mEnter the ID of the product you want to remove (leave blank to return): \033[0m";
+        getline(cin, id);
+        if(id.empty()) { 
             cout << "\033[1;33mRemoval cancelled.\033[0m\n";
             return;
         }
         while (current) {
-            if (current->product->getName() == name) {
+            if (current->product->getID() == id) {
                 if (previous) {
                     previous->next = current->next;
                 } else {
-                    // กรณี 1 node
                     head = current->next;
                 }
                 delete current->product;
                 delete current;
                 size--;
-                cout << "Product \"" << name << "\" removed successfully." << endl;
+                cout << "\033[1;32mProduct ID: " << id << " removed successfully.\033[0m" << endl;
 
                 saveToFile("products.txt");
                 return;
@@ -187,7 +188,7 @@ class ProductList {
             current = current->next;
         }
 
-        cout << "Product \"" << name << "\" not found." << endl;
+        cout << "\033[1;31mProduct ID: " << id << " not found.\033[0m" << endl;
     }
 
     void ProductList::sortByNameAZ() {
@@ -286,6 +287,30 @@ class ProductList {
         for (ProductNode* i = head; i != nullptr; i = i->next) {
             for (ProductNode* j = i->next; j != nullptr; j = j->next) {
                 if (i->product->getStock() > j->product->getStock()) {
+                    swap(i->product, j->product);
+                }
+            }
+        }
+    }
+
+    void ProductList::sortByIdAscending() {
+        if (!head || !head->next) return;
+    
+        for (ProductNode* i = head; i != nullptr; i = i->next) {
+            for (ProductNode* j = i->next; j != nullptr; j = j->next) {
+                if (i->product->getID() > j->product->getID()) {
+                    swap(i->product, j->product);
+                }
+            }
+        }
+    }
+
+    void ProductList::sortByIdDescending() {
+        if (!head || !head->next) return;
+    
+        for (ProductNode* i = head; i != nullptr; i = i->next) {
+            for (ProductNode* j = i->next; j != nullptr; j = j->next) {
+                if (i->product->getID() < j->product->getID()) {
                     swap(i->product, j->product);
                 }
             }
@@ -396,17 +421,19 @@ class ProductList {
         char choice;
         while (true) {
             system("clear");
-            cout << "\033[1;34m";
-            cout << "+=============================================+\n";
-            cout << "| 🔽           PRODUCT SORT MENU             |\n";
-            cout << "+=============================================+\033[0m\n";
-            cout << "| [1] 🆕 Newest to Oldest                    |\n";
-            cout << "| [2] 📜 Oldest to Newest                    |\n";
-            cout << "| [3] 🔤 Sort by Name A-Z                    |\n";
-            cout << "| [4] 💰 Price High to Low                   |\n";
-            cout << "| [5] 📦 Stock Low to High                   |\n";
-            cout << "| [0] 🔙 Back to Product Menu                |\n";
-            cout << "+---------------------------------------------+\n";
+            cout << "\033[1;34m"; // สีฟ้าเข้ม
+            cout << "+===================================================+\n";
+            cout << "| 🔽              PRODUCT SORT MENU                |\n";
+            cout << "+===================================================+\033[0m\n";
+            cout << "| \033[1;32m[1]\033[0m 🆕  Newest to Oldest                         |\n";
+            cout << "| \033[1;32m[2]\033[0m 📜  Oldest to Newest                         |\n";
+            cout << "| \033[1;32m[3]\033[0m 🔤  Sort by Name (A-Z)                       |\n";
+            cout << "| \033[1;32m[4]\033[0m 💰  Sort by Price (High → Low)               |\n";
+            cout << "| \033[1;32m[5]\033[0m 📦  Sort by Stock (Low → High)               |\n";
+            cout << "| \033[1;32m[6]\033[0m 🆔  Sort by ID (Ascending)                   |\n";
+            cout << "| \033[1;32m[7]\033[0m 🆔  Sort by ID (Descending)                  |\n";
+            cout << "| \033[1;31m[0]\033[0m 🔙  Back to Product Menu                     |\n";
+            cout << "+---------------------------------------------------+\n";
 
             choice = getch();
             system("clear");
@@ -436,6 +463,14 @@ class ProductList {
                     system("clear");
                     sortByLowStock();
                     displayAll();
+                    break;
+                case 6:
+                    system("clear");
+                    sortByIdAscending();
+                    break;
+                case 7:
+                    system("clear");
+                    sortByIdDescending();
                     break;
                 case '0':
                     return;
@@ -512,9 +547,7 @@ class ProductList {
                 return;
             }
     
-            if (isDuplicateName(name)) {
-                cout << "\033[1;31m❌ Product \'" << name << "\' already exists! Cannot add duplicate.\033[0m\n";
-            } else if (!isValidName(name)) {
+            if (!isValidName(name)) {
                 cout << "\033[1;31m❌ Error: Product name must contain only English letters.\033[0m\n";
             } else {
                 break;
@@ -726,8 +759,9 @@ class ProductList {
                             break;
                         }
                         case 'S':
-                        case 's': {
-                            string timestamp = getCurrentTimestamp();
+                        case 's': 
+                        {
+                            string timestamp =  current->product->getTimestamp();
                             delete current->product;
                             current->product = new Product(productID, productName, price, cost, stock, timestamp);
                             saveToFile("products.txt");
