@@ -196,17 +196,26 @@ struct MonthlyFinanceData {
     float profit;
 };
 
-MonthlyFinanceData calculateMonthlyFinance(ProductList& products, EmployeeManager& empManager, const string& targetMonth){
+MonthlyFinanceData calculateMonthlyFinance(ProductList& products, EmployeeManager& empManager, const string& targetMonth) {
     float income = products.getMonthlyIncome("sales.txt", targetMonth);
-    float salary = 0, sso = 0;
+    float totalSalary = 0, totalSSO = 0;
 
     for (Node* curr = empManager.getHead(); curr; curr = curr->next) {
-        sso += curr->data.getSocialSecurity();
-        salary += curr->data.getSalary() - curr->data.getSocialSecurity();
+        string timestamp = curr->data.getTimestamp();  // YYYY-MM-DD
+
+        // ถ้าเริ่มงานหลังเดือนเป้าหมาย ไม่ต้องนับ
+        if (timestamp.substr(0, 7) > targetMonth) continue;
+
+        float baseSalary = curr->data.getSalary();
+        float baseSSO = curr->data.getSocialSecurity();
+        float netBaseSalary = baseSalary - baseSSO;
+
+        totalSalary += netBaseSalary;
+        totalSSO += baseSSO;
     }
 
-    float profit = income - salary - sso;
-    return { targetMonth, income, salary, sso, profit };
+    float profit = income - totalSalary - totalSSO;
+    return { targetMonth, income, totalSalary, totalSSO, profit };
 }
 
 void printFinanceRow(const MonthlyFinanceData& data) {
@@ -222,6 +231,7 @@ void printFinanceRow(const MonthlyFinanceData& data) {
          << ssoColor << setw(18) << data.sso << reset << " ║ "
          << profitColor << setw(18) << data.profit << reset << " ║\n";
 }
+
 void showMonthlyFinanceSummary(ProductList& products, EmployeeManager& empManager) {
     string targetMonth = getTargetMonthInput();
     if (targetMonth.empty()) return;
