@@ -39,7 +39,7 @@ void Employee::display() const {
          << setw(12) << id
          << "| " << setw(20) << name
          << "| " << setw(5)  << age
-         << "| " << setw(12) << role
+         << "| " << setw(25) << role
          << "| " << setw(10) << salary
          << "| " << setw(10) << calculateBonus()
          << "| " << setw(10) << getSocialSecurity()
@@ -59,11 +59,11 @@ string Employee::getSummary() const {
     stringstream ss;
     ss << fixed << setprecision(2);
 
-    ss << "\033[1;32m" << left << setw(25) << name
-       << "\033[1;36m" << setw(25) << role 
-       << "\033[1;33m" << "(Total: "
+    ss << "\033[1;32m" << left << setw(29) << name
+       << "\033[1;36m" << setw(27) << role 
+       << "\033[1;33m"
        << setw(10) << salary + calculateBonus()
-       << " Baht) \033[0m";
+       << "\033[0m";
 
     return ss.str();
 }
@@ -376,6 +376,7 @@ class EmployeeManager {
             cout << current->data.getSummary() << endl;
             current = current->next;
         }
+        cout << "\n\033[1;36m👥 Total Employees: \033[1;33m" << size << "\033[0m\n";
     }
 
     void EmployeeManager::split(Node* source, Node** frontRef, Node** backRef) {
@@ -500,12 +501,12 @@ class EmployeeManager {
             << setw(12) << "ID"
             << "| " << setw(20) << "Name"
             << "| " << setw(5)  << "Age"
-            << "| " << setw(12) << "Role"
+            << "| " << setw(25) << "Role"
             << "| " << setw(10) << "Salary"
             << "| " << setw(10) << "Bonus"
             << "| " << setw(10) << "SSO"
             << "| " << setw(19) << "Timestamp" << endl;
-        cout << string(110, '-') << endl;
+        cout << string(125, '-') << endl;
     }
 
     void EmployeeManager::edit_employee() {

@@ -327,7 +327,7 @@ class ProductList {
              << "| " << setw(8)  << "Total"
              << "| " << setw(8)  << "Profit"
              << "| " << setw(13) << "Stock"
-             << "| " << setw(20) << "Last Updated" << endl;
+             << "| " << setw(20) << "Timestamp" << endl;
     
         cout << string(115, '-') << endl;
     }
