@@ -1,4 +1,6 @@
-# Business Management Program Written in C++ for EGCO112 Programming Techniques Course's Final Project
+# Business Management Program
+
+## Written in C++ for EGCO112 Programming Techniques Course's Final Project
 
 ## Get Started
 First, you must have a C/C++ compiler installed if you haven't already.
